@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css">
+    <script src="codemirror/lib/codemirror.js"></script>
+    <script src="codemirror/addon/edit/closetag.js"></script>
+    <script src="codemirror/mode/javascript/javascript.js"></script>
+    <link href="codemirror/lib/codemirror.css" rel="stylesheet"/>
+    <link href="codemirror/theme/erlang-dark.css" rel="stylesheet"/>
+    <link href="codemirror/theme/isotope.css" rel="stylesheet"/>
+    <title>Compi 2</title>
+  </head>
+  <body>
+    <div><p></p></div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-1">
+                <input type="button" value="Compilar" class="btn btn-block btn-md btn-success" id="BtnCompilar">
+		    </div>
+		    <div class="col-md-1">
+		    </div>
+        </div>
+        <p></p>
+        <hr>
+        <div class = "row">
+            <div class="col-md-6">
+                <h5 align="center">Editor</h5>
+            </div>
+            <div class="col-md-6">
+                <h5 align="center">Consola</h5>
+            </div>
+        </div>
+        <p></p>
+        <div class = "row">
+            <div class="col-md-6">
+                <div class="jumbotron">
+                    <textarea id="Fuente"></textarea>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="jumbotron">
+                    <textarea id="Consola"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div id="graph" style="text-align: center"></div>
+        </div>
+    </div>
+    <script>
+        var Fuente = CodeMirror.fromTextArea(document.getElementById('Fuente'),{
+            mode: "javascript",
+            theme: "isotope",
+            lineNumbers: true,
+            autoCloseTags: true,
+        });
+        Fuente.setSize("570","400");
+        var Consola = CodeMirror.fromTextArea(document.getElementById('Consola'),{
+            mode: null,
+            theme: "isotope",
+            lineNumbers: true,
+            autoCloseTags: true,
+            readOnly: true
+        });
+        Consola.setSize("570","400");
+        
+        function Compile(texto){
+            Consola.setValue("");
+            Consola.setValue(texto);
+        }
+
+        document.getElementById('BtnCompilar').onclick = function (){
+            var Codigo = Fuente.getValue();
+            Compile(Codigo);
+        }
+                
+    </script>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
+</html>
