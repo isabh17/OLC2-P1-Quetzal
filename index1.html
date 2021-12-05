@@ -16,8 +16,6 @@
     <link href="css/lib/codemirror.css" rel="stylesheet"/>
     <link href="css/theme/erlang-dark.css" rel="stylesheet"/>
     <link href="css/theme/isotope.css" rel="stylesheet"/>
-     <!-- GRAMMAR FOR GRAPH -->
-     <script src="Gramatica/gramatica.js"></script>
     <title>Compi 2</title>
   </head>
   <body>
@@ -48,34 +46,26 @@
         </div>
         <p></p>
         <hr>
-        <div class="row justify-content-md-center">
-            <div class="col-md-6 ">
+        <div class = "row">
+            <div class="col-md-6">
                 <h5 align="center">Editor</h5>
             </div>
             <div class="col-md-6">
-                <h5 align="center">Salida</h5>
+                <h5 align="center">Consola</h5>
             </div>
         </div>
         <p></p>
-        <div class="row justify-content-md-center">
-            <div class="col-md-6 justify-content-md-center">
-                <div  class="jumbotron">
+        <div class = "row">
+            <div class="col-md-6">
+                <div align="center" class="jumbotron">
                     <textarea id="Fuente"></textarea>
                 </div>
             </div>
-            <div  class="col-md-6 justify-content-md-center">
+            <div  align="center" class="col-md-6">
                 <div class="jumbotron">
-                    <textarea id="Salida"></textarea>
-                </div>
-            </div>
-        </div>
-        <div class="row justify-content-md-center">
-            <div class="col-md-8">
-                <div  class="jumbotron">
                     <textarea id="Consola"></textarea>
                 </div>
             </div>
-           
         </div>
         <div class="row">
             <div id="graph" style="text-align: center"></div>
@@ -88,16 +78,7 @@
             lineNumbers: true,
             autoCloseTags: true,
         });
-        Fuente.setSize("770","400");
-        var Salida = CodeMirror.fromTextArea(document.getElementById('Salida'),{
-            mode: null,
-            theme: "isotope",
-            lineNumbers: true,
-            autoCloseTags: true,
-            readOnly: true
-        });
-        Salida.setSize("770","400");
-
+        Fuente.setSize("670","400");
         var Consola = CodeMirror.fromTextArea(document.getElementById('Consola'),{
             mode: null,
             theme: "isotope",
@@ -105,20 +86,11 @@
             autoCloseTags: true,
             readOnly: true
         });
-        Consola.setSize("1170","300");
+        Consola.setSize("670","400");
         
         function Compile(texto){
-            Salida.setValue("");
-            Salida.setValue(texto);
-        }
-        function Compile(texto){
-            Salida.setValue("");
-            var res = gramatica.parse(texto);
-            var codigo = "";
-            for(var e of res){
-                codigo+=e+"\n";
-            }
-            Salida.setValue(codigo);
+            Consola.setValue("");
+            Consola.setValue(texto);
         }
 
         document.getElementById('BtnCompilar').onclick = function (){
