@@ -117,3 +117,39 @@ function getTemp() {
     templist.push(temp);
     return temp;
 }
+
+function showTableErrorsSymbols() {
+    document.getElementById("ShowReportErrors").innerHTML = "";
+  
+    var html = "<h2>Reporte de Errores</h2>\n";
+    html += '<table class="table table-dark" id="tableErrors">';
+    html += '<thead class="thead-light">';
+    html += "<tr>";
+    html += '<th scope="col">#</th>';
+    html += '<th scope="col">Linea</th>';
+    html += '<th scope="col">Columna</th>';
+    html += '<th scope="col">Tipo de Error</th>';
+    html += '<th scope="col">Descripcion</th>';
+    html += '<th scope="col">Entorno</th>';
+    html += "</tr>";
+    html += " </thead>";
+    html += "<tbody>";
+  
+    var nodes = ErrorList.getErrorList();
+    for (var i = 0; i < nodes.length; i++) {
+      var item = nodes[i];
+      html += "<tr>";
+      html += `<td>${i + 1}</td>`;
+      html += `<td>${item.line}</td>`;
+      html += `<td>${item.column}</td>`;
+      html += `<td>${item.errorType.toString()}</td>`;
+      html += `<td>${item.description}</td>`;
+      html += `<td>${item.environmentType.toString()}</td>`;
+      html += "</tr>";
+    }
+  
+    html += "</tbody>";
+    html += "</table>";
+    console.log(html);
+    document.getElementById("ReportErrors").innerHTML = html;
+  }

@@ -8,7 +8,7 @@ class InstructionError extends Instruction {
         return "";
     }
 
-    translatedSymbolsTable(e){
+    translatedSymbolsTable(e){ 
         return "";
     }
 
