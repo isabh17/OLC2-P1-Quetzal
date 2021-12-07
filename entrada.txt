@@ -1,0 +1,82 @@
+void main() {
+    int val1 = 1;
+    int val2 = 10;
+    double val3 = 2021.2020;
+
+    println("Probando declaracion de variables");
+    println(val1, " ", val2, " ", val3);
+    println("---------------------------------");
+    // COMENTARIO DE UNA LINEA
+    val1 = val1 + 41 - 123 * 4 / (2 + 2 * 2) - (10 + (125 % 5)) * 2 ^ 2;
+    val2 = 11 * (11 % (12 + -10)) + 22 / 2;
+    val3 = 2 ^ (2 * 12 / 6) + 25 / 5/* COMENTARIO
+    MULTILINEA */;
+    println("Probando asignación de variables y aritmeticas");
+    println(val1, " ", val2, " ", val3);
+    println("---------------------------------");
+
+    rel1 = (((val1 - val2) == 24) && (true && (false || 5 >= 5))) || ((7*7) != (15+555) || -61 > 51);
+    rel2 = (7*7) <= (15+555) && 1 < 2;
+    rel3 = ((0 == 0) != ((532 > 532)) == ("Hola" == "Hola")) && (false || (false == true));
+    println("Probando relacionales y logicas");
+    println(rel1, " ", rel2, " ", rel3);
+    println("---------------------------------");
+
+    println("OPERACIONES " * "CON " * "Cadenas"^3);
+    hola = "Hola Mundo! ";
+    despedida = "Adios mundo :c";
+    println(hola.uppercase() * despedida.lowercase());
+    println(hola.length())
+    println(hola.subString(2,4))
+
+    println("Probando funciones nativas de JOLC");
+    println("Funciones de operaciones aritmeticas");
+    val3 = log10(1000) * log(2, 4);
+    print("log10(1000) * log(2, 4): ");
+    println(val3);
+    println(sin(134), " ", cos(val1), " ", tan(12), " ", sqrt(100));
+    println("Funciones relacionadas a conversiones");
+    println(double.parse("3.141516"), " ", int.parse("45"));
+    println(boolean.parse("1"));
+    carnet = "201807394";
+    println("Hola " * string(carnet));
+    println(typeof(val1), " ", typeof(rel1));
+    println("---------------------------------");
+
+	if(true){
+	print("If 1");
+	}
+
+	if(true)
+		print("If 2");
+
+	if(true){
+		print("If 2");
+	}else{
+		print("Else If 2");
+	}
+
+	if(true)
+		print("If 3");
+	else{
+		print("Else If 3.1");
+		print("Else If 3.2");
+	}
+
+	if(true)
+		print("If 4");
+	else
+		print("Else If 4");
+
+	if(true){
+		print("If 5.1");
+		print("If 5.2");
+	}else
+		print("Else If 5");
+
+	if(true){
+		print("If 3");
+	}else if(false)
+		print("Else If 3.1");
+
+}

@@ -51,6 +51,7 @@ function Compile(texto){
     Salida.setValue("");
     treeData = [];
     var res = gramatica.parse(texto);
+    console.log(res)
     var codigo = "";
     for(var e of res){
         codigo+=e+"\n";

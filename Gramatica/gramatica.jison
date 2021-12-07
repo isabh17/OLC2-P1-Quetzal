@@ -20,7 +20,11 @@ lex_identificador   [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*
 [0-9]+("."[0-9]+)+\b            return "doubleVal";
 [0-9]+\b                        return "intVal";
 \"((\\\")|[^\n\"])*\"           { yytext = yytext.substr(1,yyleng-2); return 'stringVal'; }
-\'((\\\')|[^\n\'])*\'		{ yytext = yytext.substr(1,yyleng-2); return 'charVal'; }
+\'((\\\')|[^\n\'])*\'	        	{ yytext = yytext.substr(1,yyleng-2); return 'charVal'; }
+//---------------------------------------------------------------------------------
+
+"print"			    		return "Rprint";
+"println"			      return "Rprintln";
 //-------------------------------------Simbolos--------------------------------
 
 "("                 return 'PAROP';
@@ -139,33 +143,48 @@ lex_identificador   [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*
 
 %% /* Definición de la gramática */
 
-INIT: SENTENCES EOF { }
+INIT: SENTENCES EOF             {  return $1;}
     | EOF
 ;
-
+/*
+CUERPOS: CUERPOS CUERPO       {  }
+        | CUERPO              {  }
+*/
+CUERPO
+  : PRINT                       {  $$ = $1; }
+  | DECLARATION                 {  $$ = $1; }
+  | ASSIGNMENT                  {  $$ = $1; }
+  | SENTENCE_WHILE              {  $$ = $1; }
+  | SENTENCE_DO_WHILE           {  $$ = $1; }
+  | SENTENCE_SWITCH             {  $$ = $1; }
+  | SENTENCE_FOR                {  $$ = $1; }
+  | RETUR                       {  $$ = $1; }
+  | BREAKS                      {  $$ = $1; }
+  | CONTINU                     {  $$ = $1; }
+  | CALL_FUNCTION PTOCOMA       {  $$ = $1,$2; }
+;
 SENTENCES: SENTENCES SENTENCE {  }
          | SENTENCE           {  }
 ;
 
 SENTENCE
-  : FUNCTIO                     { }
-  | PRINT                       { }
-  | DECLARATION                 { }
-  | ASSIGNMENT                  { }
-  | SENTENCE_IF                 { }
-  | SENTENCE_WHILE              { }
-  | SENTENCE_DO_WHILE           { }
-  | SENTENCE_SWITCH             { }
-  | SENTENCE_FOR                { }
-  | RETUR                       { }
-  | BREAKS                      { }
-  | CONTINU                     { }
-  | CALL_FUNCTION PTOCOMA       { }
-  | POST_FIXED PTOCOMA          { }
-  | TEMPLATE_STRUCT             { }
-  | CREATE_STRUCT               {  }
-  | error PTOCOMA               { console.log("Error sintactico en punto y coma"); }
-  | error KEYCLS                { console.log("Error sintactico en llave cierre"); }
+  : FUNCTIO                     { $$ = $1; }
+  | PRINT                       { $$ = $1; }
+  | DECLARATION                 { $$ = $1; }
+  | ASSIGNMENT                  { $$ = $1; }
+  | SENTENCE_IF                 { $$ = $1; }
+  | SENTENCE_WHILE              { $$ = $1; }
+  | SENTENCE_DO_WHILE           { $$ = $1; }
+  | SENTENCE_SWITCH             { $$ = $1; }
+  | SENTENCE_FOR                { $$ = $1; }
+  | RETUR                       { $$ = $1; }
+  | BREAKS                      { $$ = $1; }
+  | CONTINU                     { $$ = $1; }
+  | CALL_FUNCTION PTOCOMA       { $$ = $1; }
+  | POST_FIXED PTOCOMA          { $$ = $1; }
+  | error PTOCOMA               { ErrorList.addError(new ErrorNode(this._$.first_line,this._$.first_column,new ErrorType(EnumErrorType.SYNTACTIC),` Error sintactico `,new EnvironmentType(EnumEnvironmentType.NULL, ""))); $$ = new InstructionError(); }
+  | error KEYCLS                { ErrorList.addError(new ErrorNode(this._$.first_line,this._$.first_column,new ErrorType(EnumErrorType.SYNTACTIC),` Error sintactico `,new EnvironmentType(EnumEnvironmentType.NULL, ""))); $$ = new InstructionError(); }
+
 ;
 
 CREATE_STRUCT
@@ -200,11 +219,11 @@ ASSIGNMENT
 ;
 
 EXP
-  : EXP '&'  EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
-  | EXP '+'  EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
-  | EXP '-'  EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
-  | EXP '*' EXP                               { $$=($1.toString()+$2.toString()+$3.toString()); }
-  | EXP '/' EXP                               { $$=($1.toString()+$2.toString()+$3.toString()); }
+  : EXP '&'  EXP                              { $$=($1.toString()+$2.toString()+$3.toString(),  newNode(yy, yystate, $1.node, $2, $3.node)); }
+  | EXP '+'  EXP                              { $$=($1.toString()+$2.toString()+$3.toString(),  newNode(yy, yystate, $1.node, $2, $3.node)); }
+  | EXP '-'  EXP                              { $$=($1.toString()+$2.toString()+$3.toString(),  newNode(yy, yystate, $1.node, $2, $3.node)); }
+  | EXP '*' EXP                               { $$=($1.toString()+$2.toString()+$3.toString(),  newNode(yy, yystate, $1.node, $2, $3.node)); }
+  | EXP '/' EXP                               { $$=($1.toString()+$2.toString()+$3.toString(),  newNode(yy, yystate, $1.node, $2, $3.node)); }
   | EXP '%' EXP                               { $$=($1.toString()+$2.toString()+$3.toString()); }
   | EXP '^' EXP                               { $$=($1.toString()+$2.toString()+$3.toString()); }
   | '!' EXP                                   { $$=($1.toString()+$2.toString()); }
@@ -263,18 +282,25 @@ BLOCK
   | KEYOP KEYCLS            { $$=$1+$2; }
 ;
 
+BLOCK_IF
+  : KEYOP SENTENCES KEYCLS  { $$=$1+$3; }
+  | KEYOP KEYCLS            { $$=$1+$2; }
+  | CUERPO                  {  }
+;
+
 POST_FIXED
   : ID '--'   { $$=($1.toString()+$2.toString()); }
   | ID '++'   { $$=($1.toString()+$2.toString()); }
 ;
 
 SENTENCE_IF
-  : PRINCIPAL_IF ELSEIF                         {  }
-  | PRINCIPAL_IF ELSE ELSEIF                    {  }
+  : ELSE_IF ELSE BLOCK_IF                 {  }
+  | ELSE_IF                               {  }
 ;
 
-PRINCIPAL_IF
-  : IF PAROP EXP PARCLS                         {  }
+ELSE_IF
+  : ELSE_IF ELSE IF PAROP EXP PARCLS BLOCK  {  }
+  | IF PARCLS EXP PARCLS BLOCK_IF              {  }
 ;
 
 ELSEIF
