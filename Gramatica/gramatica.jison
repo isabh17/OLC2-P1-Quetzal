@@ -182,6 +182,8 @@ SENTENCE
   | CONTINU                     { $$ = $1; }
   | CALL_FUNCTION PTOCOMA       { $$ = $1; }
   | POST_FIXED PTOCOMA          { $$ = $1; }
+  | TEMPLATE_STRUCT             { }
+  | CREATE_STRUCT               { }
   | error PTOCOMA               { ErrorList.addError(new ErrorNode(this._$.first_line,this._$.first_column,new ErrorType(EnumErrorType.SYNTACTIC),` Error sintactico `,new EnvironmentType(EnumEnvironmentType.NULL, ""))); $$ = new InstructionError(); }
   | error KEYCLS                { ErrorList.addError(new ErrorNode(this._$.first_line,this._$.first_column,new ErrorType(EnumErrorType.SYNTACTIC),` Error sintactico `,new EnvironmentType(EnumEnvironmentType.NULL, ""))); $$ = new InstructionError(); }
 
