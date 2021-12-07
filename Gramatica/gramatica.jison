@@ -21,10 +21,6 @@ lex_identificador   [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*
 [0-9]+\b                        return "intVal";
 \"((\\\")|[^\n\"])*\"           { yytext = yytext.substr(1,yyleng-2); return 'stringVal'; }
 \'((\\\')|[^\n\'])*\'		{ yytext = yytext.substr(1,yyleng-2); return 'charVal'; }
-//---------------------------------------------------------------------------------
-
-"print"			    		return "Rprint";
-"println"			        return "Rprintln";
 //-------------------------------------Simbolos--------------------------------
 
 "("                 return 'PAROP';
@@ -143,7 +139,7 @@ lex_identificador   [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*
 
 %% /* Definición de la gramática */
 
-INIT: SENTENCES EOF {  }
+INIT: SENTENCES EOF { }
     | EOF
 ;
 
@@ -152,22 +148,32 @@ SENTENCES: SENTENCES SENTENCE {  }
 ;
 
 SENTENCE
-  : FUNCTIO                     {  }
-  | PRINT                       {  }
-  | DECLARATION                 {  }
-  | ASSIGNMENT                  {  }
-  | SENTENCE_IF                 {  }
-  | SENTENCE_WHILE              {  }
-  | SENTENCE_DO_WHILE           {  }
-  | SENTENCE_SWITCH             {  }
-  | SENTENCE_FOR                {  }
-  | RETUR                       {  }
-  | BREAKS                      {  }
-  | CONTINU                     {  }
-  | CALL_FUNCTION PTOCOMA       {  }
-  | POST_FIXED PTOCOMA          {  }
-  | error PTOCOMA               {  }
-  | error KEYCLS                {  }
+  : FUNCTIO                     { }
+  | PRINT                       { }
+  | DECLARATION                 { }
+  | ASSIGNMENT                  { }
+  | SENTENCE_IF                 { }
+  | SENTENCE_WHILE              { }
+  | SENTENCE_DO_WHILE           { }
+  | SENTENCE_SWITCH             { }
+  | SENTENCE_FOR                { }
+  | RETUR                       { }
+  | BREAKS                      { }
+  | CONTINU                     { }
+  | CALL_FUNCTION PTOCOMA       { }
+  | POST_FIXED PTOCOMA          { }
+  | TEMPLATE_STRUCT             { }
+  | CREATE_STRUCT               {  }
+  | error PTOCOMA               { console.log("Error sintactico en punto y coma"); }
+  | error KEYCLS                { console.log("Error sintactico en llave cierre"); }
+;
+
+CREATE_STRUCT
+  : ID ID '=' ID PAROP L_E PARCLS PTOCOMA             {console.log($1, $2, $3, $4, $5, $6, $7, $8); }
+;
+
+TEMPLATE_STRUCT
+  : STRUCT ID KEYOP PARAMETERS KEYCLS PTOCOMA            { console.log($1, $2, $3, $4, $5, $6); }
 ;
 
 PRINT
@@ -211,7 +217,7 @@ EXP
   | EXP '==' EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
   | EXP '>=' EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
   | EXP '<=' EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
-  | CALL_FUNCTION                             {  }
+  | CALL_FUNCTION                             { $$=$1; }
   | PRIMITIVO                                 { $$=$1; }
   | PAROP EXP PARCLS                          { $$=($1.toString()+$2.toString()+$3.toString()); }
   | COROP L_E CORCLS                          { $$=($1.toString()+$2.toString()+$3.toString()); }
@@ -263,14 +269,17 @@ POST_FIXED
 ;
 
 SENTENCE_IF
-  : ELSE_IF ELSE BLOCK {  }
-  | ELSE_IF               {  }
+  : PRINCIPAL_IF ELSEIF                         {  }
+  | PRINCIPAL_IF ELSE ELSEIF                    {  }
 ;
 
-ELSE_IF
-  : ELSE_IF ELSE IF PAROP EXP PARCLS BLOCK {  }
-  | IF PARCLS E PARCLS BLOCK              {  }
-  //| ELSE BLOCK                             {  } ARREGLARLO CON ELSE 
+PRINCIPAL_IF
+  : IF PAROP EXP PARCLS                         {  }
+;
+
+ELSEIF
+  : BLOCK                                       {  }
+  | SENTENCE                                    {  }
 ;
 
 SENTENCE_WHILE
@@ -292,18 +301,19 @@ FUNCTION_HEADER
 ;
 
 PARAMETERS
-  : PARAMETERS COMA PARAMETER   {  }
-  | PARAMETER                   {  }
+  : PARAMETERS COMA PARAMETER   { $$=($1.toString()+$2.toString()+$3.toString()); }
+  | PARAMETER                   { $$=$1.toString(); }
 ;
 
 PARAMETER
-  : TIPO ID                     {  }
-  | TIPO ID COROP CORCLS        {  }
+  : TIPO ID                     { $$=($1.toString()+$2.toString()); }
+  | TIPO ID COROP CORCLS        { $$=($1.toString()+$2.toString()+$3.toString()+$4.toString()); }
+  | ID ID                       { $$=($1.toString()+$2.toString()); }
 ;
 
 CALL_FUNCTION
-  : ID PAROP L_E PARCLS         {  }
-  | ID PAROP PARCLS             {  }
+  : ID PAROP L_E PARCLS         { $$=($1.toString()+$2.toString()+$3.toString()+$4.toString()); }
+  | ID PAROP PARCLS             { $$=($1.toString()+$2.toString()+$3.toString()); }
 ;
 
 SENTENCE_SWITCH
