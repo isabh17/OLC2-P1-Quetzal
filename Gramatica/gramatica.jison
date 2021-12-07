@@ -94,7 +94,6 @@ lex_identificador   [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*
 "touppercase"       return 'TOUPPER';
 "tolowercase"       return 'TOLOWER';
 "caracterOfPosition" return 'CARACTERPOSC';
-"function"          return 'FUNCTION';
 "struct"            return 'STRUCT'
 "pow"               return 'POW';
 "parse"             return 'PARSE';
@@ -165,7 +164,7 @@ SENTENCE
   | RETUR                       {  }
   | BREAKS                      {  }
   | CONTINU                     {  }
-  | CALL_FUNCTION               {  }
+  | CALL_FUNCTION PTOCOMA       {  }
   | POST_FIXED PTOCOMA          {  }
   | error PTOCOMA               {  }
   | error KEYCLS                {  }
@@ -194,11 +193,6 @@ ASSIGNMENT
   | COROP CORCLS ID '=' COROP PARAMETROS CORCLS PTOCOMA           {  }
 ;
 
-PARMETROS
-  : PARAMETROS COMA PARAMETROS         {  }
-  | EXP                                {  }
-;
-
 EXP
   : EXP '&'  EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
   | EXP '+'  EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
@@ -217,18 +211,14 @@ EXP
   | EXP '==' EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
   | EXP '>=' EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
   | EXP '<=' EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
-  | ID PAROP PARCLS                           { $$=($1.toString()+$2.toString()+$3.toString()); }
-  | ID PAROP PARMETROS PARCLS                 { $$=($1.toString()+$2.toString()+$3.toString()+$4.toString()); }
+  | CALL_FUNCTION                             {  }
   | PRIMITIVO                                 { $$=$1; }
   | PAROP EXP PARCLS                          { $$=($1.toString()+$2.toString()+$3.toString()); }
   | COROP L_E CORCLS                          { $$=($1.toString()+$2.toString()+$3.toString()); }
   | ID COROP L_E CORCLS                       { $$=($1.toString()+$2.toString()+$3.toString()+$4.toString()); }
   | EXP '?' EXP DOSPTOS EXP                   { $$=($1.toString()+$2.toString()+$3.toString()+$4.toString()+$5.toString()); }
-  | ID                                        { $$=$1.toString(); }    //Agregado
+  | ID                                        { $$=$1.toString(); }
   | POST_FIXED                                { $$=$1; }
- // | ID PAROP L_E PARCLS                       {  }  PARA UN METODO ME TIRA ERROR 
- /* | '--'                                      {  }
-  | '++'                                      {  }*/
 ;
 
 L_E
@@ -291,58 +281,29 @@ SENTENCE_DO_WHILE
   : DO BLOCK WHILE PAROP EXP PARCLS PTOCOMA { console.log($1, $2, $3, $4, $5, $6, $7); }
 ;
 
-FUNCTIO
-  : FUNCTION_HEAD KEYOP FUNCTION_SENTENCES KEYCLS  {  }
-  | FUNCTION_HEAD KEYOP KEYCLS                    {  }
+FUNCTION
+  : FUNCTION_HEADER ID PAROP PARCLS BLOCK               {  }
+  | FUNCTION_HEADER ID PAROP PARAMETERS PARCLS BLOCK    {  }
 ;
 
-FUNCTION_HEAD
-  : FUNCTION ID PAROP PARCLS                                         {  }
-  | FUNCTION ID PAROP L_PARAMETROS PARCLS                           {  }
+FUNCTION_HEADER
+  : TIPO                { $$=$1; }
+  | VOID                { $$=$1; }
 ;
 
-FUNCTION_SENTENCES
-  : FUNCTION_SENTENCE FUNCTION_SENTENCES   { }
-  | FUNCTION_SENTENCE                        { }
-;
-    
-FUNCTION_SENTENCE
-  : PRINT      { }
-  | DECLARATION { }
-  | ASSIGNMENT  { }
-  | SENTENCE_IF { }
-  | SENTENCE_WHILE { }
-  | SENTENCE_DO_WHILE{ }
-  | SENTENCE_SWITCH{ }
-  | SENTENCE_FOR { }
-  | RETUR  { }
-  | BREAKS { }
-  | CONTINU { } 
-  | CALL_FUNCTION
-  | FUNCTIO  { }
-  | error PTOCOMA { }
-  | error KEYCLS { }
+PARAMETERS
+  : PARAMETERS COMA PARAMETER   {  }
+  | PARAMETER                   {  }
 ;
 
-L_PARAMETROS
-  : L_PARAMETROS COMA PARAMETRO  {  }
-  | PARAMETRO                    {  }
+PARAMETER
+  : TIPO ID                     {  }
+  | TIPO ID COROP CORCLS        {  }
 ;
-
-PARAMETRO
-  : TIPO ID            {  }
-  | TIPO ID L_DIMENSION {  }
-;
-
-L_DIMENSION
-  : L_DIMENSION COROP CORCLS {  }
-  | COROP CORCLS                {  }
-;
-
 
 CALL_FUNCTION
-  : ID PAROP L_E PARCLS PTOCOMA {  }
-  | ID PAROP PARCLS PTOCOMA {  }
+  : ID PAROP L_E PARCLS         {  }
+  | ID PAROP PARCLS             {  }
 ;
 
 SENTENCE_SWITCH
@@ -350,8 +311,8 @@ SENTENCE_SWITCH
 ;
 
 BLOCK_SWITCH
-  : KEYOP L_CASE KEYCLS {  }
-  | KEYOP KEYCLS            {  }
+  : KEYOP L_CASE KEYCLS         {  }
+  | KEYOP KEYCLS                {  }
 ;
 
 L_CASE
@@ -367,11 +328,11 @@ CASES
 ;
 
 BREAKS
-  : BREAK PTOCOMA {  }
+  : BREAK PTOCOMA               {  }
 ;
 
 CONTINU
-  : CONTINUE PTOCOMA {  }
+  : CONTINUE PTOCOMA            {  }
 ;
 
 RETUR
