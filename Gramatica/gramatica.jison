@@ -1,23 +1,4 @@
-%{	
-	var Consola = [];
-	var EntornoGlobal = Entorno(null);
-	
-	function EjecutarBloque(LINS, ent){
-    var retorno = null;
-    for(var elemento of LINS){
-        switch(elemento.TipoInstruccion){
-            case "print":
-                var e = Evaluar(elemento.Operacion, ent);
-                Consola.push(e.Valor);
-                break;
-        }
-        if(retorno){
-            return retorno;
-        }
-    }
-    return null;
-  }
-
+%{
 %}
 %lex
 
@@ -33,17 +14,17 @@ lex_identificador   [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*
 //---------------------------------------------------------------------------------
 
 //--------------------Para valores primitivos--------------------------------------
-"null"			    	 	    return "nullVal";
-"true"			    	 	    return "trueVal";
-"false"			    	 	    return "falseVal";
-[0-9]+\b                return "intVal";
-[0-9]+("."[0-9]+)+\b    return "doubleVal";
-\"((\\\")|[^\n\"])*\"   { yytext = yytext.substr(1,yyleng-2); return 'stringVal'; }
+"null"			    	return "nullVal";
+"true"			    	return "trueVal";
+"false"			    	return "falseVal";
+[0-9]+("."[0-9]+)+\b            return "doubleVal";
+[0-9]+\b                        return "intVal";
+\"((\\\")|[^\n\"])*\"           { yytext = yytext.substr(1,yyleng-2); return 'stringVal'; }
 \'((\\\')|[^\n\'])*\'		{ yytext = yytext.substr(1,yyleng-2); return 'charVal'; }
 //---------------------------------------------------------------------------------
 
 "print"			    		return "Rprint";
-"println"			  		return "Rprintln";
+"println"			        return "Rprintln";
 //-------------------------------------Simbolos--------------------------------
 
 "("                 return 'PAROP';
@@ -51,13 +32,11 @@ lex_identificador   [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*
 ";"                 return 'PTOCOMA';
 ","                 return 'COMA';
 ":"                 return 'DOSPTOS';
-"?"                 return 'ASK';
 "["                 return 'COROP';
 "]"                 return 'CORCLS';
 "{"                 return 'KEYOP';
 "}"                 return 'KEYCLS';
 "."                 return 'PTO';
-"&"                 return 'CONCAT';
 
 //-------------------------------Aritmetica----------------------------------
 "++"                return '++';
@@ -68,6 +47,7 @@ lex_identificador   [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*
 "^"                 return '^';
 "/"                 return '/';
 "%"                 return '%';
+"?"                 return '?';
 
 //-------------------------------Relacionales-----------------------------------
 ">="                return '>=';
@@ -80,11 +60,13 @@ lex_identificador   [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*
 "="                 return '=';
 //------------------------------Logicas---------------------------------------
 "&&"                return '&&';
+"&"                 return '&';
 "||"                return '||';
 "!"                 return '!';
 
 //-----------------------------Reservadas-------------------------------------
-"string"            return 'STRING'
+"string"            return 'STRING';
+"double"            return 'DOUBLE';
 "int"               return 'INT';
 "void"              return 'VOID';
 "boolean"           return 'BOOLEAN';
@@ -124,6 +106,8 @@ lex_identificador   [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*
 "sqrt"              return 'SQRT';
 "log10"             return 'LOG10';
 
+{lex_identificador} return 'ID'
+
 <<EOF>>             return 'EOF';
 
 .                       { console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); }
@@ -131,16 +115,17 @@ lex_identificador   [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*
 
 /* Asociación de operadores y precedencia */
 %right '='
-%right '?' ':'
+%right '?' 'DOSPTOS'
 %left '||'
 %left '&&'
 %left '!='
 %left '==' 
 %nonassoc '>' '>='
 %nonassoc '<' '<='
+%left '&'               //Averiguar que hacer con  la  concatenacion
 %left '+' '-'
 %left '*' '/' '%'
-%right '**'
+%right '^'
 %right '!'
 %right UMENOS
 %right '++'
@@ -159,7 +144,7 @@ lex_identificador   [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*
 
 %% /* Definición de la gramática */
 
-INIT: SENTENCES EOF { return $1; }
+INIT: SENTENCES EOF {  }
     | EOF
 ;
 
@@ -167,208 +152,229 @@ SENTENCES: SENTENCES SENTENCE {  }
          | SENTENCE           {  }
 ;
 
-SENTENCE: FUNCTIO            {   }
-        | PRINT              {   }
-        | DECLARATION        {   }
-        | ASSIGNMENT         {   }
-        | SENTENCE_IF        {   }
-        | SENTENCE_WHILE     {   }
-        | SENTENCE_DO_WHILE  {   }
-        | SENTENCE_SWITCH    {   }
-        | SENTENCE_FOR       {   }
-        | RETUR              {   }
-        | BREAKS             {   }
-        | CONTINU            {   }
-        | CALL_FUNCTION      {   }
-        | error PTOCOMA      {   }
-        | error KEYCLS       {   }
-        ;
-
-PUNTO_Y_COMA: PTOCOMA { }
-            |/* epsilon */ {  }
-            ;
+SENTENCE
+  : FUNCTIO                     {  }
+  | PRINT                       {  }
+  | DECLARATION                 {  }
+  | ASSIGNMENT                  {  }
+  | SENTENCE_IF                 {  }
+  | SENTENCE_WHILE              {  }
+  | SENTENCE_DO_WHILE           {  }
+  | SENTENCE_SWITCH             {  }
+  | SENTENCE_FOR                {  }
+  | RETUR                       {  }
+  | BREAKS                      {  }
+  | CONTINU                     {  }
+  | CALL_FUNCTION               {  }
+  | POST_FIXED PTOCOMA          {  }
+  | error PTOCOMA               {  }
+  | error KEYCLS                {  }
+;
 
 PRINT
-	: Rprint PAROP EXP PARCLS PUNTO_Y_COMA			        { }
-	| Rprintln PAROP EXP PARCLS PUNTO_Y_COMA		        { }
+  : Rprint PAROP EXP PARCLS PTOCOMA		{ console.log($1,$2,$3,$4,$5); }
+  | Rprintln PAROP EXP PARCLS PTOCOMA		{ console.log($1,$2,$3,$4,$5); }
 ;
 
-DECLARATION: TIPO ID PUNTO_Y_COMA                                              { }
-          | TIPO ID '=' EXP PUNTO_Y_COMA                                       { }
-          | TIPO COROP CORCLS ID PUNTO_Y_COMA                                  { }
-          | TIPO COROP CORCLS ID '=' COROP PARAMETROS CORCLS PUNTO_Y_COMA      { }
+DECLARATION
+  : TIPO IDENTIFIERS PTOCOMA                    { console.log($1, $2, $3); }
+  | TIPO ID '=' EXP PTOCOMA                     { console.log($1, $2, $3, $4, $5); }
+  | TIPO COROP CORCLS IDENTIFIERS PTOCOMA       { console.log($1, $2, $3, $4, $5); }
+  | TIPO COROP CORCLS ID '=' EXP PTOCOMA        { console.log($1, $2, $3, $4, $5, $6, $7); }
 ;
 
-ASSIGNMENT: ID '=' EXP PUNTO_Y_COMA                                             { }
-  | ID COROP CORCLS '=' PARAMETROS                                              { }
-  | COROP CORCLS ID '=' COROP PARAMETROS CORCLS PUNTO_Y_COMA                    { }
+IDENTIFIERS
+  : IDENTIFIERS COMA ID                 { $$=($1.toString()+$2.toString()+$3.toString()); }
+  | ID                                  { $$=$1.toString(); }
 ;
 
-PARMETROS: PARAMETROS COMA PARAMETROS         {  }
-         | EXP                                {  }
+ASSIGNMENT
+  : ID '=' EXP PTOCOMA                                            { console.log($1, $2, $3, $4); }
+  | ID COROP CORCLS '=' PARAMETROS                                {  }
+  | COROP CORCLS ID '=' COROP PARAMETROS CORCLS PTOCOMA           {  }
 ;
 
-EXP: EXP '+'  EXP                             {  }
-  | EXP '-'  EXP                              {  }
-  | EXP '*' EXP                               {  }
-  | EXP '/' EXP                               {  }
-  | EXP '%' EXP                               {  }
-  | EXP '&&' EXP                              {  }
-  | EXP '<'  EXP                              {  }
-  | EXP '||' EXP                              {  }
-  | '!' EXP                                   {  }
-  | '-' EXP %prec UMENOS                      {  }
-  | EXP '!=' EXP                              {  }
-  | EXP '==' EXP                              {  }
-  | EXP '>=' EXP                              {  }
-  | EXP '>'  EXP                              {  }
-  | EXP '<=' EXP                              {  }
-  | ID PAROP PARCLS                           {  }
-  | ID PAROP PARMETROS PARCLS                 {  }
-  | nullVal                                   {  }
-  | intVal                                    {  }
-  | doubleVal                                 {  }
-  | stringVal                                 {  }
-  | trueVal                                   {  }
-  | falseVal                                  {  }
-  | PAROP EXP PARCLS                          {  }
-  | COROP L_E CORCLS                          {  }
-  | EXP '?' EXP DOSPTOS EXP                   {  }
+PARMETROS
+  : PARAMETROS COMA PARAMETROS         {  }
+  | EXP                                {  }
+;
+
+EXP
+  : EXP '&'  EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
+  | EXP '+'  EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
+  | EXP '-'  EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
+  | EXP '*' EXP                               { $$=($1.toString()+$2.toString()+$3.toString()); }
+  | EXP '/' EXP                               { $$=($1.toString()+$2.toString()+$3.toString()); }
+  | EXP '%' EXP                               { $$=($1.toString()+$2.toString()+$3.toString()); }
+  | EXP '^' EXP                               { $$=($1.toString()+$2.toString()+$3.toString()); }
+  | '!' EXP                                   { $$=($1.toString()+$2.toString()); }
+  | '-' EXP %prec UMENOS                      { $$=($1.toString()+$2.toString()); }
+  | EXP '<'  EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
+  | EXP '>'  EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
+  | EXP '&&' EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
+  | EXP '||' EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
+  | EXP '!=' EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
+  | EXP '==' EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
+  | EXP '>=' EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
+  | EXP '<=' EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
+  | ID PAROP PARCLS                           { $$=($1.toString()+$2.toString()+$3.toString()); }
+  | ID PAROP PARMETROS PARCLS                 { $$=($1.toString()+$2.toString()+$3.toString()+$4.toString()); }
+  | PRIMITIVO                                 { $$=$1; }
+  | PAROP EXP PARCLS                          { $$=($1.toString()+$2.toString()+$3.toString()); }
+  | COROP L_E CORCLS                          { $$=($1.toString()+$2.toString()+$3.toString()); }
+  | ID COROP L_E CORCLS                       { $$=($1.toString()+$2.toString()+$3.toString()+$4.toString()); }
+  | EXP '?' EXP DOSPTOS EXP                   { $$=($1.toString()+$2.toString()+$3.toString()+$4.toString()+$5.toString()); }
+  | ID                                        { $$=$1.toString(); }    //Agregado
+  | POST_FIXED                                { $$=$1; }
  // | ID PAROP L_E PARCLS                       {  }  PARA UN METODO ME TIRA ERROR 
  /* | '--'                                      {  }
   | '++'                                      {  }*/
-
 ;
 
-L_E: L_E COMA EXP                             {  }
-  | EXP                                       {  }
-  ;
+L_E
+  : L_E COMA EXP                { $$=($1.toString()+$2.toString()+$3.toString()); }
+  | EXP DOSPTOS EXP             { $$=($1.toString()+$2.toString()+$3.toString()); }
+  | EXP                         { $$=$1; }
+;
 
 PRIMITIVO
-  : nullVal                                   {  }
-  | intVal                                    {  }
-  | doubleVal                                 {  }
-  | charVal                                   {  }
-  | stringVal                                 {  }
-  | trueVal                                   {  }
-  | falseVal                                  {  }
+  : nullVal                                   { $$=$1; }
+  | intVal                                    { $$=$1; }
+  | doubleVal                                 { $$=$1; }
+  | charVal                                   { $$=$1; }
+  | stringVal                                 { $$=$1; }
+  | trueVal                                   { $$=$1; }
+  | falseVal                                  { $$=$1; }
 ;
 
 TIPO
-  : INT                                       {  }
-  | DOUBLE                                    {  }
-  | BOOLEAN                                   {  }
-  | STRING                                    {  }
-  | CHAR                                      {  }
+  : INT                                       { $$=$1; }
+  | DOUBLE                                    { $$=$1; }
+  | BOOLEAN                                   { $$=$1; }
+  | STRING                                    { $$=$1; }
+  | CHAR                                      { $$=$1; }
+;
+
+SENTENCE_FOR
+  : FOR PAROP TIPO ID '=' EXP PTOCOMA EXP PTOCOMA POST_FIXED PARCLS BLOCK  { console.log($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11); }
+  | FOR PAROP ID '=' EXP PTOCOMA EXP PTOCOMA POST_FIXED PARCLS BLOCK       { console.log($1,$2,$3,$4,$5,$6,$7,$8,$9,$10); }
+  | FOR PAROP ID PTOCOMA EXP PTOCOMA POST_FIXED PARCLS BLOCK               { console.log($1,$2,$3,$4,$5,$6,$7,$8,$9); }
+  | FOR ID IN EXP BLOCK                                                    { console.log($1,$2,$3,$4,$5); }
+;
+
+BLOCK
+  : KEYOP SENTENCES KEYCLS  { $$=$1+$3; }
+  | KEYOP KEYCLS            { $$=$1+$2; }
+;
+
+POST_FIXED
+  : ID '--'   { $$=($1.toString()+$2.toString()); }
+  | ID '++'   { $$=($1.toString()+$2.toString()); }
+;
+
+SENTENCE_IF
+  : ELSE_IF ELSE BLOCK {  }
+  | ELSE_IF               {  }
+;
+
+ELSE_IF
+  : ELSE_IF ELSE IF PAROP EXP PARCLS BLOCK {  }
+  | IF PARCLS E PARCLS BLOCK              {  }
+  //| ELSE BLOCK                             {  } ARREGLARLO CON ELSE 
+;
+
+SENTENCE_WHILE
+  : WHILE PAROP EXP PARCLS BLOCK  { console.log($1, $2, $3, $4, $5); }
+;
+
+SENTENCE_DO_WHILE
+  : DO BLOCK WHILE PAROP EXP PARCLS PTOCOMA { console.log($1, $2, $3, $4, $5, $6, $7); }
+;
+
+FUNCTIO
+  : FUNCTION_HEAD KEYOP FUNCTION_SENTENCES KEYCLS  {  }
+  | FUNCTION_HEAD KEYOP KEYCLS                    {  }
+;
+
+FUNCTION_HEAD
+  : FUNCTION ID PAROP PARCLS                                         {  }
+  | FUNCTION ID PAROP L_PARAMETROS PARCLS                           {  }
+;
+
+FUNCTION_SENTENCES
+  : FUNCTION_SENTENCE FUNCTION_SENTENCES   { }
+  | FUNCTION_SENTENCE                        { }
+;
+    
+FUNCTION_SENTENCE
+  : PRINT      { }
+  | DECLARATION { }
+  | ASSIGNMENT  { }
+  | SENTENCE_IF { }
+  | SENTENCE_WHILE { }
+  | SENTENCE_DO_WHILE{ }
+  | SENTENCE_SWITCH{ }
+  | SENTENCE_FOR { }
+  | RETUR  { }
+  | BREAKS { }
+  | CONTINU { } 
+  | CALL_FUNCTION
+  | FUNCTIO  { }
+  | error PTOCOMA { }
+  | error KEYCLS { }
+;
+
+L_PARAMETROS
+  : L_PARAMETROS COMA PARAMETRO  {  }
+  | PARAMETRO                    {  }
+;
+
+PARAMETRO
+  : TIPO ID            {  }
+  | TIPO ID L_DIMENSION {  }
+;
+
+L_DIMENSION
+  : L_DIMENSION COROP CORCLS {  }
+  | COROP CORCLS                {  }
 ;
 
 
-SENTENCE_FOR: FOR PAROP TIPO L_ID '=' EXP PTOCOMA EXP PTOCOMA POST_FIXED PARCLS BLOCK  { }
-        | FOR PAROP ID '=' EXP PTOCOMA E PTOCOMA POST_FIXED PARCLS BLOCK { }
-        | FOR PAROP ID PTOCOMA EXP PTOCOMA POST_FIXED PARCLS BLOCK{ }
-        | FOR L_ID IN EXP BLOCK { }
-        ;
+CALL_FUNCTION
+  : ID PAROP L_E PARCLS PTOCOMA {  }
+  | ID PAROP PARCLS PTOCOMA {  }
+;
 
-L_ID:   L_ID COMA ID {  }
-        | ID           {  }
-        ; 
+SENTENCE_SWITCH
+  : SWITCH PAROP EXP PARCLS BLOCK_SWITCH {  }
+;
 
-BLOCK:    KEYOP SENTENCES KEYCLS {  }
-        | KEYOP KEYCLS           {  }
-        ;
+BLOCK_SWITCH
+  : KEYOP L_CASE KEYCLS {  }
+  | KEYOP KEYCLS            {  }
+;
 
-POST_FIXED: '--'   {  }
-          | '++'   {  }
-          ;
+L_CASE
+  : L_CASE CASES {  }
+  | CASES      {  }
+;
 
+CASES
+  : CASE EXP DOSPTOS SENTENCES          {  }
+  | CASE EXP DOSPTOS                    {  }
+  | DEFAULT DOSPTOS                     {  }
+  | DEFAULT DOSPTOS SENTENCES           {  }
+;
 
+BREAKS
+  : BREAK PTOCOMA {  }
+;
 
-SENTENCE_IF: ELSE_IF ELSE BLOCK {  }
-        | ELSE_IF               {  }
-        ;
+CONTINU
+  : CONTINUE PTOCOMA {  }
+;
 
-ELSE_IF: ELSE_IF ELSE IF PAROP EXP PARCLS BLOCK {  }
-        | IF PARCLS E PARCLS BLOCK              {  }
-        //| ELSE BLOCK                             {  } ARREGLARLO CON ELSE 
-        ;
-
-SENTENCE_WHILE: WHILE PAROP EXP PARCLS BLOCK  { }
-                ;
-
-SENTENCE_DO_WHILE: DO BLOCK WHILE PAROP EXP PARCLS PUNTO_Y_COMA { }
-                ;
-
-FUNCTIO: FUNCTION_HEAD KEYOP FUNCTION_SENTENCES KEYCLS  {  }
-        | FUNCTION_HEAD KEYOP KEYCLS                    {  }
-        ;
-
-FUNCTION_HEAD: FUNCTION ID PAROP PARCLS                                         {  }
-              | FUNCTION ID PAROP L_PARAMETROS PARCLS                           {  }
-              ;
-
-FUNCTION_SENTENCES: FUNCTION_SENTENCE FUNCTION_SENTENCES   { }
-                | FUNCTION_SENTENCE                        { }
-                ;
-    
-FUNCTION_SENTENCE: PRINT      { }               
-                | DECLARATION { }
-                | ASSIGNMENT  { }
-                | SENTENCE_IF { }
-                | SENTENCE_WHILE { }
-                | SENTENCE_DO_WHILE{ }
-                | SENTENCE_SWITCH{ }
-                | SENTENCE_FOR { }
-                | RETUR  { }
-                | BREAKS { }
-                | CONTINU { } 
-                | CALL_FUNCTION
-                | FUNCTIO  { }
-                | error PTOCOMA { }
-                | error KEYCLS { }
-                ;
-
-L_PARAMETROS: L_PARAMETROS COMA PARAMETRO  {  }
-            | PARAMETRO                    {  }
-            ;
-
-PARAMETRO: TIPO ID            {  }
-        | TIPO ID L_DIMENSION {  }
-        ;
-
-L_DIMENSION: L_DIMENSION COROP CORCLS {  }
-        | COROP CORCLS                {  }
-        ;
-
-
-CALL_FUNCTION:  ID PAROP L_E PARCLS PUNTO_Y_COMA {  }
-              | ID PAROP PARCLS PUNTO_Y_COMA {  }
-              ;
-
-SENTENCE_SWITCH: SWITCH PAROP EXP PARCLS BLOCK_SWITCH {  }
-                ;
-
-BLOCK_SWITCH: KEYOP L_CASE KEYCLS {  }
-        | KEYOP KEYCLS            {  }
-        ;
-
-L_CASE: L_CASE CASES {  }
-        | CASES      {  }
-        ;
-
-CASES:   CASE EXP DOSPTOS SENTENCES    {  }
-        | CASE EXP DOSPTOS            {  }
-        | DEFAULT DOSPTOS             {  }
-        | DEFAULT DOSPTOS SENTENCES   {  }
-        ;
-
-BREAKS: BREAK PUNTO_Y_COMA {  }
-        ;
-
-CONTINU: CONTINUE PUNTO_Y_COMA {  }
-        ;
-
-RETUR:  RETURN PTOCOMA    {  }
-      | RETURN EXP PTOCOMA {  }
-      ;
-
-
+RETUR
+  : RETURN PTOCOMA    {  }
+  | RETURN EXP PTOCOMA {  }
+;
