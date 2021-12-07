@@ -1,3 +1,5 @@
+//const Node =require("./Node");
+
 class Instruction extends Node {
     /**
      * 

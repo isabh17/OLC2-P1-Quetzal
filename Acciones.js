@@ -61,6 +61,7 @@ function Compile(texto){
     }
     Salida.setValue(codigo);
     generateTree([res.node]);
+    showTableErrorsSymbols();
 }
 
 document.getElementById('BtnCompilar').onclick = function (){

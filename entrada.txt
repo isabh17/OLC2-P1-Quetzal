@@ -1,4 +1,4 @@
-void main() {
+__void main() {
     int val1 = 1;
     int val2 = 10;
     double val3 = 2021.2020;

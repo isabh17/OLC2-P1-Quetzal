@@ -1,3 +1,5 @@
+//const Instruction =require("../Struct/Abstract/Instruction");
+  
 class InstructionError extends Instruction {
 
     constructor(){

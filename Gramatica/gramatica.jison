@@ -1,5 +1,4 @@
-%{
-%}
+
 %lex
 
 %options case-insensitive
@@ -113,7 +112,16 @@ lex_identificador   [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*
 
 /*.                       { console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); }*/
 /lex
+/*%{  
+  const EnumEnvironmentType =require("../Utils/EnumEnvironmentType.js");
+  const ErrorList =require("../Utils/ErrorList.js");
+  const ErrorType =require("../Utils/ErrorType.js");
+  const Node =require("../Struct/Abstract/Node.js");
+  const ErrorNode =require("../Utils/ErrorNode.js");
+  const Instruction =require("../Struct/Abstract/Instruction.js");
+  const InstructionError =require("../Instrucciones/InstructionError.js");
 
+%}*/
 /* Asociación de operadores y precedencia */
 %right '='
 %right '?' 'DOSPTOS'
