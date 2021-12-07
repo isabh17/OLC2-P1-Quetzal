@@ -5,10 +5,7 @@
     <!--<link rel="icon" href="%PUBLIC_URL%/favicon.ico" />-->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
+    <!-- CSS only -->
     <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css">
     <script src="css/lib/codemirror.js"></script>
     <script src="css/addon/edit/closetag.js"></script>
@@ -16,6 +13,9 @@
     <link href="css/lib/codemirror.css" rel="stylesheet"/>
     <link href="css/theme/erlang-dark.css" rel="stylesheet"/>
     <link href="css/theme/isotope.css" rel="stylesheet"/>
+    <link href="css/theme/darcula.css" rel="stylesheet"/>
+    <link href="css/theme/dracula.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="AST/chart/chart.css">
      <!-- GRAMMAR FOR GRAPH -->
      <script src="Gramatica/gramatica.js"></script>
     <title>Quetzal Grupo #40</title>
@@ -23,30 +23,34 @@
   <body>
     <div><p></p></div>
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-1">
-                <input type="button" value="Abrir Archivo" class="btn btn-block btn-md btn-outline-success" id="BtnAbrirArchivo">
-		    </div>
-            <div class="col-md-1">
-                <input type="button" value="Nueva Pestaña" class="btn btn-block btn-md btn-outline-warning" id="BtnNuevaPestaña">
-		    </div>
-            <div class="col-md-1">
-                <input type="button" value="Guardar Archivo" class="btn btn-block btn-md btn-outline-light" id="BtnGuardarArchivo">
-		    </div>
-		    <div class="col-md-1">
-                <input type="button" value="Compilar" class="btn btn-block btn-md btn-outline-success" id="BtnCompilar">
-		    </div>
-            <div class="col-md-1">
-                <input type="button" value="Tabla de Simbolos " class="btn btn-block btn-md btn-outline-info" id="BtnTablaSimbolos">
-		    </div>
-            <div class="col-md-1">
-                <input type="button" value="Reporte Errores" class="btn btn-block btn-md btn-outline-danger" id="BtnReporteErrores">
-		    </div>
-            <div class="col-md-1">
-                <input type="button" value="Arbol AST" class="btn btn-block btn-md btn-outline-success" id="BtnArbolAST">
-		    </div>
-        </div>
-        <p></p>
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+            <ul class="navbar-nav">
+                <li class="nav-item" href="AST.html">
+                    <input type="file" name="" class="btn btn-block btn-md btn-outline-warning" id="open-file" >
+                </li>
+                <!--<li class="nav-item">
+                    <input type="button" value="Guardar Archivo" class="btn btn-block btn-md btn-outline-light" id="BtnGuardarArchivo">
+                </li>-->
+
+                <li class="nav-item">
+                    <input type="button" value="Compilar" class="btn btn-block btn-md btn-outline-success" id="BtnCompilar">
+                </li>
+
+                <li class="nav-item">
+                    <input type="button" value="Tabla de Simbolos " class="btn btn-block btn-md btn-outline-info" id="BtnTablaSimbolos">
+                </li>
+
+                <li class="nav-item">
+                    <input type="button" value="Reporte Errores" class="btn btn-block btn-md btn-outline-danger" id="BtnReporteErrores">
+                </li>
+
+                <li class="nav-item">
+                    <a href="AST.html" class="btn btn-block btn-md btn-outline-warning">Arbol AST</a>                    
+                </li>
+            </ul>
+        </nav>
+       
+        <p>  </p>
         <hr>
         <div class="row justify-content-md-center">
             <div class="col-md-6 ">
@@ -81,62 +85,25 @@
            
         </div>
         <div class="row">
-            <div id="graph" style="text-align: center"></div>
+            <div class="col-12">
+                <div _ngcontent-pyl-c58="" id="graph-container" name="graph-container" style="text-align: center">
+                    
+                </div>
+            </div>     
         </div>
-    </div>
-    <script>
-        var Fuente = CodeMirror.fromTextArea(document.getElementById('Fuente'),{
-            mode: "javascript",
-            theme: "isotope",
-            lineNumbers: true,
-            autoCloseTags: true,
-        });
-        Fuente.setSize("770","400");
-        var Salida = CodeMirror.fromTextArea(document.getElementById('Salida'),{
-            mode: null,
-            theme: "isotope",
-            lineNumbers: true,
-            autoCloseTags: true,
-            readOnly: true
-        });
-        Salida.setSize("770","400");
+    </div>  
+    <!-- ACCIONES-->
+    <script type="text/javascript" src="Gramatica/gramatica.js"></script>
+    <script type="text/javascript" src="Acciones.js"></script>
+    <!-- load the d3.js library -->    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>   
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@1,500&display=swap" rel="stylesheet">
+    <script src="AST/chart/chart.js"></script>
+ 
+   
 
-        var Consola = CodeMirror.fromTextArea(document.getElementById('Consola'),{
-            mode: null,
-            theme: "isotope",
-            lineNumbers: true,
-            autoCloseTags: true,
-            readOnly: true
-        });
-        Consola.setSize("1170","300");
-        
-        function Compile(texto){
-            Salida.setValue("");
-            Salida.setValue(texto);
-        }
-        function Compile(texto){
-            Salida.setValue("");
-            var res = gramatica.parse(texto);
-            var codigo = "";
-            for(var e of res){
-                codigo+=e+"\n";
-            }
-            Salida.setValue(codigo);
-        }
-
-        document.getElementById('BtnCompilar').onclick = function (){
-            var Codigo = Fuente.getValue();
-            Compile(Codigo);
-        }
-
-        document.getElementById('BtnAbrirArchivo').onclick = function (){
-             
-        }
-       
-    
-                
-    </script>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
   </body>
+  <footer></footer>
+
 </html>
