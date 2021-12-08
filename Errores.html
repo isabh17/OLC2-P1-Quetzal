@@ -26,7 +26,10 @@
         <div class="row">             
             <a class="nav-link  active" href="index.html">
               <input type="button" value="Regresar" class="btn btn-block btn-md btn-outline-success" >
-            </a>       
+            </a> 
+            <a class="nav-link " >
+              <input type="button" value="Generar" class="btn btn-block btn-md btn-outline-success" id="BtnShowReportErrors" >
+            </a>      
         </div>
         <p></p>
         <hr>
@@ -36,19 +39,72 @@
             </div>         
         </div>
         <p></p>
-        <div class="container" >
-          <div class="container" id="ShowReportErrors">
-            <div class="row justify-content-md-center">
-                <div class="col col-sm-12 col-md-10 col-lg-10 col-xl-10" id="ReportErrors">
-                    
-                </div>
-            </div>
-        </div>   
+        <div class="container" id="ShowReportErrors">
+          <div class="row justify-content-md-center">
+              <div class="col col-sm-12 col-md-10 col-lg-10 col-xl-10" id="ReportErrors">
+                  
+              </div>
+          </div>
+        </div> 
         </div>
         </div>
     </div>
-   
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <!--Interprete-->
+    <script src="Interprete/Abstract/Instruction.js"></script>
+    <script src="Interprete/Expresions/Primitive.js"></script>
+    <script src="Interprete/Expresions/Aritmetica.js"></script>
+    <script src="Interprete/TS/Tree.js"></script>
+    <script src="Interprete/TS/TableSymbols.js"></script>
+    <script src="Interprete/TS/Type.js"></script>
+    <script src="Interprete/TS/Exception.js"></script>
+    <script src="Interprete/Instructions/Print.js"></script>
+    <script src="Interprete/Instructions/InstructionError.js"></script>
+
+    <!-- Utils-->
+    <script src="Utils/ErrorList.js"></script>
+    <script src="Utils/ErrorType.js"></script>
+    <script src="Utils/ErrorNode.js"></script>
+    <script src="Utils/Node.js"></script>
+    <script>
+       document.getElementById('BtnShowReportErrors').onclick = function (){
+            showTableErrorsSymbols(); 
+        }
+        function showTableErrorsSymbols() {
+            document.getElementById("ReportErrors").innerHTML = "";
+        
+            var html = "<h2>Reporte de Errores</h2>\n";
+            html += '<table class="table table-dark-light" id="ReportErrors">';
+            html += '<thead class="thead-light">';
+            html += "<tr>";
+            html += '<th scope="col">#</th>';
+            html += '<th scope="col">Linea</th>';
+            html += '<th scope="col">Columna</th>';
+            html += '<th scope="col">Tipo de Error</th>';
+            html += '<th scope="col">Descripcion</th>';
+            html += '<th scope="col">Entorno</th>';
+            html += "</tr>";
+            html += " </thead>";
+            html += "<tbody>";
+        
+            var nodes = ErrorList.getErrorList();
+            for (var i = 0; i < nodes.length; i++) {
+            var item = nodes[i];
+            html += "<tr>";
+            html += `<td>${i + 1}</td>`;
+            html += `<td>${item.line}</td>`;
+            html += `<td>${item.column}</td>`;
+            html += `<td>${item.errorType.toString()}</td>`;
+            html += `<td>${item.description}</td>`;
+            html += `<td>${item.environmentType.toString()}</td>`;
+            html += "</tr>";
+            }
+        
+            html += "</tbody>";
+            html += "</table>";
+            //console.log(html);
+            document.getElementById("ReportErrors").innerHTML = html;
+        }
+    </script>
     <div id="root"></div>
   </body>
 </html>

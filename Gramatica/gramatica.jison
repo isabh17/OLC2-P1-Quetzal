@@ -108,7 +108,7 @@ lex_identificador   [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*
 
 <<EOF>>             return 'EOF';
 /* ERROR */
-. { ErrorList.addError(new ErrorNode(yylloc.first_line,yylloc.first_column,new ErrorType(EnumErrorType.LEXICO),`El caracter: "${yytext}" no pertenece al lenguaje`,new EnvironmentType(EnumEnvironmentType.NULL, ""))); }
+. { ErrorList.addError(new ErrorNode(yylloc.first_line,yylloc.first_column,new ErrorType(EnumErrorType.LEXICO),`El caracter: "${yytext}" no pertenece al lenguaje`,ENVIRONMENT.NULL)); }
 
 /*.                       { console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); }*/
 /lex
@@ -173,8 +173,10 @@ CUERPO
   | CONTINU                     {  $$ = $1; }
   | CALL_FUNCTION PTOCOMA       {  $$ = $1,$2; }
 ;
-SENTENCES: SENTENCES SENTENCE {  }
-         | SENTENCE           {  }
+
+SENTENCES
+  : SENTENCES SENTENCE          { $$=$1; $$.push($2); }
+  | SENTENCE                    { $$=[]; $$.push($1); }
 ;
 
 SENTENCE
@@ -194,8 +196,8 @@ SENTENCE
   | POST_FIXED PTOCOMA          { $$ = $1; }
   | TEMPLATE_STRUCT             { }
   | CREATE_STRUCT               { }
-  | error PTOCOMA               { ErrorList.addError(new ErrorNode(this._$.first_line,this._$.first_column,new ErrorType(EnumErrorType.SYNTACTIC),` Error sintactico `,new EnvironmentType(EnumEnvironmentType.NULL, ""))); $$ = new InstructionError(); }
-  | error KEYCLS                { ErrorList.addError(new ErrorNode(this._$.first_line,this._$.first_column,new ErrorType(EnumErrorType.SYNTACTIC),` Error sintactico `,new EnvironmentType(EnumEnvironmentType.NULL, ""))); $$ = new InstructionError(); }
+  | error PTOCOMA               { ErrorList.addError(new ErrorNode(this._$.first_line,this._$.first_column,new ErrorType(EnumErrorType.SYNTACTIC),` Error sintactico `,ENVIRONMENT.NULL)); $$ = new InstructionError(); }
+  | error KEYCLS                { ErrorList.addError(new ErrorNode(this._$.first_line,this._$.first_column,new ErrorType(EnumErrorType.SYNTACTIC),` Error sintactico `,ENVIRONMENT.NULL)); $$ = new InstructionError(); }
 
 ;
 
@@ -231,15 +233,15 @@ ASSIGNMENT
 ;
 
 EXP
-  : EXP '&'  EXP                              { $$=($1.toString()+$2.toString()+$3.toString(),  newNode(yy, yystate, $1.node, $2, $3.node)); }
-  | EXP '+'  EXP                              { $$=($1.toString()+$2.toString()+$3.toString(),  newNode(yy, yystate, $1.node, $2, $3.node)); }
-  | EXP '-'  EXP                              { $$=($1.toString()+$2.toString()+$3.toString(),  newNode(yy, yystate, $1.node, $2, $3.node)); }
-  | EXP '*' EXP                               { $$=($1.toString()+$2.toString()+$3.toString(),  newNode(yy, yystate, $1.node, $2, $3.node)); }
-  | EXP '/' EXP                               { $$=($1.toString()+$2.toString()+$3.toString(),  newNode(yy, yystate, $1.node, $2, $3.node)); }
-  | EXP '%' EXP                               { $$=($1.toString()+$2.toString()+$3.toString()); }
-  | EXP '^' EXP                               { $$=($1.toString()+$2.toString()+$3.toString()); }
+  : EXP '&'  EXP                              {  }
+  | EXP '+'  EXP                              { $$ = new Aritmetica($1, ARITMETIC_OPERATOR.SUM, $3, @1.first_line, @1.first_column); }
+  | EXP '-'  EXP                              { $$ = new Aritmetica($1, ARITMETIC_OPERATOR.REST, $3, @1.first_line, @1.first_column); }
+  | EXP '*' EXP                               { $$ = new Aritmetica($1, ARITMETIC_OPERATOR.MULT, $3, @1.first_line, @1.first_column); }
+  | EXP '/' EXP                               { $$ = new Aritmetica($1, ARITMETIC_OPERATOR.DIV, $3, @1.first_line, @1.first_column); }
+  | EXP '%' EXP                               { $$ = new Aritmetica($1, ARITMETIC_OPERATOR.MOD, $3, @1.first_line, @1.first_column); }
+  | EXP '^' EXP                               { $$ = new Aritmetica($1, ARITMETIC_OPERATOR.POT, $3, @1.first_line, @1.first_column); }
   | '!' EXP                                   { $$=($1.toString()+$2.toString()); }
-  | '-' EXP %prec UMENOS                      { $$=($1.toString()+$2.toString()); }
+  | '-' EXP %prec UMENOS                      { $$ = new Aritmetica($1, ARITMETIC_OPERATOR.UMENOS, $3, @1.first_line, @1.first_column); }
   | EXP '<'  EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
   | EXP '>'  EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
   | EXP '&&' EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
@@ -265,13 +267,13 @@ L_E
 ;
 
 PRIMITIVO
-  : nullVal                                   { $$=$1; }
-  | intVal                                    { $$=$1; }
-  | doubleVal                                 { $$=$1; }
-  | charVal                                   { $$=$1; }
-  | stringVal                                 { $$=$1; }
-  | trueVal                                   { $$=$1; }
-  | falseVal                                  { $$=$1; }
+  : nullVal         { $$ = new Primitive(Type.NULL,  $1, @1.first_line, @1.first_column); }
+  | intVal          { $$ = new Primitive(Type.INT,  $1, @1.first_line, @1.first_column); }
+  | doubleVal       { $$ = new Primitive(Type.DOUBLE,  $1, @1.first_line, @1.first_column); }
+  | charVal         { $$ = new Primitive(Type.CHAR,  $1, @1.first_line, @1.first_column); }
+  | stringVal       { $$ = new Primitive(Type.STRING,  $1, @1.first_line, @1.first_column); }
+  | trueVal         { $$ = new Primitive(Type.BOOLEAN,  $1, @1.first_line, @1.first_column); }
+  | falseVal        { $$ = new Primitive(Type.BOOLEAN,  $1, @1.first_line, @1.first_column); }
 ;
 
 TIPO
