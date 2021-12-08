@@ -29,9 +29,9 @@ class Relational extends Instruction{
       }else if (this.operLeft.type === Type.DOUBLE && this.operRight.type === Type.STRING){
         return this.getVal(this.operLeft.type, left) === this.getVal(this.operRight.type, right);
       //BOOLEAN
-      }else if (this.operLeft.type === Type.BOOLEANO && this.operRight.type === Type.BOOLEANO){
+      }else if (this.operLeft.type === Type.BOOLEAN && this.operRight.type === Type.BOOLEAN){
         return this.getVal(this.operLeft.type, left) === this.getVal(this.operRight.type, right);
-      }else if (this.operLeft.type === Type.BOOLEANO && this.operRight.type === Type.STRING){
+      }else if (this.operLeft.type === Type.BOOLEAN && this.operRight.type === Type.STRING){
         return this.getVal(this.operLeft.type, left) === this.getVal(this.operRight.type, right);
       // CHAR
       }else if (this.operLeft.type === Type.CHAR && this.operRight.type === Type.CHAR){
@@ -41,7 +41,7 @@ class Relational extends Instruction{
         return this.getVal(this.operLeft.type, left) === this.getVal(this.operRight.type, right);
       }else if (this.operLeft.type === Type.STRING && this.operRight.type === Type.DOUBLE){
         return this.getVal(this.operLeft.type, left) === this.getVal(this.operRight.type, right);
-      }else if (this.operLeft.type === Type.STRING && this.operRight.type === Type.BOOLEANO){
+      }else if (this.operLeft.type === Type.STRING && this.operRight.type === Type.BOOLEAN){
         return this.getVal(this.operLeft.type, left) === this.getVal(this.operRight.type, right);
       }else if (this.operLeft.type === Type.STRING && this.operRight.type === Type.STRING){
         return this.getVal(this.operLeft.type, left) === this.getVal(this.operRight.type, right);
@@ -53,9 +53,10 @@ class Relational extends Instruction{
       }else if (this.operRight.type === Type.NULL){
         return false;
       }
-      return Exception("Semantico", "Tipo Erroneo de operacion para ===.", this.row, this.column,  datetime.now().strftime('%Y-%m-%d %H){%M){%S'))
+      console.log("Tipo Erroneo de operacion para ===.");
+      //return Exception("Semantico", "Tipo Erroneo de operacion para ===.", this.row, this.column,  datetime.now().strftime('%Y-%m-%d %H){%M){%S'))
 
-    }else if (this.operador === RELATIONAL_OPERATOR.NOT){
+    }else if (this.operador === RELATIONAL_OPERATOR.DIFERENT){
       // INT
       if (this.operLeft.type === Type.INT && this.operRight.type === Type.INT){
         return this.getVal(this.operLeft.type, left) != this.getVal(this.operRight.type, right);
@@ -71,9 +72,9 @@ class Relational extends Instruction{
       }else if (this.operLeft.type === Type.DOUBLE && this.operRight.type === Type.STRING){
         return this.getVal(this.operLeft.type, left) != this.getVal(this.operRight.type, right);
       // BOOLEAN
-      }else if (this.operLeft.type === Type.BOOLEANO && this.operRight.type === Type.BOOLEANO){
+      }else if (this.operLeft.type === Type.BOOLEAN && this.operRight.type === Type.BOOLEAN){
         return this.getVal(this.operLeft.type, left) != this.getVal(this.operRight.type, right);
-      }else if (this.operLeft.type === Type.BOOLEANO && this.operRight.type === Type.STRING){
+      }else if (this.operLeft.type === Type.BOOLEAN && this.operRight.type === Type.STRING){
         return this.getVal(this.operLeft.type, left) != this.getVal(this.operRight.type, right);
       // CHAR
       }else if (this.operLeft.type === Type.CHAR && this.operRight.type === Type.CHAR){
@@ -83,7 +84,7 @@ class Relational extends Instruction{
         return this.getVal(this.operLeft.type, left) != str(this.getVal(this.operRight.type, right));
       }else if (this.operLeft.type === Type.STRING && this.operRight.type === Type.DOUBLE){
         return this.getVal(this.operLeft.type, left) != this.getVal(this.operRight.type, right);
-      }else if (this.operLeft.type === Type.STRING && this.operRight.type === Type.BOOLEANO){
+      }else if (this.operLeft.type === Type.STRING && this.operRight.type === Type.BOOLEAN){
         return this.getVal(this.operLeft.type, left) != this.getVal(this.operRight.type, right);
       }else if (this.operLeft.type === Type.STRING && this.operRight.type === Type.STRING){
         return this.getVal(this.operLeft.type, left) != this.getVal(this.operRight.type, right);
@@ -97,7 +98,8 @@ class Relational extends Instruction{
       }else if (this.operRight.type === Type.NULL){
         return true;
       }
-      return Exception("Semantico", "Tipo Erroneo de operacion para =!.", this.row, this.column,  datetime.now().strftime('%Y-%m-%d %H){%M){%S'))
+      console.log("Tipo Erroneo de operacion para !=.");
+      //return Exception("Semantico", "Tipo Erroneo de operacion para =!.", this.row, this.column,  datetime.now().strftime('%Y-%m-%d %H){%M){%S'))
     }else if ( this.operador === RELATIONAL_OPERATOR.MENQ){
       // INT
       if ( this.operLeft.type === Type.INT && this.operRight.type === Type.INT){
@@ -110,10 +112,11 @@ class Relational extends Instruction{
       }else if ( this.operLeft.type === Type.DOUBLE && this.operRight.type === Type.DOUBLE){
         return this.getVal(this.operLeft.type, left) < this.getVal(this.operRight.type, right);
       // BOOLEAN
-      }else if ( this.operLeft.type === Type.BOOLEANO && this.operRight.type === Type.BOOLEANO){
+      }else if ( this.operLeft.type === Type.BOOLEAN && this.operRight.type === Type.BOOLEAN){
         return this.getVal(this.operLeft.type, left) < this.getVal(this.operRight.type, right);
       }
-      return Exception("Semantico", "Tipo Erroneo de operacion para <.", this.row, this.column,  datetime.now().strftime('%Y-%m-%d %H){%M){%S'))
+      console.log("Tipo Erroneo de operacion para <.");
+      //return Exception("Semantico", "Tipo Erroneo de operacion para <.", this.row, this.column,  datetime.now().strftime('%Y-%m-%d %H){%M){%S'))
 
     }else if ( this.operador === RELATIONAL_OPERATOR.MAYQ){
       // INT
@@ -127,10 +130,11 @@ class Relational extends Instruction{
       }else if ( this.operLeft.type === Type.DOUBLE && this.operRight.type === Type.DOUBLE){
         return this.getVal(this.operLeft.type, left) > this.getVal(this.operRight.type, right);
       // BOOLEAN
-      }else if ( this.operLeft.type === Type.BOOLEANO && this.operRight.type === Type.BOOLEANO){
+      }else if ( this.operLeft.type === Type.BOOLEAN && this.operRight.type === Type.BOOLEAN){
         return this.getVal(this.operLeft.type, left) > this.getVal(this.operRight.type, right);
       }
-      return Exception("Semantico", "Tipo Erroneo de operacion para >.", this.row, this.column,  datetime.now().strftime('%Y-%m-%d %H){%M){%S'))
+      console.log("Tipo Erroneo de operacion para >.");
+      //return Exception("Semantico", "Tipo Erroneo de operacion para >.", this.row, this.column,  datetime.now().strftime('%Y-%m-%d %H){%M){%S'))
         
     }else if ( this.operador === RELATIONAL_OPERATOR.MENEQ){
       // INT
@@ -144,10 +148,11 @@ class Relational extends Instruction{
       }else if ( this.operLeft.type === Type.DOUBLE && this.operRight.type === Type.DOUBLE){
         return this.getVal(this.operLeft.type, left) <= this.getVal(this.operRight.type, right);
       // BOOLEAN
-      }else if ( this.operLeft.type === Type.BOOLEANO && this.operRight.type === Type.BOOLEANO){
+      }else if ( this.operLeft.type === Type.BOOLEAN && this.operRight.type === Type.BOOLEAN){
         return this.getVal(this.operLeft.type, left) <= this.getVal(this.operRight.type, right);
       }
-      return Exception("Semantico", "Tipo Erroneo de operacion para <=.", this.row, this.column,  datetime.now().strftime('%Y-%m-%d %H){%M){%S'))
+      console.log("Tipo Erroneo de operacion para <=.");
+      //return Exception("Semantico", "Tipo Erroneo de operacion para <=.", this.row, this.column,  datetime.now().strftime('%Y-%m-%d %H){%M){%S'))
         
     }else if ( this.operador === RELATIONAL_OPERATOR.MAYEQ){
       // INT
@@ -161,10 +166,11 @@ class Relational extends Instruction{
       }else if ( this.operLeft.type === Type.DOUBLE && this.operRight.type === Type.DOUBLE){
         return this.getVal(this.operLeft.type, left) >= this.getVal(this.operRight.type, right)
       // BOOLEAN
-      }else if ( this.operLeft.type === Type.BOOLEANO && this.operRight.type === Type.BOOLEANO){
+      }else if ( this.operLeft.type === Type.BOOLEAN && this.operRight.type === Type.BOOLEAN){
         return this.getVal(this.operLeft.type, left) >= this.getVal(this.operRight.type, right)
       }
-      return Exception("Semantico", "Tipo Erroneo de operacion para >.", this.row, this.column,  datetime.now().strftime('%Y-%m-%d %H){%M){%S'))
+      console.log("Tipo Erroneo de operacion para >=.");
+      //return Exception("Semantico", "Tipo Erroneo de operacion para >=.", this.row, this.column,  datetime.now().strftime('%Y-%m-%d %H){%M){%S'))
     }
     return Exception("Semantico", "Tipo de Operacion no Especif (icado.", this.row, this.column,  datetime.now().strftime('%Y-%m-%d %H){%M){%S'))
   }
@@ -174,7 +180,7 @@ class Relational extends Instruction{
       return parseInt(value);
     }else if( type === Type.DOUBLE){
       return parseFloat(value);
-    }else if(type === Type.BOOLEANO){
+    }else if(type === Type.BOOLEAN){
       return Boolean(value);
     }else if(type === Type.CHAR){
       return parseInt(value.charCodeAt(0));
