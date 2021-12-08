@@ -1,7 +1,7 @@
 
 %lex
 
-%options case-insensitive
+%options case-sensitive
 lex_identificador   [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*
 
 %%
@@ -112,16 +112,7 @@ lex_identificador   [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*
 
 /*.                       { console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); }*/
 /lex
-/*%{  
-  const EnumEnvironmentType =require("../Utils/EnumEnvironmentType.js");
-  const ErrorList =require("../Utils/ErrorList.js");
-  const ErrorType =require("../Utils/ErrorType.js");
-  const Node =require("../Struct/Abstract/Node.js");
-  const ErrorNode =require("../Utils/ErrorNode.js");
-  const Instruction =require("../Struct/Abstract/Instruction.js");
-  const InstructionError =require("../Instrucciones/InstructionError.js");
 
-%}*/
 /* Asociación de operadores y precedencia */
 %right '='
 %right '?' 'DOSPTOS'
@@ -201,7 +192,6 @@ SENTENCE
   | CREATE_STRUCT               { }
   | error PTOCOMA               { ErrorList.addError(new ErrorNode(this._$.first_line,this._$.first_column,new ErrorType(EnumErrorType.SYNTACTIC),` Error sintactico `,ENVIRONMENT.NULL)); $$ = new InstructionError(); }
   | error KEYCLS                { ErrorList.addError(new ErrorNode(this._$.first_line,this._$.first_column,new ErrorType(EnumErrorType.SYNTACTIC),` Error sintactico `,ENVIRONMENT.NULL)); $$ = new InstructionError(); }
-
 ;
 
 CREATE_STRUCT
@@ -218,19 +208,19 @@ PRINT
 ;
 
 DECLARATION
-  : TIPO IDENTIFIERS PTOCOMA                    { console.log($1, $2, $3); }
-  | TIPO ID '=' EXP PTOCOMA                     { console.log($1, $2, $3, $4, $5); }
-  | TIPO COROP CORCLS IDENTIFIERS PTOCOMA       { console.log($1, $2, $3, $4, $5); }
-  | TIPO COROP CORCLS ID '=' EXP PTOCOMA        { console.log($1, $2, $3, $4, $5, $6, $7); }
+  : TIPO IDENTIFIERS PTOCOMA                    { $$ = new Declaration($1, $2, null, @1.first_line, @1.first_column); }
+  | TIPO ID '=' EXP PTOCOMA                     { $$ = new Declaration($1, $2, $4, @1.first_line, @1.first_column); }
+  | TIPO COROP CORCLS IDENTIFIERS PTOCOMA       { $$ = new Declaration(null, null, null, @1.first_line, @1.first_column); }
+  | TIPO COROP CORCLS ID '=' EXP PTOCOMA        { $$ = new Declaration(null, null, null, @1.first_line, @1.first_column); }
 ;
 
 IDENTIFIERS
-  : IDENTIFIERS COMA ID                 { $$=($1.toString()+$2.toString()+$3.toString()); }
-  | ID                                  { $$=$1.toString(); }
+  : IDENTIFIERS COMA ID                 { $$=$1; $$.push($3); }
+  | ID                                  { $$=[]; $$.push($1); }
 ;
 
 ASSIGNMENT
-  : ID '=' EXP PTOCOMA                                            { console.log($1, $2, $3, $4); }
+  : ID '=' EXP PTOCOMA                                            { $$ = new Assignation($1, $3, @1.first_line, @1.first_column); }
   | ID COROP CORCLS '=' PARAMETROS                                {  }
   | COROP CORCLS ID '=' COROP PARAMETROS CORCLS PTOCOMA           {  }
 ;
@@ -243,23 +233,23 @@ EXP
   | EXP '/' EXP                               { $$ = new Aritmetica($1, ARITMETIC_OPERATOR.DIV, $3, @1.first_line, @1.first_column); }
   | EXP '%' EXP                               { $$ = new Aritmetica($1, ARITMETIC_OPERATOR.MOD, $3, @1.first_line, @1.first_column); }
   | EXP '^' EXP                               { $$ = new Aritmetica($1, ARITMETIC_OPERATOR.POT, $3, @1.first_line, @1.first_column); }
-  | '!' EXP                                   { $$=($1.toString()+$2.toString()); }
-  | '-' EXP %prec UMENOS                      { $$ = new Aritmetica($1, ARITMETIC_OPERATOR.UMENOS, $3, @1.first_line, @1.first_column); }
-  | EXP '<'  EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
-  | EXP '>'  EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
-  | EXP '&&' EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
-  | EXP '||' EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
-  | EXP '!=' EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
-  | EXP '==' EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
-  | EXP '>=' EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
-  | EXP '<=' EXP                              { $$=($1.toString()+$2.toString()+$3.toString()); }
+  | '!' EXP                                   { $$=new Logic($2, LOGIC_OPERATOR.NOT, null, @1.first_line, @1.first_column); }
+  | '-' EXP %prec UMENOS                      { $$ = new Aritmetica($1, ARITMETIC_OPERATOR.UMENOS, null, @1.first_line, @1.first_column); }
+  | EXP '<'  EXP                              { $$=new Relational($1, RELATIONAL_OPERATOR.MENQ , $3, @1.first_line, @1.first_column); }
+  | EXP '>'  EXP                              { $$=new Relational($1, RELATIONAL_OPERATOR.MAYQ , $3, @1.first_line, @1.first_column); }
+  | EXP '&&' EXP                              { $$=new Logic($1, LOGIC_OPERATOR.AND, $3, @1.first_line, @1.first_column); }
+  | EXP '||' EXP                              { $$=new Logic($1, LOGIC_OPERATOR.OR, $3, @1.first_line, @1.first_column); }
+  | EXP '!=' EXP                              { $$=new Relational($1, RELATIONAL_OPERATOR.DIFFERENT , $3, @1.first_line, @1.first_column); }
+  | EXP '==' EXP                              { $$=new Relational($1, RELATIONAL_OPERATOR.IDENT , $3, @1.first_line, @1.first_column); }
+  | EXP '>=' EXP                              { $$=new Relational($1, RELATIONAL_OPERATOR.MAYEQ , $3, @1.first_line, @1.first_column); }
+  | EXP '<=' EXP                              { $$=new Relational($1, RELATIONAL_OPERATOR.MENEQ , $3, @1.first_line, @1.first_column); }
   | CALL_FUNCTION                             { $$=$1; }
   | PRIMITIVO                                 { $$=$1; }
-  | PAROP EXP PARCLS                          { $$=($1.toString()+$2.toString()+$3.toString()); }
+  | PAROP EXP PARCLS                          { $$=$2; }
   | COROP L_E CORCLS                          { $$=($1.toString()+$2.toString()+$3.toString()); }
   | ID COROP L_E CORCLS                       { $$=($1.toString()+$2.toString()+$3.toString()+$4.toString()); }
   | EXP '?' EXP DOSPTOS EXP                   { $$=($1.toString()+$2.toString()+$3.toString()+$4.toString()+$5.toString()); }
-  | ID                                        { $$=$1.toString(); }
+  | ID                                        { $$= new Identifier($1, @1.first_line, @1.first_column); }
   | POST_FIXED                                { $$=$1; }
 ;
 
@@ -280,11 +270,11 @@ PRIMITIVO
 ;
 
 TIPO
-  : INT                                       { $$=$1; }
-  | DOUBLE                                    { $$=$1; }
-  | BOOLEAN                                   { $$=$1; }
-  | STRING                                    { $$=$1; }
-  | CHAR                                      { $$=$1; }
+  : INT                                       { $$=Type.INT; }
+  | DOUBLE                                    { $$=Type.DOUBLE; }
+  | BOOLEAN                                   { $$=Type.BOOLEAN; }
+  | STRING                                    { $$=Type.STRING; }
+  | CHAR                                      { $$=Type.CHAR; }
 ;
 
 SENTENCE_FOR
