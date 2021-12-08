@@ -7,18 +7,11 @@ class Identifier extends Instruction{
 
   execute(tree, table){
     var symbol = table.getSymbol(this.identifier);
-    if (symbol == null){
-      symbol = tree.getSymbol(this.identifier)
-      if (symbol == null){
-        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumType.SEMANTIC),`No se encontro la variable `+this.identifier,table.getEnvironment()));
-        return Exception("Semantico", "No se encontro la variable "+this.identifier+" declarada", this.fila, this.columna, datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-      }else{
-        this.tipo = symbol.tipo
-        return symbol.getVariables();
-      }
+    if (symbol === null){
+      return Exception("Semantico", "No se encontro la variable "+this.identifier+" declarada", this.fila, this.columna);
     }else{
-        this.tipo = symbol.get_tipo()
-        return symbol.get_valor();
+        this.type = symbol.getType();
+        return symbol.getValue();
     }
   }
 }
