@@ -1,5 +1,5 @@
 class Symbol{
-  constructor(id, type, row, column, value, ambit){
+  constructor(id, type, value, row, column, ambit){
     this.id = id;
     this.type = type;
     this.row = row;
@@ -8,43 +8,43 @@ class Symbol{
     this.ambit = ambit;
   }
 
-  get_id(){
-      return this.id;
+  getId(){
+    return this.id;
   }
 
-  set_id(id){
-      this.id = id;
+  setId(id){
+    this.id = id;
   }
 
-  get_type(){
-      return this.type;
+  getType(){
+    return this.type;
   }
 
-  set_type(type){
-      this.type = type;
+  setType(type){
+    this.type = type;
   }
 
-  get_row(){
-      return this.row;
+  getRow(){
+    return this.row;
   }
     
-  set_row(row){
-      this.row = row;
+  setRow(row){
+    this.row = row;
   }
 
-  get_column(){
-      return this.column;
+  getColumn(){
+    return this.column;
   }
 
-  set_column(column){
-      this.column = column;
+  setColumn(column){
+    this.column = column;
   }
     
-  get_value(){
-      return this.value;
+  getValue(){
+    return this.value;
   }
 
-  set_value(value){
-      this.value = value;
+  setValue(value){
+    this.value = value;
   }
 }

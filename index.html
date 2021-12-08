@@ -16,8 +16,6 @@
     <link href="css/theme/darcula.css" rel="stylesheet"/>
     <link href="css/theme/dracula.css" rel="stylesheet"/>
     <link rel="stylesheet" href="AST/chart/chart.css">
-     <!-- GRAMMAR FOR GRAPH -->
-     <script src="Gramatica/gramatica.js"></script>
     <title>Quetzal Grupo #40</title>
   </head>
   <body>
@@ -125,7 +123,7 @@
         
     </div>  
     <!-- Gramatica-->
-    <script type="text/javascript" src="Gramatica/gramatica.js"></script>
+    <script type="text/javascript" src="./Gramatica/gramatica.js"></script>
     <!--Interprete-->
     <script src="./Interprete/Abstract/Instruction.js"></script>
     <script src="./Interprete/Expresions/Primitive.js"></script>
@@ -208,7 +206,9 @@
             tree.setGlobalTable(tsGlobal);
             tree.getInstruction().forEach(instruction=>{
                 var value = instruction.execute(tree, tsGlobal);
-
+                if (value instanceof Exception){
+                    console.log(value);
+                }
             });
             Consola.setValue(tree.getOut());
               /*if (document.getElementById("grafo")) {

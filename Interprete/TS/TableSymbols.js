@@ -31,29 +31,26 @@ class TableSymbols{
     return null;
   }
 
-  actualizarTabla(simbolo){
+  updateValueSymbol(symbol){
     var actualTable = this;
     while(actualTable != null){
-      if(simbolo.id in actualTable.tabla){
-        if(actualTable.tabla[simbolo.id].get_tipo() == simbolo.get_tipo()){
-          actualTable.tabla[simbolo.id].set_valor(simbolo.get_valor())
-          actualTable.tabla[simbolo.id].set_tipo(simbolo.get_tipo())
-          return null
+      if(symbol.id in actualTable.table){
+        if(actualTable.table[symbol.id].getType() === symbol.getType()){
+          actualTable.table[symbol.id].setValue(symbol.getValue());
+          actualTable.table[symbol.id].setType(symbol.getType());
+          return null;
         }else{
-          actualTable.tabla[simbolo.id].set_tipo(simbolo.get_tipo());
-          actualTable.tabla[simbolo.id].set_valor(simbolo.get_valor());
-          actualTable.tabla[simbolo.id].set_tipo(simbolo.get_tipo());
-          return null
+          return new Exception("Semantico", "No se puede asignar tipos distintos a las variables", symbol.getRow(), symbol.getColumn());
         }
       }else{
-        actualTable = actualTable.anterior;
+        actualTable = actualTable.previous;
         if(actualTable === null){
           return null;
         }
       }
     }
     //Retornariamos un eror semantico
-    return Exception("Semantico", "Variable No encontrada en Asignacion", simbolo.get_fila(), simbolo.get_columna(), datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    return new Exception("Semantico", "Variable No encontrada en Asignacion", symbol.getRow(), symbol.getColumn());
   }
 
   setEnvironment(environment){
