@@ -224,7 +224,7 @@ class Aritmetica extends Instruction{
       return parseInt(value);
     }else if( type === Type.DOUBLE){
       return parseFloat(value);
-    }else if(type === Type.BOOLEANO){
+    }else if(type === Type.BOOLEAN){
       return Boolean(value);
     }else if(type === Type.CHAR){
       return parseInt(value.charCodeAt(0));
