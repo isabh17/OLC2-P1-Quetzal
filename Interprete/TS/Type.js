@@ -35,14 +35,14 @@ const LOGIC_OPERATOR = {
 }
 
 const ENVIRONMENT = {
-  GLOBAL : 1,
-  IF : 2,
-  WHILE : 3,
-  DO : 4,
-  SWITCH : 5,
-  FORIN : 6,
-  FOR : 7,
-  FUNCTION : 8,
-  MAIN : 9,
-  NULL : 10
+  GLOBAL : 'GLOBAL',
+  IF : 'IF',
+  WHILE : 'WHILE',
+  DO : 'DO',
+  SWITCH : 'SWITCH',
+  FORIN : 'FORIN',
+  FOR : 'FOR',
+  FUNCTION : 'FUNCTION',
+  MAIN : 'MAIN',
+  NULL : 'NULL'
 }

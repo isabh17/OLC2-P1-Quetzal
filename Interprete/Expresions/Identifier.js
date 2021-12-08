@@ -10,6 +10,7 @@ class Identifier extends Instruction{
     if (symbol == null){
       symbol = tree.getSymbol(this.identifier)
       if (symbol == null){
+        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumType.SEMANTIC),`No se encontro la variable `+this.identifier,table.getEnvironment()));
         return Exception("Semantico", "No se encontro la variable "+this.identifier+" declarada", this.fila, this.columna, datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
       }else{
         this.tipo = symbol.tipo

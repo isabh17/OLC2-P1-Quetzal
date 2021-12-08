@@ -172,6 +172,9 @@ CUERPO
   | BREAKS                      {  $$ = $1; }
   | CONTINU                     {  $$ = $1; }
   | CALL_FUNCTION PTOCOMA       {  $$ = $1,$2; }
+  | error PTOCOMA               { ErrorList.addError(new ErrorNode(this._$.first_line,this._$.first_column,new ErrorType(EnumErrorType.SYNTACTIC),` Error sintactico `,ENVIRONMENT.NULL)); $$ = new InstructionError(); }
+  | error KEYCLS                { ErrorList.addError(new ErrorNode(this._$.first_line,this._$.first_column,new ErrorType(EnumErrorType.SYNTACTIC),` Error sintactico `,ENVIRONMENT.NULL)); $$ = new InstructionError(); }
+
 ;
 
 SENTENCES
@@ -210,7 +213,7 @@ TEMPLATE_STRUCT
 ;
 
 PRINT
-  : Rprint PAROP EXP PARCLS PTOCOMA		  { $$ = new Print(this._$.first_line,this._$.first_column,$3); }
+  : Rprint PAROP EXP PARCLS PTOCOMA		  { $$ = new Print(this._$.first_line,this._$.first_column,$3,false); }
   | Rprintln PAROP EXP PARCLS PTOCOMA		{ $$ = new Print(this._$.first_line,this._$.first_column,$3,true); }
 ;
 
@@ -317,10 +320,6 @@ ELSE_IF
   | IF PARCLS EXP PARCLS BLOCK_IF              {  }
 ;
 
-ELSEIF
-  : BLOCK                                       {  }
-  | SENTENCE                                    {  }
-;
 
 SENTENCE_WHILE
   : WHILE PAROP EXP PARCLS BLOCK            { $$ = new While(this._$.first_line,this._$.first_column,$3,$5); }
