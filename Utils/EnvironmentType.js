@@ -4,7 +4,6 @@ var EnumEnvironmentType;
     EnumEnvironmentType["IF"] = "IF";
     EnumEnvironmentType["FOR"] = "FOR";
     EnumEnvironmentType["FOR_IN"] = "FOR_IN";
-    EnumEnvironmentType["FOR_OF"] = "FOR_OF";
     EnumEnvironmentType["WHILE"] = "WHILE";
     EnumEnvironmentType["SWITCH"] = "SWITCH";
     EnumEnvironmentType["DO"] = "DO";

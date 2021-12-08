@@ -208,8 +208,8 @@ TEMPLATE_STRUCT
 ;
 
 PRINT
-  : Rprint PAROP EXP PARCLS PTOCOMA		{ console.log($1,$2,$3,$4,$5); }
-  | Rprintln PAROP EXP PARCLS PTOCOMA		{ console.log($1,$2,$3,$4,$5); }
+  : Rprint PAROP EXP PARCLS PTOCOMA		  { $$ = new Print(this._$.first_line,this._$.first_column,$3); }
+  | Rprintln PAROP EXP PARCLS PTOCOMA		{ $$ = new Print(this._$.first_line,this._$.first_column,$3,true); }
 ;
 
 DECLARATION
@@ -321,11 +321,11 @@ ELSEIF
 ;
 
 SENTENCE_WHILE
-  : WHILE PAROP EXP PARCLS BLOCK  { console.log($1, $2, $3, $4, $5); }
+  : WHILE PAROP EXP PARCLS BLOCK            { $$ = new While(this._$.first_line,this._$.first_column,$3,$5); }
 ;
 
 SENTENCE_DO_WHILE
-  : DO BLOCK WHILE PAROP EXP PARCLS PTOCOMA { console.log($1, $2, $3, $4, $5, $6, $7); }
+  : DO BLOCK WHILE PAROP EXP PARCLS PTOCOMA { $$ = new Do(this._$.first_line,this._$.first_column,$2,$5); }
 ;
 
 FUNCTION
@@ -350,40 +350,41 @@ PARAMETER
 ;
 
 CALL_FUNCTION
-  : ID PAROP L_E PARCLS         { $$=($1.toString()+$2.toString()+$3.toString()+$4.toString()); }
-  | ID PAROP PARCLS             { $$=($1.toString()+$2.toString()+$3.toString()); }
+  : ID PAROP L_E PARCLS         { $$ = new CallFunction(this._$.first_line,this._$.first_column,$1,$3,true); }
+  | ID PAROP PARCLS             { $$ = new CallFunction(this._$.first_line,this._$.first_column,$1,[],true); }
 ;
 
 SENTENCE_SWITCH
-  : SWITCH PAROP EXP PARCLS BLOCK_SWITCH {  }
+  : SWITCH PAROP EXP PARCLS BLOCK_SWITCH { $$ = new Switch(this._$.first_line,this._$.first_column,$3,$5); }
 ;
 
 BLOCK_SWITCH
-  : KEYOP L_CASE KEYCLS         {  }
-  | KEYOP KEYCLS                {  }
+  : KEYOP L_CASE KEYCLS         { $$ = $2; }
+  | KEYOP KEYCLS                { $$ = []; }
 ;
 
 L_CASE
-  : L_CASE CASES {  }
-  | CASES      {  }
+  : L_CASE CASES  { $$ = $1; $$.push($2); }
+  | CASES         { $$ = []; $$.push($1); }
 ;
 
 CASES
-  : CASE EXP DOSPTOS SENTENCES          {  }
-  | CASE EXP DOSPTOS                    {  }
-  | DEFAULT DOSPTOS                     {  }
-  | DEFAULT DOSPTOS SENTENCES           {  }
+  : CASE EXP DOSPTOS SENTENCES          { $$ = new CaseSwitch(this._$.first_line,this._$.first_column,$2,new Block($4),true,true);  }
+  | CASE EXP DOSPTOS                    { $$ = new CaseSwitch(this._$.first_line,this._$.first_column,$2,new Block([]),true,false); }
+  | DEFAULT DOSPTOS SENTENCES           { $$ = new CaseSwitch(this._$.first_line,this._$.first_column,"",new Block($3),false,true); }
+  | DEFAULT DOSPTOS                     { $$ = new CaseSwitch(this._$.first_line,this._$.first_column,"",new Block([]),false,false);}
+
 ;
 
 BREAKS
-  : BREAK PTOCOMA               {  }
+  : BREAK PTOCOMA               { $$ = new Break(this._$.first_line,this._$.first_column); }
 ;
 
 CONTINU
-  : CONTINUE PTOCOMA            {  }
+  : CONTINUE PTOCOMA            { $$ = new Continue(this._$.first_line,this._$.first_column); }
 ;
 
 RETUR
-  : RETURN PTOCOMA    {  }
-  | RETURN EXP PTOCOMA {  }
+  : RETURN PTOCOMA     { $$ = new Return(this._$.first_line,this._$.first_column,null,false); }
+  | RETURN EXP PTOCOMA { $$ = new Return(this._$.first_line,this._$.first_column,$2,true); }
 ;
