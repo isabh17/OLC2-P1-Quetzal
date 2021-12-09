@@ -138,10 +138,6 @@ lex_identificador   [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*
 INIT: SENTENCES EOF             {  return $1;}
     | EOF
 ;
-/*
-CUERPOS: CUERPOS CUERPO       {  }
-        | CUERPO              {  }
-*/
 
 SENTENCES
   : SENTENCES SENTENCE          { $$=$1; $$.push($2); }

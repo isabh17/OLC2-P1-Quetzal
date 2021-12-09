@@ -10,7 +10,7 @@ class If extends Instruction {
         var condition = this.condition.execute(tree, table);
         if (condition instanceof Exception) return condition;
         if (this.condition.type === Type.BOOLEAN) {
-            if (condition === 'true') {
+            if (String (condition) === 'true') {
                 var newTable = new TableSymbols(table);
                 if (this.instructionsIf[0] !== undefined) {
                     for (var instrIF of this.instructionsIf) {
