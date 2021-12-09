@@ -138,18 +138,17 @@
     <script src="./Interprete/TS/Exception.js"></script>
     <script src="./Interprete/Instructions/Print.js"></script>
     <script src="./Interprete/Instructions/Declaration.js"></script>
-    <script src="./Interprete/Instructions/Block.js"></script>
-    <script src="./Interprete/Instructions/BlockIf.js"></script>
-    <script src="./Interprete/Instructions/If.js"></script>
-    <script src="./Interprete/Instructions/InstructionError.js"></script>
     <script src="./Interprete/Instructions/Assignation.js"></script>
+    <script src="./Interprete/Instructions/While.js"></script>
+    <script src="./Interprete/Instructions/Break.js"></script>
+    <script src="./Interprete/Instructions/Continue.js"></script>
+    <script src="./Interprete/Instructions/Return.js"></script>
 
     <!-- Utils-->
     <script src="Utils/ErrorList.js"></script>
     <script src="Utils/ErrorType.js"></script>
     <script src="Utils/ErrorNode.js"></script>
     <script src="Utils/Node.js"></script>
-    <script src="Utils/PrintConsole.js"></script>
 
 
 
@@ -180,7 +179,7 @@
 
         var Fuente = CodeMirror.fromTextArea(document.getElementById('Fuente'),{
             mode: "javascript",
-            theme: "dracula",
+            theme: "darcula",
             lineNumbers: true,
             autoCloseTags: true,
         });
@@ -205,7 +204,6 @@
 
         function Compile(texto){
             Consola.setValue("");
-            ErrorList.cleanErrorList();
             var instructions = gramatica.parse(texto);
             var tree = new Tree(instructions);
             var tsGlobal = new TableSymbols(null);

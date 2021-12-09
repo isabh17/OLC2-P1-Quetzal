@@ -1,11 +1,8 @@
 class Do extends Instruction {
-
     constructor(linea,column,block,condition){
         super(linea,column);
-
         this.condition = condition;
         this.block = block;
-
         this.translatedCode = "";
     }
 

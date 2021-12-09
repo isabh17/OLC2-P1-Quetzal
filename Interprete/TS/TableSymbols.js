@@ -23,7 +23,7 @@ class TableSymbols{
       if (id in actualTable.table){
         return actualTable.table[id];
       }else{
-        actualTable = actualTable.anterior;
+        actualTable = actualTable.previous;
         if(actualTable === null){
           return null;
         }
