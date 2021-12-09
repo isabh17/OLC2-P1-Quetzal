@@ -31,7 +31,7 @@ class While extends Instruction{
               //tree.removeAmbito()
               return result;
             }
-            if (result instanceof Continue) break;
+            if (result instanceof Continue) continue;
           }
         }else{
           //tree.removeAmbito();

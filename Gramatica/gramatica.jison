@@ -358,7 +358,7 @@ CASES
 ;
 
 BREAKS
-  : BREAK PTOCOMA       { $$ = new Break(@1.first_line, @1.first_column); }
+  : BREAK PTOCOMA       { $$ = new Break(@1.first_line,  @1.first_column); }
 ;
 
 CONTINU

@@ -7,14 +7,40 @@ class Declaration extends Instruction{
   }
 
   execute(tree, table){
-    var value = this.expression.execute(tree, table);
-    if (value instanceof Exception) return value;
-    if (this.type != this.expression.type){
-        return new Exception("Semantico", "Los types de variables no concuerdan: "+String(this.type)+"!="+String(this.expression.type));
+    if(typeof(this.identifier)==='string'){//Para declarar multiples variables
+      var value = this.expression.execute(tree, table);
+      if (value instanceof Exception) return value;
+      if (this.type != this.expression.type){
+          return new Exception("Semantico", "Los types de variables no concuerdan: "+String(this.type)+"!="+String(this.expression.type));
+      }
+      var symbol = new Symbol(String(this.identifier), this.type, value, this.row, this.column, null);
+      var res = table.addSymbol(symbol);
+      if (res instanceof Exception) return res;
+      return null;
+    }else{
+      var exceptions = [];
+      for(var variable of this.identifier){
+        var value = "";
+        if(this.type===Type.INT){
+          value = 0;
+        }else if(this.type===Type.DOUBLE){
+          value = 0.0;
+        }else if(this.type===Type.BOOLEAN){
+          value = true;
+        }else if(this.type===Type.STRING){
+          value = "";
+        }else if(this.type===Type.CHAR){
+          value = '';
+        }
+        var symbol = new Symbol(String(variable), this.type, value, this.row, this.column, null);
+        var res = table.addSymbol(symbol);
+        if(res instanceof Exception) exceptions.push(res);
+      }
+      if(exceptions===[]){
+        return null;
+      }else{
+        return exceptions;
+      }
     }
-    var symbol = new Symbol(String(this.identifier), this.type, value, this.row, this.column, null);
-    var res = table.addSymbol(symbol);
-    if (res instanceof Exception) return res;
-    return null;
   }
 }

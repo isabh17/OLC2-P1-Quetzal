@@ -23,7 +23,7 @@ class Do extends Instruction{
             //tree.removeAmbito()
             return result;
           }
-          if (result instanceof Continue) break;
+          if (result instanceof Continue) continue;
         }
         var condition = this.condition.execute(tree, table);
         if (condition instanceof Exception){

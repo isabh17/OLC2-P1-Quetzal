@@ -214,6 +214,10 @@
                 var value = instruction.execute(tree, tsGlobal);
                 if (value instanceof Exception){
                     console.log(value);
+                }else if(value !== null){
+                    for(var err of value){
+                        console.log(err);
+                    }
                 }
             });
             Consola.setValue(tree.getOut());
