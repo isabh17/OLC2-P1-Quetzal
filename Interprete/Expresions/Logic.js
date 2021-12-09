@@ -19,22 +19,22 @@ class Logic extends Instruction{
         if ( this.operLeft.type === Type.BOOLEAN && this.operRight.type === Type.BOOLEAN){
           return this.getVal(this.operLeft.type, left) || this.getVal(this.operRight.type, right);
         }
-        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumType.SEMANTIC),`Tipo Erroneo de operacion para ||.`,table.getEnvironment()));
+        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`Tipo Erroneo de operacion para ||.`,table.getEnvironment()));
         return Exception("Semantico", "Tipo Erroneo de operacion para ||.", this.row, this.column, datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     }else if ( this.operator === LOGIC_OPERATOR.AND){
         if ( this.operLeft.type === Type.BOOLEAN && this.operRight.type === Type.BOOLEAN){
           return this.getVal(this.operLeft.type, left) && this.getVal(this.operRight.type, right);
         }
-        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumType.SEMANTIC),`Tipo Erroneo de operacion para &&.`,table.getEnvironment()));
+        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`Tipo Erroneo de operacion para &&.`,table.getEnvironment()));
         return Exception("Semantico", "Tipo Erroneo de operacion para &&.", this.row, this.column, datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     }else if ( this.operator === LOGIC_OPERATOR.NOT){
         if ( this.operLeft.type === Type.BOOLEAN){
           return ! this.getVal(this.operLeft.type, left);
         }
-        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumType.SEMANTIC),`Tipo Erroneo de operacion para !.`,table.getEnvironment()));
+        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`Tipo Erroneo de operacion para !.`,table.getEnvironment()));
         return Exception("Semantico", "Tipo Erroneo de operacion para !.", this.row, this.column, datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     }
-    ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumType.SEMANTIC),`Tipo de Operacion no Especificado.`,table.getEnvironment()));
+    ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`Tipo de Operacion no Especificado.`,table.getEnvironment()));
     return Exception("Semantico", "Tipo de Operacion no Especificado.", this.row, this.column, datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
   }
     

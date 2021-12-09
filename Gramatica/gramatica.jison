@@ -13,9 +13,9 @@ lex_identificador   [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*
 //---------------------------------------------------------------------------------
 
 //--------------------Para valores primitivos--------------------------------------
-"null"			    	return "nullVal";
-"true"			    	return "trueVal";
-"false"			    	return "falseVal";
+"null"			    	              return "nullVal";
+"true"			    	              return "trueVal";
+"false"			    	              return "falseVal";
 [0-9]+("."[0-9]+)+\b            return "doubleVal";
 [0-9]+\b                        return "intVal";
 \"((\\\")|[^\n\"])*\"           { yytext = yytext.substr(1,yyleng-2); return 'stringVal'; }
@@ -125,6 +125,9 @@ lex_identificador   [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*
 %right '++' '--'
 %right '&'
 %right UMENOS
+%left 'PAROP' 'PARCLS'
+
+%left 'EOF'
 
 %start INIT
 
@@ -215,14 +218,14 @@ EXP
   | EXP '==' EXP                              { $$ = new Relational($1, RELATIONAL_OPERATOR.IDENT , $3, @1.first_line, @1.first_column); }
   | EXP '>=' EXP                              { $$ = new Relational($1, RELATIONAL_OPERATOR.MAYEQ , $3, @1.first_line, @1.first_column); }
   | EXP '<=' EXP                              { $$ = new Relational($1, RELATIONAL_OPERATOR.MENEQ , $3, @1.first_line, @1.first_column); }
-  | CALL_FUNCTION                             { $$=$1; }
-  | PRIMITIVO                                 { $$=$1; }
-  | PAROP EXP PARCLS                          { $$=$2; }
-  | COROP L_E CORCLS                          { $$=($1.toString()+$2.toString()+$3.toString()); }
-  | ID COROP L_E CORCLS                       { $$=($1.toString()+$2.toString()+$3.toString()+$4.toString()); }
-  | EXP '?' EXP DOSPTOS EXP                   { $$=($1.toString()+$2.toString()+$3.toString()+$4.toString()+$5.toString()); }
-  | ID                                        { $$= new Identifier($1, @1.first_line, @1.first_column,ENVIRONMENT.NULL); }
-  | POST_FIXED                                { $$=$1; }
+  | CALL_FUNCTION                             { $$ = $1; }
+  | PRIMITIVO                                 { $$ = $1; }
+  | PAROP EXP PARCLS                          { $$ = $2; }
+  | COROP L_E CORCLS                          { $$ = ($1.toString()+$2.toString()+$3.toString()); }
+  | ID COROP L_E CORCLS                       { $$ = ($1.toString()+$2.toString()+$3.toString()+$4.toString()); }
+  | EXP '?' EXP DOSPTOS EXP                   { $$ = ($1.toString()+$2.toString()+$3.toString()+$4.toString()+$5.toString()); }
+  | ID                                        { $$ = new Identifier($1, @1.first_line, @1.first_column,ENVIRONMENT.NULL); }
+  | POST_FIXED                                { $$ = $1; }
 ;
 
 L_E

@@ -92,10 +92,10 @@ break;
 case 4: case 32:
  this.$=[]; this.$.push($$[$0]); 
 break;
-case 5: case 6: case 7: case 8: case 9: case 10: case 11: case 12: case 13: case 14: case 15: case 16:
+case 5: case 6: case 7: case 8: case 9: case 10: case 11: case 12: case 13: case 14: case 15: case 16: case 53: case 54: case 60:
  this.$ = $$[$0]; 
 break;
-case 17: case 18: case 118:
+case 17: case 18: case 55: case 118:
  this.$ = $$[$0-1]; 
 break;
 case 19: case 20: case 97:
@@ -185,23 +185,23 @@ break;
 case 52:
  this.$ = new Relational($$[$0-2], RELATIONAL_OPERATOR.MENEQ , $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
 break;
-case 53: case 54: case 60: case 63: case 108: case 109:
- this.$=$$[$0]; 
+case 56:
+ this.$ = ($$[$0-2].toString()+$$[$0-1].toString()+$$[$0].toString()); 
 break;
-case 55:
- this.$=$$[$0-1]; 
-break;
-case 56: case 61: case 62: case 110:
- this.$=($$[$0-2].toString()+$$[$0-1].toString()+$$[$0].toString()); 
-break;
-case 57: case 113:
- this.$=($$[$0-3].toString()+$$[$0-2].toString()+$$[$0-1].toString()+$$[$0].toString()); 
+case 57:
+ this.$ = ($$[$0-3].toString()+$$[$0-2].toString()+$$[$0-1].toString()+$$[$0].toString()); 
 break;
 case 58:
- this.$=($$[$0-4].toString()+$$[$0-3].toString()+$$[$0-2].toString()+$$[$0-1].toString()+$$[$0].toString()); 
+ this.$ = ($$[$0-4].toString()+$$[$0-3].toString()+$$[$0-2].toString()+$$[$0-1].toString()+$$[$0].toString()); 
 break;
 case 59:
- this.$= new Identifier($$[$0], _$[$0].first_line, _$[$0].first_column,ENVIRONMENT.NULL); 
+ this.$ = new Identifier($$[$0], _$[$0].first_line, _$[$0].first_column,ENVIRONMENT.NULL); 
+break;
+case 61: case 62: case 110:
+ this.$=($$[$0-2].toString()+$$[$0-1].toString()+$$[$0].toString()); 
+break;
+case 63: case 108: case 109:
+ this.$=$$[$0]; 
 break;
 case 64:
  this.$ = new Primitive(Type.NULL,  $$[$0], _$[$0].first_line, _$[$0].first_column); 
@@ -271,6 +271,9 @@ case 105:
 break;
 case 111:
  this.$=$$[$0].toString(); 
+break;
+case 113:
+ this.$=($$[$0-3].toString()+$$[$0-2].toString()+$$[$0-1].toString()+$$[$0].toString()); 
 break;
 case 115:
  this.$ = new CallFunction(this._$.first_line,this._$.first_column,$$[$0-3],$$[$0-1],true); 

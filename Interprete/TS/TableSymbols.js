@@ -9,6 +9,7 @@ class TableSymbols{
 
   addSymbol(symbol){
     if(symbol.id in this.table){
+      ErrorList.addError(new ErrorNode(symbol.getRow(),symbol.getColumn(),new ErrorType(EnumErrorType.SEMANTIC),"Variable " + symbol.id + " ya existe",this.symbol.getEnvironment()));
       return Exception("Semantico", "Variable " + symbol.id + " ya existe", symbol.row, symbol.column);
     }else{
       this.table[symbol.id] = symbol;
@@ -40,7 +41,8 @@ class TableSymbols{
           actualTable.table[symbol.id].setType(symbol.getType());
           return null;
         }else{
-          return new Exception("Semantico", "No se puede asignar tipos distintos a las variables", symbol.getRow(), symbol.getColumn());
+          ErrorList.addError(new ErrorNode(symbol.getRow(),symbol.getColumn(),new ErrorType(EnumErrorType.SEMANTIC),`No se puede asignar tipos distintos a las variables.`,table.getEnvironment()));
+          return new Exception("Semantico", "No se puede asignar tipos distintos a las variables", symbol.getRow(), symbol.getEnvironment());
         }
       }else{
         actualTable = actualTable.previous;
@@ -50,6 +52,7 @@ class TableSymbols{
       }
     }
     //Retornariamos un eror semantico
+    ErrorList.addError(new ErrorNode(symbol.getRow(),symbol.getColumn(),new ErrorType(EnumErrorType.SEMANTIC),`Variable No encontrada en Asignacion.`,table.getEnvironment()));
     return new Exception("Semantico", "Variable No encontrada en Asignacion", symbol.getRow(), symbol.getColumn());
   }
 

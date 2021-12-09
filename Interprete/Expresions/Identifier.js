@@ -9,7 +9,7 @@ class Identifier extends Instruction{
   execute(tree, table){
     var symbol = table.getSymbol(this.identifier);
     if (symbol === null){
-      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumType.SEMANTIC),`No se encontro la variable` +this.identifier+" declarada",table.getEnvironment()));
+      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`No se encontro la variable` +this.identifier+" declarada",table.getEnvironment()));
       return Exception("Semantico", "No se encontro la variable "+this.identifier+" declarada", this.row, this.column);
     }else{
         this.type = symbol.getType();
