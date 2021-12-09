@@ -260,14 +260,15 @@ SENTENCE_FOR
 ;
 
 BLOCK
-  : KEYOP SENTENCES KEYCLS  { $$ = new Block($2); }
-  | KEYOP KEYCLS            { $$ = new Block([]); }
+  : KEYOP SENTENCES KEYCLS  { $$ = $2; }
+  | KEYOP KEYCLS            { $$ = []; }
 ;
 
 POST_FIXED
   : ID '--'   { $$=($1.toString()+$2.toString()); }
   | ID '++'   { $$=($1.toString()+$2.toString()); }
 ;
+
 CUERPO
   : PRINT                       {  $$ = $1; }
   | DECLARATION                 {  $$ = $1; }
@@ -325,7 +326,7 @@ ELSE_IF
 ;*/
 
 SENTENCE_WHILE
-  : WHILE PAROP EXP PARCLS BLOCK            { $$ = new While(this._$.first_line,this._$.first_column,$3,$5); }
+  : WHILE PAROP EXP PARCLS BLOCK            { $$ = new While($3, $5, @1.first_line, @1.first_column); }
 ;
 
 SENTENCE_DO_WHILE
@@ -381,14 +382,14 @@ CASES
 ;
 
 BREAKS
-  : BREAK PTOCOMA               { $$ = new Break(this._$.first_line,this._$.first_column); }
+  : BREAK PTOCOMA       { $$ = new Break(@1.first_line, @1.first_column); }
 ;
 
 CONTINU
-  : CONTINUE PTOCOMA            { $$ = new Continue(this._$.first_line,this._$.first_column); }
+  : CONTINUE PTOCOMA    { $$ = new Continue(@1.first_line, @1.first_column); }
 ;
 
 RETUR
-  : RETURN PTOCOMA     { $$ = new Return(this._$.first_line,this._$.first_column,null,false); }
-  | RETURN EXP PTOCOMA { $$ = new Return(this._$.first_line,this._$.first_column,$2,true); }
+  : RETURN PTOCOMA     { $$ = new Return(null, @1.first_line, @1.first_column); }
+  | RETURN EXP PTOCOMA { $$ = new Return($2, @1.first_line, @1.first_column); }
 ;

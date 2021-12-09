@@ -95,7 +95,7 @@ break;
 case 5: case 6: case 7: case 8: case 9: case 10: case 11: case 12: case 13: case 14: case 15: case 16: case 53: case 54: case 60:
  this.$ = $$[$0]; 
 break;
-case 17: case 18: case 55: case 118:
+case 17: case 18: case 55: case 80: case 118:
  this.$ = $$[$0-1]; 
 break;
 case 19: case 20: case 97:
@@ -248,11 +248,8 @@ break;
 case 79:
  console.log($$[$0-4],$$[$0-3],$$[$0-2],$$[$0-1],$$[$0]); 
 break;
-case 80:
- this.$ = new Block($$[$0-1]); 
-break;
-case 81:
- this.$ = new Block([]); 
+case 81: case 119:
+ this.$ = []; 
 break;
 case 82: case 83: case 112: case 114:
  this.$=($$[$0-1].toString()+$$[$0].toString()); 
@@ -264,7 +261,7 @@ case 94:
   this.$ = $$[$0-1],$$[$0]; 
 break;
 case 104:
- this.$ = new While(this._$.first_line,this._$.first_column,$$[$0-2],$$[$0]); 
+ this.$ = new While($$[$0-2], $$[$0], _$[$0-4].first_line, _$[$0-4].first_column); 
 break;
 case 105:
  this.$ = new Do(this._$.first_line,this._$.first_column,$$[$0-5],$$[$0-2]); 
@@ -283,9 +280,6 @@ case 116:
 break;
 case 117:
  this.$ = new Switch(this._$.first_line,this._$.first_column,$$[$0-2],$$[$0]); 
-break;
-case 119:
- this.$ = []; 
 break;
 case 120:
  this.$ = $$[$0-1]; this.$.push($$[$0]); 
@@ -306,16 +300,16 @@ case 125:
  this.$ = new CaseSwitch(this._$.first_line,this._$.first_column,"",new Block([]),false,false);
 break;
 case 126:
- this.$ = new Break(this._$.first_line,this._$.first_column); 
+ this.$ = new Break(_$[$0-1].first_line, _$[$0-1].first_column); 
 break;
 case 127:
- this.$ = new Continue(this._$.first_line,this._$.first_column); 
+ this.$ = new Continue(_$[$0-1].first_line, _$[$0-1].first_column); 
 break;
 case 128:
- this.$ = new Return(this._$.first_line,this._$.first_column,null,false); 
+ this.$ = new Return(null, _$[$0-1].first_line, _$[$0-1].first_column); 
 break;
 case 129:
- this.$ = new Return(this._$.first_line,this._$.first_column,$$[$0-1],true); 
+ this.$ = new Return($$[$0-1], _$[$0-2].first_line, _$[$0-2].first_column); 
 break;
 }
 },
