@@ -283,47 +283,33 @@ CUERPO
   | CALL_FUNCTION PTOCOMA       {  $$ = $1,$2; }
   | error PTOCOMA               { ErrorList.addError(new ErrorNode(this._$.first_line,this._$.first_column,new ErrorType(EnumErrorType.SYNTACTIC),` Error sintactico `,ENVIRONMENT.NULL)); $$ = new InstructionError(); }
   | error KEYCLS                { ErrorList.addError(new ErrorNode(this._$.first_line,this._$.first_column,new ErrorType(EnumErrorType.SYNTACTIC),` Error sintactico `,ENVIRONMENT.NULL)); $$ = new InstructionError(); }
-
 ;
 
 BLOCK_IF
-  : KEYOP SENTENCES KEYCLS  { }
-  | KEYOP KEYCLS            {  }
-  | CUERPO                  {  }
+  : KEYOP SENTENCES KEYCLS  { $$ = $2; }
+  | KEYOP KEYCLS            { $$ = []; }
+  | CUERPO                  { $$ = $1; }
 ;
 
-SENTENCE_IF
-  : ELSE_IF ELSE BLOCK_IF                 {  }
-  | ELSE_IF                               {  }
-;
-
-ELSE_IF
-  : ELSE_IF ELSE IF PAROP EXP PARCLS BLOCK  {  }
-  | IF PARCLS EXP PARCLS BLOCK_IF           {  }
-;
-/*
-SENTENCE_IF
-  : IF PAROP EXP PARCLS BLOCK_IF LIST_ELSE_IF      {  }
-  | LIST_ELSE_IF                                   {  }
-;
-
-BLOCK_IF
-  : KEYOP SENTENCES KEYCLS  { }
-  | KEYOP KEYCLS            { }
-  | SENTENCE                { }
-
-;
-
-LIST_ELSE_IF
-  : LIST_ELSE_IF ELSE_IF     { }
- // | ELSE_IF                  { }
+/*SENTENCE_IF
+  : IF PAROP EXP PARCLS BLOCK_IF            { $$ = new If($3, $5, null, null, @1.first_line, @1.first_column); }
+  | IF PAROP EXP PARCLS BLOCK_IF ELSE_IF    { $$ = new If($3, $5, $6, null, @1.first_line, @1.first_column); }
 ;
 
 ELSE_IF
-    : ELSE IF PAROP EXP PARCLS BLOCK    { }
-    | ELSE BLOCK_IF                     { }
-    |                                   { }
+  : ELSE SENTENCE_IF                        { $$ = $2; }
+  | ELSE BLOCK_IF                           { $$ = $2; }
 ;*/
+
+SENTENCE_IF
+  : IF PAROP EXP PARCLS BLOCK_IF ELSE_IF  { $$ = new If($3, $5, $6, @1.first_line, @1.first_column); }
+;
+
+ELSE_IF
+  : ELSE IF PAROP EXP PARCLS BLOCK ELSE_IF  { $$ = new If($4, $6, $7, @1.first_line, @1.first_column); }
+  | ELSE BLOCK_IF                           { $$ = $2; }
+  | /*epsilone*/                            { $$ = null; }
+;
 
 SENTENCE_WHILE
   : WHILE PAROP EXP PARCLS BLOCK            { $$ = new While($3, $5, @1.first_line, @1.first_column); }

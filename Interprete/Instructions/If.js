@@ -1,52 +1,66 @@
 class If extends Instruction {
-    constructor(row,column,ifList,blockElse,haveElse){
+    constructor(condition, instructionsIf, instructionsElse, row, column) {
         super(row, column);
-
-        this.ifList = ifList;
-        this.haveElse = haveElse;
-        this.blockElse = blockElse;
-
-        this.translatedCode = "";
+        this.condition = condition;
+        this.instructionsIf = instructionsIf;
+        this.instructionsElse = instructionsElse;
     }
-    execute(tree, table){
-        var resultBlockIf;       
 
-        for(var i = 0; i < this.ifList.length; i++){
-            resultBlockIf = (this.ifList[i]).execute(tree,table);
-
-            if((this.ifList[i]).conditionTrue){
-                if(resultBlockIf != null){
-                    if(resultBlockIf instanceof Break){
-                        return resultBlockIf;
-                    }else if(resultBlockIf instanceof Continue){
-                        return resultBlockIf;
-                    }else if(resultBlockIf instanceof Return){
-                        return resultBlockIf;
+    execute(tree, table) {
+        var condition = this.condition.execute(tree, table);
+        if (condition instanceof Exception) return condition;
+        if (this.condition.type === Type.BOOLEAN) {
+            if (condition === 'true') {
+                var newTable = new TableSymbols(table);
+                if (this.instructionsIf[0] !== undefined) {
+                    for (var instrIF of this.instructionsIf) {
+                        var result = instrIF.execute(tree, newTable);
+                        if (result instanceof Exception) {
+                            //tree.get_excepcion().append(result)
+                            //tree.update_consola(result.__str__())
+                        }
+                        if (result instanceof Break) return result;
+                        if (result instanceof Return) return result;
+                        if (result instanceof Continue) return result;
+                    }
+                } else {
+                    var result = this.instructionsIf.execute(tree, newTable);
+                    if (result instanceof Exception) {
+                        //tree.get_excepcion().append(result)
+                        //tree.update_consola(result.__str__())
+                    }
+                    if (result instanceof Break) return result;
+                    if (result instanceof Return) return result;
+                    if (result instanceof Continue) return result;
+                }
+            } else {
+                if (this.instructionsElse !== null) {
+                    var newTable = new TableSymbols(table);
+                    if (this.instructionsElse[0] !== undefined) {
+                        for (var instrElse of this.instructionsElse) {
+                            var result = instrElse.execute(tree, newTable);
+                            if (result instanceof Exception) {
+                                //tree.get_excepcion().append(result)
+                                //tree.update_consola(result.__str__()) 
+                            }
+                            if (result instanceof Break) return result;
+                            if (result instanceof Return) return result;
+                            if (result instanceof Continue) return result;
+                        }
+                    } else {
+                        var result = this.instructionsElse.execute(tree, newTable);
+                        if (result instanceof Exception) {
+                            //tree.get_excepcion().append(result)
+                            //tree.update_consola(result.__str__())
+                        }
+                        if (result instanceof Break) return result;
+                        if (result instanceof Return) return result;
+                        if (result instanceof Continue) return result;
                     }
                 }
-                return null;
             }
+        } else {
+            return new Exception("Semantico", "La expresion a evaluar en el if debe devolver true o false", this.row, this.column, datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
         }
-
-        if(this.haveElse){
-            var envIf = new Environment(table,new EnvironmentType(ENVIRONMENT.IF,null));
-            var resultBlockElse = this.blockElse.execute(envIf);
-
-            if(resultBlockElse != null){
-                if(resultBlockElse instanceof  Break){
-                    return resultBlockElse;
-                }else if(resultBlockElse instanceof Continue){
-                    return resultBlockElse;
-                }else if(resultBlockElse instanceof Return){
-                    return resultBlockElse;
-                }else{
-                    console.log("error con else");
-                }
-            }
-
-        }
-
-        return null;
     }
-
 }
