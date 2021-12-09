@@ -11,7 +11,7 @@ class Assignation extends Instruction{
     if (value instanceof Exception) return value;
     var symbol = table.getSymbol(this.identifier);
     if (symbol === null){
-      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`La variable`+this.identifier+" no existe",table.getEnvironment()));
+      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`La variable`+this.identifier+" no existe",ENVIRONMENT.NULL));
       return new Exception("Semantico", "La variable "+this.identifier+" no existe");
     }
     if (symbol.getType() !== this.expression.type){
