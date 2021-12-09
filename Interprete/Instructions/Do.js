@@ -36,6 +36,7 @@ class Do extends Instruction{
           }
         }else{
           //tree.removeAmbito();
+          ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`Error en do-while, la expresion no retorna un booleano.`,ENVIROMMENT.DO));
           return new Exception("Semantico", "Error en do-while, la expresion no retorna un booleano.", this.row, this.column);
         }
       }while(true);

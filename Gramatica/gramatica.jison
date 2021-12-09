@@ -297,6 +297,29 @@ ELSE_IF
   | /*epsilone*/                            { $$ = null; }
 ;
 
+SENTENCE_SWITCH
+  : SWITCH PAROP EXP PARCLS BLOCK_SWITCH { $$ = new Switch($3,$5,this._$.first_line,this._$.first_column); }
+;
+
+BLOCK_SWITCH
+  : KEYOP L_CASE KEYCLS         { $$ = $2; }
+  | KEYOP KEYCLS                { $$ = []; }
+;
+
+L_CASE
+  : L_CASE CASES  { $$=$1; $$.push($2);}
+  | CASES         { $$=[]; $$.push($1); }
+; 
+
+CASES
+  : CASE EXP BLOCK_CASES        { $$ = new CaseSwitch($2,$3,this._$.first_line,this._$.first_column);}
+  | DEFAULT BLOCK_CASES         { $$ = new CaseSwitch(null,$2,this._$.first_line,this._$.first_column);}
+;
+BLOCK_CASES
+  : DOSPTOS SENTENCES       { $$ = $2; }
+  | DOSPTOS                 { $$ = []; }
+;
+
 SENTENCE_WHILE
   : WHILE PAROP EXP PARCLS BLOCK            { $$ = new While($3, $5, @1.first_line, @1.first_column); }
 ;
@@ -331,28 +354,7 @@ CALL_FUNCTION
   | ID PAROP PARCLS             { $$ = new CallFunction(this._$.first_line,this._$.first_column,$1,[],true); }
 ;
 
-SENTENCE_SWITCH
-  : SWITCH PAROP EXP PARCLS BLOCK_SWITCH { $$ = new Switch($3,$5,true,this._$.first_line,this._$.first_column); }
-;
 
-BLOCK_SWITCH
-  : KEYOP L_CASE KEYCLS         { $$ = $2; }
-  | KEYOP KEYCLS                { $$ = []; }
-;
-
-L_CASE
-  : L_CASE CASES  { $$ = $2; $$.push($2); }
-  | CASES         { $$ = []; $$.push($1); }
-; 
-
-CASES
-  : CASE EXP BLOCK_CASES        { $$ = new Switch($2,$3,false,this._$.first_line,this._$.first_column);}
-  | DEFAULT BLOCK_CASES         { $$ = new Switch(null,$2,true,this._$.first_line,this._$.first_column);}
-;
-BLOCK_CASES
-  : DOSPTOS SENTENCES       { $$ = $2; }
-  | DOSPTOS                 { $$ = []; }
-;
 
 BREAKS
   : BREAK PTOCOMA       { $$ = new Break(@1.first_line,  @1.first_column); }
