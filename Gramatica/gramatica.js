@@ -134,8 +134,11 @@ break;
 case 33:
  this.$ = new Assignation($$[$0-3], $$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column); 
 break;
-case 34: case 35: case 36: case 106: case 107:
+case 34: case 35: case 106: case 107:
   
+break;
+case 36:
+ this.$ = new Strings($$[$0-2], STRINGS.CONCAT, $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
 break;
 case 37:
  this.$ = new Aritmetica($$[$0-2], ARITMETIC_OPERATOR.SUM, $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
