@@ -7,6 +7,7 @@ class Print extends Instruction{
 
   execute(tree, table){
     var value = this.expression.execute(tree, table);
+    if (value instanceof Exception) return value;
     if(this.jump){
       //tree.updateOut("\n"+value);
       tree.updateOut(value+"\n");

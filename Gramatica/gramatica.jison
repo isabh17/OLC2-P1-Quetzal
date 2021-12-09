@@ -291,16 +291,6 @@ BLOCK_IF
   | CUERPO                  { $$ = $1; }
 ;
 
-/*SENTENCE_IF
-  : IF PAROP EXP PARCLS BLOCK_IF            { $$ = new If($3, $5, null, null, @1.first_line, @1.first_column); }
-  | IF PAROP EXP PARCLS BLOCK_IF ELSE_IF    { $$ = new If($3, $5, $6, null, @1.first_line, @1.first_column); }
-;
-
-ELSE_IF
-  : ELSE SENTENCE_IF                        { $$ = $2; }
-  | ELSE BLOCK_IF                           { $$ = $2; }
-;*/
-
 SENTENCE_IF
   : IF PAROP EXP PARCLS BLOCK_IF ELSE_IF  { $$ = new If($3, $5, $6, @1.first_line, @1.first_column); }
 ;
@@ -316,7 +306,7 @@ SENTENCE_WHILE
 ;
 
 SENTENCE_DO_WHILE
-  : DO BLOCK WHILE PAROP EXP PARCLS PTOCOMA { $$ = new Do(this._$.first_line,this._$.first_column,$2,$5); }
+  : DO BLOCK WHILE PAROP EXP PARCLS PTOCOMA { $$ = new Do($5, $2, @1.first_line, @1.first_column); }
 ;
 
 FUNCTION

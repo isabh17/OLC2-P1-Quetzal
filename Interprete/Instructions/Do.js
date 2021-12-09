@@ -1,85 +1,43 @@
-class Do extends Instruction {
-    constructor(linea,column,block,condition){
-        super(linea,column);
-        this.condition = condition;
-        this.block = block;
-        this.translatedCode = "";
+class Do extends Instruction{
+    constructor(condition, instructions, row, column){
+      super(row, column);
+      this.condition = condition;
+      this.instructions = instructions; //[]
     }
-
-    getTranslated(){
-        this.translatedCode += `do ${this.block.getTranslated()}while(${this.condition.getTranslated()});\n\n`;
-        return this.translatedCode;
-    }
-
-    translatedSymbolsTable(e){
-        TableReport.addTranslated(
-            new NodeTableSymbols(
-              this.linea,
-              this.column,
-              "DO",
-              null,
-              e.enviromentType,
-              null
-            )
-        );
-      
-        var env = new Environment(e,new EnvironmentType(EnumEnvironmentType.DO,""));
-        this.condition.translatedSymbolsTable(env);
-        this.block.translatedSymbolsTable(env);
-    }
-
-    executeSymbolsTable(e){
-        return "implementar";
-    }
-
-    execute(e) {
-        var resultCondition;
-        var resultBlock;
-        var env = new Environment(e,new EnvironmentType(EnumEnvironmentType.DO,null));
-
-        resultBlock = this.block.execute(env);
-
-        if(resultBlock != null){
-            if(resultBlock instanceof Break){
-                return null;
-            }else if(resultBlock instanceof Continue){
-                // muere el continue
-            }else if(resultBlock instanceof Return){
-                return resultBlock;
-            }
-        }
-
-        resultCondition = this.condition.getValue(e);
-        
-        if(resultCondition == null){
-            ErrorList.addError(new ErrorNode(this.line,this.column,new ErrorType(EnumErrorType.SEMANTIC),`la condicion de while tiene errores`,e.enviromentType));
+  
+    execute(tree, table){
+      //tree.setAmbito(ENVIRONMENT.WHILE);
+      do{
+        var newTable = new TableSymbols(table);        // Inicia el Nuevo Ambito.
+        for (var instruction of this.instructions){  // Inicia ejecutando las instructions adentro del While.            
+          var result = instruction.execute(tree, newTable);
+          if (result instanceof Exception){
+            //tree.get_excepcion().append(result)
+            //tree.update_consola(result.__str__())
+          }
+          if (result instanceof Break){
+            //tree.removeAmbito();
             return null;
+          }
+          if (result instanceof Return){
+            //tree.removeAmbito()
+            return result;
+          }
+          if (result instanceof Continue) break;
         }
-        
-        if(resultCondition.type.enumType != EnumType.BOOLEAN){
-            ErrorList.addError(new ErrorNode(this.line,this.column,new ErrorType(EnumErrorType.SEMANTIC),`la condicion de while no es de tipo boolean`,e.enviromentType));
-            return null;
+        var condition = this.condition.execute(tree, table);
+        if (condition instanceof Exception){
+            //tree.removeAmbito();
+            return condition;
         }
-
-        while(resultCondition.value){
-            env = new Environment(e,new EnvironmentType(EnumEnvironmentType.DO,null));
-            resultBlock = this.block.execute(env);
-
-            if(resultBlock != null){
-                if(resultBlock instanceof Break){
-                    return null;
-                }else if(resultBlock instanceof Continue){
-                    // muere el continue
-                }else if(resultBlock instanceof Return){
-                    return resultBlock;
-                }
-            }
-
-            
-            resultCondition = this.condition.getValue(e);
+        if (this.condition.type === Type.BOOLEAN){ // Aqui verifica si la condition es una expresion logica, sino lanza una Exception.
+          if (String(condition) === "false"){
+            break;
+          }
+        }else{
+          //tree.removeAmbito();
+          return new Exception("Semantico", "Error en do-while, la expresion no retorna un booleano.", this.row, this.column);
         }
-
-        return null;
+      }while(true);
     }
-
-}
+  }

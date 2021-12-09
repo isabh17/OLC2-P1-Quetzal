@@ -15,7 +15,7 @@ class While extends Instruction{
       }
       
       if (this.condition.type === Type.BOOLEAN){ // Aqui verifica si la condition es una expresion logica, sino lanza una Exception.
-        if (Boolean(condition) === true){
+        if (String(condition) === "true"){
           var newTable = new TableSymbols(table)        // Inicia el Nuevo Ambito.
           for (var instruction of this.instructions){  // Inicia ejecutando las instructions adentro del While.            
             var result = instruction.execute(tree, newTable);

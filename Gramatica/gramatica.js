@@ -273,7 +273,7 @@ case 104:
  this.$ = new While($$[$0-2], $$[$0], _$[$0-4].first_line, _$[$0-4].first_column); 
 break;
 case 105:
- this.$ = new Do(this._$.first_line,this._$.first_column,$$[$0-5],$$[$0-2]); 
+ this.$ = new Do($$[$0-2], $$[$0-5], _$[$0-6].first_line, _$[$0-6].first_column); 
 break;
 case 111:
  this.$=$$[$0].toString(); 
