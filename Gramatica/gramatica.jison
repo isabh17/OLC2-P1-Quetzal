@@ -114,28 +114,17 @@ lex_identificador   [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*
 /lex
 
 /* Asociación de operadores y precedencia */
-%right '='
-%right '?' 'DOSPTOS'
+%left '?' DOSPTOS
 %left '||'
 %left '&&'
-%left '!='
-%left '==' 
-%nonassoc '>' '>='
-%nonassoc '<' '<='
-%left '&'               //Averiguar que hacer con  la  concatenacion
+%right '!'
+%left '&' 
+%left '++' '--'
+%left '==' '!=' '<' '<=' '>' '>='
 %left '+' '-'
 %left '*' '/' '%'
 %right '^'
-%right '!'
 %right UMENOS
-%right '++'
-%right '--'
-%right '('
-%left ')'
-%left '['
-%left ']'
-%left '{'
-%left '}'
 %left 'EOF'
 
 %start INIT
@@ -151,22 +140,6 @@ INIT: SENTENCES EOF             {  return $1;}
 CUERPOS: CUERPOS CUERPO       {  }
         | CUERPO              {  }
 */
-CUERPO
-  : PRINT                       {  $$ = $1; }
-  | DECLARATION                 {  $$ = $1; }
-  | ASSIGNMENT                  {  $$ = $1; }
-  | SENTENCE_WHILE              {  $$ = $1; }
-  | SENTENCE_DO_WHILE           {  $$ = $1; }
-  | SENTENCE_SWITCH             {  $$ = $1; }
-  | SENTENCE_FOR                {  $$ = $1; }
-  | RETUR                       {  $$ = $1; }
-  | BREAKS                      {  $$ = $1; }
-  | CONTINU                     {  $$ = $1; }
-  | CALL_FUNCTION PTOCOMA       {  $$ = $1,$2; }
-  | error PTOCOMA               { ErrorList.addError(new ErrorNode(this._$.first_line,this._$.first_column,new ErrorType(EnumErrorType.SYNTACTIC),` Error sintactico `,ENVIRONMENT.NULL)); $$ = new InstructionError(); }
-  | error KEYCLS                { ErrorList.addError(new ErrorNode(this._$.first_line,this._$.first_column,new ErrorType(EnumErrorType.SYNTACTIC),` Error sintactico `,ENVIRONMENT.NULL)); $$ = new InstructionError(); }
-
-;
 
 SENTENCES
   : SENTENCES SENTENCE          { $$=$1; $$.push($2); }
@@ -249,7 +222,7 @@ EXP
   | COROP L_E CORCLS                          { $$=($1.toString()+$2.toString()+$3.toString()); }
   | ID COROP L_E CORCLS                       { $$=($1.toString()+$2.toString()+$3.toString()+$4.toString()); }
   | EXP '?' EXP DOSPTOS EXP                   { $$=($1.toString()+$2.toString()+$3.toString()+$4.toString()+$5.toString()); }
-  | ID                                        { $$= new Identifier($1, @1.first_line, @1.first_column); }
+  | ID                                        { $$= new Identifier($1, @1.first_line, @1.first_column,ENVIRONMENT.NULL); }
   | POST_FIXED                                { $$=$1; }
 ;
 
@@ -285,19 +258,35 @@ SENTENCE_FOR
 ;
 
 BLOCK
-  : KEYOP SENTENCES KEYCLS  { $$=$1+$3; }
-  | KEYOP KEYCLS            { $$=$1+$2; }
-;
-
-BLOCK_IF
-  : KEYOP SENTENCES KEYCLS  { $$=$1+$3; }
-  | KEYOP KEYCLS            { $$=$1+$2; }
-  | CUERPO                  {  }
+  : KEYOP SENTENCES KEYCLS  { $$ = new Block($2); }
+  | KEYOP KEYCLS            { $$ = new Block([]); }
 ;
 
 POST_FIXED
   : ID '--'   { $$=($1.toString()+$2.toString()); }
   | ID '++'   { $$=($1.toString()+$2.toString()); }
+;
+CUERPO
+  : PRINT                       {  $$ = $1; }
+  | DECLARATION                 {  $$ = $1; }
+  | ASSIGNMENT                  {  $$ = $1; }
+  | SENTENCE_WHILE              {  $$ = $1; }
+  | SENTENCE_DO_WHILE           {  $$ = $1; }
+  | SENTENCE_SWITCH             {  $$ = $1; }
+  | SENTENCE_FOR                {  $$ = $1; }
+  | RETUR                       {  $$ = $1; }
+  | BREAKS                      {  $$ = $1; }
+  | CONTINU                     {  $$ = $1; }
+  | CALL_FUNCTION PTOCOMA       {  $$ = $1,$2; }
+  | error PTOCOMA               { ErrorList.addError(new ErrorNode(this._$.first_line,this._$.first_column,new ErrorType(EnumErrorType.SYNTACTIC),` Error sintactico `,ENVIRONMENT.NULL)); $$ = new InstructionError(); }
+  | error KEYCLS                { ErrorList.addError(new ErrorNode(this._$.first_line,this._$.first_column,new ErrorType(EnumErrorType.SYNTACTIC),` Error sintactico `,ENVIRONMENT.NULL)); $$ = new InstructionError(); }
+
+;
+
+BLOCK_IF
+  : KEYOP SENTENCES KEYCLS  { }
+  | KEYOP KEYCLS            {  }
+  | CUERPO                  {  }
 ;
 
 SENTENCE_IF
@@ -307,9 +296,31 @@ SENTENCE_IF
 
 ELSE_IF
   : ELSE_IF ELSE IF PAROP EXP PARCLS BLOCK  {  }
-  | IF PARCLS EXP PARCLS BLOCK_IF              {  }
+  | IF PARCLS EXP PARCLS BLOCK_IF           {  }
+;
+/*
+SENTENCE_IF
+  : IF PAROP EXP PARCLS BLOCK_IF LIST_ELSE_IF      {  }
+  | LIST_ELSE_IF                                   {  }
 ;
 
+BLOCK_IF
+  : KEYOP SENTENCES KEYCLS  { }
+  | KEYOP KEYCLS            { }
+  | SENTENCE                { }
+
+;
+
+LIST_ELSE_IF
+  : LIST_ELSE_IF ELSE_IF     { }
+ // | ELSE_IF                  { }
+;
+
+ELSE_IF
+    : ELSE IF PAROP EXP PARCLS BLOCK    { }
+    | ELSE BLOCK_IF                     { }
+    |                                   { }
+;*/
 
 SENTENCE_WHILE
   : WHILE PAROP EXP PARCLS BLOCK            { $$ = new While(this._$.first_line,this._$.first_column,$3,$5); }

@@ -8,7 +8,7 @@ class Print extends Instruction{
   execute(tree, table){
     var value = this.expression.execute(tree, table);
     if(this.jump){
-      tree.updateOut(value+"\n");
+      tree.updateOut("\n"+value);
     }else{
       tree.updateOut(value);
     }
