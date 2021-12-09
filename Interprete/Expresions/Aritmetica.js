@@ -85,47 +85,54 @@ class Aritmetica extends Instruction{
 
       }else if (this.operator === ARITMETIC_OPERATOR.DIV){
         if (this.operLeft.type === Type.INT && this.operRight.type === Type.INT){
-          this.type = Type.DOUBLE;
           if (this.getVal(this.operRight.type, right) === 0){
             ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumType.SEMANTIC),`No es posible dividir entre cero`,table.getEnvironment()));
             return Exception("Semantico", "No es posible dividir entre cero", this.row, this.column);
           }
-          return this.getVal(this.operLeft.type, left) / this.getVal(this.operRight.type, right);
+          var result = this.getVal(this.operLeft.type, left) / this.getVal(this.operRight.type, right);
+          Number.isInteger(result) ? this.type = Type.INT : this.type = Type.DOUBLE;
+          return result;
         }else if (this.operLeft.type === Type.INT && this.operRight.type === Type.DOUBLE || this.operLeft.type === Type.DOUBLE && this.operRight.type === Type.INT){
-          this.type = Type.DOUBLE;
           if (this.getVal(this.operRight.type, right) === 0){
             ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumType.SEMANTIC),`No es posible dividir entre cero`,table.getEnvironment()));
             return Exception("Semantico", "No es posible dividir entre cero", this.row, this.column);
           }
-          return this.getVal(this.operLeft.type, left) / this.getVal(this.operRight.type, right)
+          var result = this.getVal(this.operLeft.type, left) / this.getVal(this.operRight.type, right);
+          Number.isInteger(result) ? this.type = Type.INT : this.type = Type.DOUBLE;
+          return result;
         }else if (this.operLeft.type === Type.INT && this.operRight.type === Type.CHAR || this.operLeft.type === Type.CHAR && this.operRight.type === Type.INT){
-          this.type = Type.DOUBLE;
           if (this.getVal(this.operRight.type, right) === 0){
             ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumType.SEMANTIC),`No es posible dividir entre cero`,table.getEnvironment()));
             return Exception("Semantico", "No es posible dividir entre cero", this.row, this.column);
           }
-          return this.getVal(this.operLeft.type, left) / this.getVal(this.operRight.type, right)
+          var result = this.getVal(this.operLeft.type, left) / this.getVal(this.operRight.type, right);
+          Number.isInteger(result) ? this.type = Type.INT : this.type = Type.DOUBLE;
+          return result;
         }else if (this.operLeft.type === Type.DOUBLE && this.operRight.type === Type.DOUBLE){
-          this.type = Type.DOUBLE;
           if (this.getVal(this.operRight.type, right) === 0){
             ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumType.SEMANTIC),`No es posible dividir entre cero`,table.getEnvironment()));
             return Exception("Semantico", "No es posible dividir entre cero", this.row, this.column);
           }
-          return this.getVal(this.operLeft.type, left) / this.getVal(this.operRight.type, right)
+          var result = this.getVal(this.operLeft.type, left) / this.getVal(this.operRight.type, right);
+          Number.isInteger(result) ? this.type = Type.INT : this.type = Type.DOUBLE;
+          return result;
         }else if (this.operLeft.type === Type.DOUBLE && this.operRight.type === Type.CHAR || this.operLeft.type === Type.CHAR && this.operRight.type === Type.DOUBLE){
-          this.type = Type.DOUBLE;
           if (this.getVal(this.operRight.type, right) === 0){
             ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumType.SEMANTIC),`No es posible dividir entre cero`,table.getEnvironment()));
             return Exception("Semantico", "No es posible dividir entre cero", this.row, this.column);
           }
-          return this.getVal(this.operLeft.type, left) / this.getVal(this.operRight.type, right);
+          var result = this.getVal(this.operLeft.type, left) / this.getVal(this.operRight.type, right);
+          Number.isInteger(result) ? this.type = Type.INT : this.type = Type.DOUBLE;
+          return result;
         }else if (this.operLeft.type === Type.CHAR && this.operRight.type === Type.CHAR){
           this.type = Type.DOUBLE;
           if (this.getVal(this.operRight.type, right) === 0){
             ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumType.SEMANTIC),`No es posible dividir entre cero`,table.getEnvironment()));
             return Exception("Semantico", "No es posible dividir entre cero", this.row, this.column);
           }
-          return this.getVal(this.operLeft.type, left) / this.getVal(this.operRight.type, right)
+          var result = this.getVal(this.operLeft.type, left) / this.getVal(this.operRight.type, right);
+          Number.isInteger(result) ? this.type = Type.INT : this.type = Type.DOUBLE;
+          return result;
         }
         ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumType.SEMANTIC),`Tipos erroneos en operación división.`,table.getEnvironment()));
         return Exception("Semantico", "Tipos erroneos en operación división.", this.row, this.column);
@@ -155,47 +162,53 @@ class Aritmetica extends Instruction{
         
       }else if (this.operator === ARITMETIC_OPERATOR.MOD){
         if (this.operLeft.type === Type.INT && this.operRight.type === Type.INT){
-          this.type = Type.DOUBLE;
           if (this.getVal(this.operRight.type, right) === 0){
             ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumType.SEMANTIC),`No es posible dividir entre cero`,table.getEnvironment()));
             return Exception("Semantico", "No es posible dividir entre cero", this.row, this.column);
           }
-          return this.getVal(this.operLeft.type, left) % this.getVal(this.operRight.type, right);
+          var result = this.getVal(this.operLeft.type, left) % this.getVal(this.operRight.type, right);
+          Number.isInteger(result) ? this.type = Type.INT : this.type = Type.DOUBLE;
+          return result;
         }else if (this.operLeft.type === Type.INT && this.operRight.type === Type.DOUBLE || this.operLeft.type === Type.DOUBLE && this.operRight.type === Type.INT){
-          this.type = Type.DOUBLE;
           if (this.getVal(this.operRight.type, right) === 0){
             ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumType.SEMANTIC),`No es posible dividir entre cero`,table.getEnvironment()));
             return Exception("Semantico", "No es posible dividir entre cero", this.row, this.column);
           }
-          return this.getVal(this.operLeft.type, left) % this.getVal(this.operRight.type, right)
+          var result = this.getVal(this.operLeft.type, left) % this.getVal(this.operRight.type, right);
+          Number.isInteger(result) ? this.type = Type.INT : this.type = Type.DOUBLE;
+          return result;
         }else if (this.operLeft.type === Type.INT && this.operRight.type === Type.CHAR || this.operLeft.type === Type.CHAR && this.operRight.type === Type.INT){
-          this.type = Type.DOUBLE;
           if (this.getVal(this.operRight.type, right) === 0){
             ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumType.SEMANTIC),`No es posible dividir entre cero`,table.getEnvironment()));
             return Exception("Semantico", "No es posible dividir entre cero", this.row, this.column);
           }
-          return this.getVal(this.operLeft.type, left) / this.getVal(this.operRight.type, right)
+          var result = this.getVal(this.operLeft.type, left) % this.getVal(this.operRight.type, right);
+          Number.isInteger(result) ? this.type = Type.INT : this.type = Type.DOUBLE;
+          return result;
         }else if (this.operLeft.type === Type.DOUBLE && this.operRight.type === Type.DOUBLE){
-          this.type = Type.DOUBLE;
           if (this.getVal(this.operRight.type, right) === 0){
             ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumType.SEMANTIC),`No es posible dividir entre cero`,table.getEnvironment()));
             return Exception("Semantico", "No es posible dividir entre cero", this.row, this.column);
           }
-          return this.getVal(this.operLeft.type, left) % this.getVal(this.operRight.type, right)
+          var result = this.getVal(this.operLeft.type, left) % this.getVal(this.operRight.type, right);
+          Number.isInteger(result) ? this.type = Type.INT : this.type = Type.DOUBLE;
+          return result;
         }else if (this.operLeft.type === Type.DOUBLE && this.operRight.type === Type.CHAR || this.operLeft.type === Type.CHAR && this.operRight.type === Type.DOUBLE){
-          this.type = Type.DOUBLE;
           if (this.getVal(this.operRight.type, right) === 0){
             ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumType.SEMANTIC),`No es posible dividir entre cero`,table.getEnvironment()));
             return Exception("Semantico", "No es posible dividir entre cero", this.row, this.column);
           }
-          return this.getVal(this.operLeft.type, left) % this.getVal(this.operRight.type, right);
+          var result = this.getVal(this.operLeft.type, left) % this.getVal(this.operRight.type, right);
+          Number.isInteger(result) ? this.type = Type.INT : this.type = Type.DOUBLE;
+          return result;
         }else if (this.operLeft.type === Type.CHAR && this.operRight.type === Type.CHAR){
-          this.type = Type.DOUBLE;
           if (this.getVal(this.operRight.type, right) === 0){
             ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumType.SEMANTIC),`No es posible dividir entre cero`,table.getEnvironment()));
             return Exception("Semantico", "No es posible dividir entre cero", this.row, this.column);
           }
-          return this.getVal(this.operLeft.type, left) % this.getVal(this.operRight.type, right)
+          var result = this.getVal(this.operLeft.type, left) % this.getVal(this.operRight.type, right);
+          Number.isInteger(result) ? this.type = Type.INT : this.type = Type.DOUBLE;
+          return result;
         }
         ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumType.SEMANTIC),`Tipos erroneos en operación división.`,table.getEnvironment()));
         return Exception("Semantico", "Tipos erroneos en operación división.", this.row, this.column);
