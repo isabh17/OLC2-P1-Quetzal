@@ -332,7 +332,7 @@ CALL_FUNCTION
 ;
 
 SENTENCE_SWITCH
-  : SWITCH PAROP EXP PARCLS BLOCK_SWITCH { $$ = new Switch(this._$.first_line,this._$.first_column,$3,$5); }
+  : SWITCH PAROP EXP PARCLS BLOCK_SWITCH { $$ = new Switch($3,$5,true,this._$.first_line,this._$.first_column); }
 ;
 
 BLOCK_SWITCH
@@ -341,16 +341,17 @@ BLOCK_SWITCH
 ;
 
 L_CASE
-  : L_CASE CASES  { $$ = $1; $$.push($2); }
+  : L_CASE CASES  { $$ = $2; $$.push($2); }
   | CASES         { $$ = []; $$.push($1); }
-;
+; 
 
 CASES
-  : CASE EXP DOSPTOS SENTENCES          { $$ = new CaseSwitch(this._$.first_line,this._$.first_column,$2,new Block($4),true,true);  }
-  | CASE EXP DOSPTOS                    { $$ = new CaseSwitch(this._$.first_line,this._$.first_column,$2,new Block([]),true,false); }
-  | DEFAULT DOSPTOS SENTENCES           { $$ = new CaseSwitch(this._$.first_line,this._$.first_column,"",new Block($3),false,true); }
-  | DEFAULT DOSPTOS                     { $$ = new CaseSwitch(this._$.first_line,this._$.first_column,"",new Block([]),false,false);}
-
+  : CASE EXP BLOCK_CASES        { $$ = new Switch($2,$3,false,this._$.first_line,this._$.first_column);}
+  | DEFAULT BLOCK_CASES         { $$ = new Switch(null,$2,true,this._$.first_line,this._$.first_column);}
+;
+BLOCK_CASES
+  : DOSPTOS SENTENCES       { $$ = $2; }
+  | DOSPTOS                 { $$ = []; }
 ;
 
 BREAKS

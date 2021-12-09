@@ -60,6 +60,7 @@ class If extends Instruction {
                 }
             }
         } else {
+            ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumType.SEMANTIC),`La expresion a evaluar en el if debe devolver true o false`,ENVIROMMENT.IF));
             return new Exception("Semantico", "La expresion a evaluar en el if debe devolver true o false", this.row, this.column, datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
         }
     }

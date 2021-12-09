@@ -39,6 +39,7 @@ class While extends Instruction{
         }
       }else{
         //tree.removeAmbito();
+        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumType.SEMANTIC),`Error en while, la expresion no retorna un booleano.`,ENVIROMMENT.IF));
         return new Exception("Semantico", "Error en while, la expresion no retorna un booleano.", this.row, this.column);
       }
     }

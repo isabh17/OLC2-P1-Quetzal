@@ -1,102 +1,76 @@
 class Switch extends Instruction {
-
-    constructor(linea,column,condition,cases){
-        super(linea,column);
-
+    constructor(condition, instructionsCase, instructionsDefault,switch_case, row, column) {
+        super(row, column);
         this.condition = condition;
-        this.casesList = cases;
-
-        this.translatedCode = "";
-    }
-
-    getTranslated(){
-        this.translatedCode += `switch (${this.condition.getTranslated()}){\n`;
-
-        for(var i = 0; i < this.casesList.length; i++){
-            this.translatedCode += this.casesList[i].getTranslated();
-        }
-
-        this.translatedCode += "}\n\n";
-        return this.translatedCode;
-    }
-
-    translatedSymbolsTable(e){
-        return"implementar";
-    }
-
-    executeSymbolsTable(e){
-        TableReport.addTranslated(
-            new NodeTableSymbols(
-              this.linea,
-              this.column,
-              "SWITCH",
-              null,
-              e.enviromentType,
-              null
-            )
-        );
-      
-        var env = new Environment(e,new EnvironmentType(EnumEnvironmentType.SWITCH,""));
-        this.condition.translatedSymbolsTable(env);
-        this.casesList.translatedSymbolsTable(env);
-    }
-
-    execute(e) {
-        var resultValueCase;
-        var resultBlockCase;
-        var env;
-        var resultCondition = this.condition.getValue(e);
-        
-        for(var i = 0; i < this.casesList.length;i++){
-            
-            if((this.casesList[i]).isCase){
-                resultValueCase = (this.casesList[i]).expression.getValue(e);
-                
-                if(resultValueCase.type.enumType != EnumType.ERROR){
-                
-                    if(resultCondition.type.enumType == resultValueCase.type.enumType && resultCondition.value == resultValueCase.value){
-                        
-                        env = new Environment(e,new EnvironmentType(EnumEnvironmentType.SWITCH,null));
-                        if((this.casesList[i]).haveBlock){
-                            resultBlockCase = (this.casesList[i]).execute(env);
-
-                            if(resultBlockCase != null){
-                                if(resultBlockCase instanceof Break){
-                                    return null;
-                                }else if(resultBlockCase instanceof Continue){
-                                    return resultBlockCase;
-                                }else if(resultBlockCase instanceof Return){
-                                    return resultBlockCase;
-                                }
+        this.instructionsCase = instructionsCase;
+        this.instructionsDefault = instructionsDefault;
+        this.switch_case =  switch_case;
+    } 
+    execute(tree, table) { 
+        console.log(this.condition);
+        console.log(this.instructionsCase);
+        console.log(this.instructionsDefault);
+        console.log(this.switch_case);
+        var condition = this.condition.execute(tree, table);
+        if (condition instanceof Exception) return condition;
+        if (this.condition.type === Type.BOOLEAN) {
+            if (String(condition) === 'true') {
+                console.log(String(this.switch_case));
+                if(String(this.switch_case) === 'true'){
+                    var newTable = new TableSymbols(table);
+                    if (this.instructionsCase[0] !== undefined) {
+                        for (var instrIF of this.instructionsCase) {
+                            var result = instrIF.execute(tree, newTable);
+                            if (result instanceof Exception) {
+                                //tree.get_excepcion().append(result)
+                                //tree.update_consola(result.__str__())
                             }
-                        
+                            if (result instanceof Break) return result;
+                            if (result instanceof Return) return result;
+                            if (result instanceof Continue) return result;
                         }
-                    }
-                }else{
-                    ErrorList.addError(new ErrorNode(this.line,this.column,new ErrorType(EnumType.SEMANTIC),`el valor del case tiene errores`,e.enviromentType));
-                }
-
-            }else if(!(this.casesList[i]).isCase){//es default
-                env = new Environment(e,new EnvironmentType(EnumEnvironmentType.SWITCH,null));
-                if((this.casesList[i]).haveBlock){
-                    resultBlockCase = (this.casesList[i]).execute(env);
-
-                    if(resultBlockCase != null){
-                        if(resultBlockCase instanceof Break){
-                            return null;
-                        }else if(resultBlockCase instanceof Continue){
-                            return resultBlockCase;
-                        }else if(resultBlockCase instanceof Return){
-                            return resultBlockCase;
+                    } else {
+                        var result = this.instructionsCase.execute(tree, newTable);
+                        if (result instanceof Exception) {
+                            //tree.get_excepcion().append(result)
+                            //tree.update_consola(result.__str__())
                         }
+                        if (result instanceof Break) return result;
+                        if (result instanceof Return) return result;
+                        if (result instanceof Continue) return result;
                     }
-                
+                }                
+            } else {
+                if (this.instructionsDefault !== null) {
+                    var newTable = new TableSymbols(table);
+                    if (this.instructionsDefault[0] !== undefined) {
+                        for (var instrElse of this.instructionsDefault) {
+                            var result = instrElse.execute(tree, newTable);
+                            if (result instanceof Exception) {
+                                //tree.get_excepcion().append(result)
+                                //tree.update_consola(result.__str__()) 
+                            }
+                            if (result instanceof Break) return result;
+                            if (result instanceof Return) return result;
+                            if (result instanceof Continue) return result;
+                        }
+                    } else {
+                        var result = this.instructionsDefault.execute(tree, newTable);
+                        if (result instanceof Exception) {
+                            //tree.get_excepcion().append(result)
+                            //tree.update_consola(result.__str__())
+                        }
+                        if (result instanceof Break) return result;
+                        if (result instanceof Return) return result;
+                        if (result instanceof Continue) return result;
+                    }
                 }
             }
-            
+        } else {
+            ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumType.SEMANTIC),`La expresion a evaluar en el Switch Case debe devolver true o false`,ENVIROMMENT.IF));
+            return new Exception("Semantico", "La expresion a evaluar en el Switch Case debe devolver true o false", this.row, this.column, datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
         }
-
-        return null;
     }
+
 
 }
