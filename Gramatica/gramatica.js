@@ -134,7 +134,7 @@ break;
 case 33:
  this.$ = new Assignation($$[$0-3], $$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column); 
 break;
-case 34: case 35: case 106: case 107:
+case 34: case 35: case 115: case 116:
   
 break;
 case 36:
@@ -279,10 +279,10 @@ case 107:
  this.$=$$[$0-1]; this.$.push($$[$0]);
 break;
 case 109:
- this.$ = new CaseSwitch($$[$0-1],$$[$0],this._$.first_line,this._$.first_column);
+ this.$ = new CaseSwitch($$[$0-1], $$[$0], this._$.first_line, this._$.first_column);
 break;
 case 110:
- this.$ = new CaseSwitch(null,$$[$0],this._$.first_line,this._$.first_column);
+ this.$ = new CaseSwitch(null, $$[$0], this._$.first_line, this._$.first_column);
 break;
 case 113:
  this.$ = new While($$[$0-2], $$[$0], _$[$0-4].first_line, _$[$0-4].first_column); 

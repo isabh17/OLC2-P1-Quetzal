@@ -309,11 +309,11 @@ BLOCK_SWITCH
 L_CASE
   : L_CASE CASES  { $$=$1; $$.push($2);}
   | CASES         { $$=[]; $$.push($1); }
-; 
+;
 
 CASES
-  : CASE EXP BLOCK_CASES        { $$ = new CaseSwitch($2,$3,this._$.first_line,this._$.first_column);}
-  | DEFAULT BLOCK_CASES         { $$ = new CaseSwitch(null,$2,this._$.first_line,this._$.first_column);}
+  : CASE EXP BLOCK_CASES        { $$ = new CaseSwitch($2, $3, this._$.first_line, this._$.first_column);}
+  | DEFAULT BLOCK_CASES         { $$ = new CaseSwitch(null, $2, this._$.first_line, this._$.first_column);}
 ;
 BLOCK_CASES
   : DOSPTOS SENTENCES       { $$ = $2; }
