@@ -145,9 +145,11 @@
     <script src="./Interprete/Instructions/Continue.js"></script>
     <script src="./Interprete/Instructions/Return.js"></script>
     <script src="./Interprete/Instructions/If.js"></script>
+    <script src="./Interprete/Instructions/InstructionError.js"></script>
+
 
     <!-- Utils-->
-    <script src="Utils/ErrorList.js"></script>
+    <script src="Utils/ErrorList.js"></script></scrip>
     <script src="Utils/ErrorType.js"></script>
     <script src="Utils/ErrorNode.js"></script>
     <script src="Utils/Node.js"></script>
@@ -181,7 +183,7 @@
 
         var Fuente = CodeMirror.fromTextArea(document.getElementById('Fuente'),{
             mode: "javascript",
-            theme: "darcula",
+            theme: "dracula",
             lineNumbers: true,
             autoCloseTags: true,
         });
