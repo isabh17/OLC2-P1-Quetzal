@@ -46,3 +46,7 @@ const ENVIRONMENT = {
   MAIN : 'MAIN',
   NULL : 'NULL'
 }
+
+const STRINGS = {
+  CONCAT : 1
+}

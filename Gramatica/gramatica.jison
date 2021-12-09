@@ -197,7 +197,7 @@ ASSIGNMENT
 ;
 
 EXP
-  : EXP '&'  EXP                              {  }
+  : EXP '&'  EXP                              { $$ = new Strings($1, STRINGS.CONCAT, $3, @1.first_line, @1.first_column); }
   | EXP '+'  EXP                              { $$ = new Aritmetica($1, ARITMETIC_OPERATOR.SUM, $3, @1.first_line, @1.first_column); }
   | EXP '-'  EXP                              { $$ = new Aritmetica($1, ARITMETIC_OPERATOR.REST, $3, @1.first_line, @1.first_column); }
   | EXP '*' EXP                               { $$ = new Aritmetica($1, ARITMETIC_OPERATOR.MULT, $3, @1.first_line, @1.first_column); }

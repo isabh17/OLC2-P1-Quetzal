@@ -80,7 +80,7 @@ class Aritmetica extends Instruction{
         this.type = Type.INT;
         return this.getVal(this.operLeft.type, left) * this.getVal(this.operRight.type, right);
       }
-      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumType.SEMANTIC),`Tipos erroneos en operación multiplicación.`,ENVIRONMENT.NULL));
+      //ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumType.SEMANTIC),`Tipos erroneos en operación multiplicación.`,ENVIRONMENT.NULL));
       return new Exception("Semantico", "Tipos erroneos en operación multiplicación.", this.row, this.column);
 
     }else if (this.operator === ARITMETIC_OPERATOR.DIV){
@@ -156,6 +156,15 @@ class Aritmetica extends Instruction{
       }else if (this.operLeft.type == Type.CHAR && this.operRight.type == Type.CHAR){
         this.type = Type.INT;
         return this.getVal(this.operLeft.type, left) ^ this.getVal(this.operRight.type, right);
+      }else if (this.operLeft.type == Type.STRING && this.operRight.type == Type.INT){
+        this.type = Type.STRING;
+        var text = String(this.getVal(this.operLeft.type, left));
+        var cant = this.getVal(this.operRight.type, right);
+        var pr = "";
+        for(let step= 0; step<cant; step++){
+          pr+=text;
+        }
+        return pr;
       }
       ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumType.SEMANTIC),`Tipos erroneos en operación potencia.`,ENVIRONMENT.NULL));
       return new Exception("Semantico", "Tipos erroneos en operación potencia.", this.row, this.column);
@@ -213,6 +222,7 @@ class Aritmetica extends Instruction{
       ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumType.SEMANTIC),`Tipos erroneos en operación división.`,ENVIRONMENT.NULL));
       return new Exception("Semantico", "Tipos erroneos en operación división.", this.row, this.column);
       
+    
     }else if (this.operator === ARITMETIC_OPERATOR.UMENOS){
       if (this.operLeft.type == Type.INT){
         this.type = Type.INT;
@@ -236,9 +246,9 @@ class Aritmetica extends Instruction{
       return parseInt(value);
     }else if( type === Type.DOUBLE){
       return parseFloat(value);
-    }else if(type === Type.BOOLEAN){
+    }else if( type === Type.BOOLEAN){
       return Boolean(value);
-    }else if(type === Type.CHAR){
+    }else if( type === Type.CHAR){
       return parseInt(value.charCodeAt(0));
     }
     return String(value);

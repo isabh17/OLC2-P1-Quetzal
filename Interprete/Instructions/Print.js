@@ -14,5 +14,6 @@ class Print extends Instruction{
     }else{
       tree.updateOut(value);
     }
+    return null;
   }
 }
