@@ -114,18 +114,17 @@ lex_identificador   [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*
 /lex
 
 /* Asociación de operadores y precedencia */
-%left '?' DOSPTOS
 %left '||'
 %left '&&'
+%left '?'
+%left '^'
 %right '!'
-%left '&' 
-%left '++' '--'
 %left '==' '!=' '<' '<=' '>' '>='
 %left '+' '-'
 %left '*' '/' '%'
-%right '^'
+%right '++' '--'
+%right '&'
 %right UMENOS
-%left 'EOF'
 
 %start INIT
 
@@ -206,16 +205,16 @@ EXP
   | EXP '/' EXP                               { $$ = new Aritmetica($1, ARITMETIC_OPERATOR.DIV, $3, @1.first_line, @1.first_column); }
   | EXP '%' EXP                               { $$ = new Aritmetica($1, ARITMETIC_OPERATOR.MOD, $3, @1.first_line, @1.first_column); }
   | EXP '^' EXP                               { $$ = new Aritmetica($1, ARITMETIC_OPERATOR.POT, $3, @1.first_line, @1.first_column); }
-  | '!' EXP                                   { $$=new Logic($2, LOGIC_OPERATOR.NOT, null, @1.first_line, @1.first_column); }
-  | '-' EXP %prec UMENOS                      { $$ = new Aritmetica($1, ARITMETIC_OPERATOR.UMENOS, null, @1.first_line, @1.first_column); }
-  | EXP '<'  EXP                              { $$=new Relational($1, RELATIONAL_OPERATOR.MENQ , $3, @1.first_line, @1.first_column); }
-  | EXP '>'  EXP                              { $$=new Relational($1, RELATIONAL_OPERATOR.MAYQ , $3, @1.first_line, @1.first_column); }
-  | EXP '&&' EXP                              { $$=new Logic($1, LOGIC_OPERATOR.AND, $3, @1.first_line, @1.first_column); }
-  | EXP '||' EXP                              { $$=new Logic($1, LOGIC_OPERATOR.OR, $3, @1.first_line, @1.first_column); }
-  | EXP '!=' EXP                              { $$=new Relational($1, RELATIONAL_OPERATOR.DIFFERENT , $3, @1.first_line, @1.first_column); }
-  | EXP '==' EXP                              { $$=new Relational($1, RELATIONAL_OPERATOR.IDENT , $3, @1.first_line, @1.first_column); }
-  | EXP '>=' EXP                              { $$=new Relational($1, RELATIONAL_OPERATOR.MAYEQ , $3, @1.first_line, @1.first_column); }
-  | EXP '<=' EXP                              { $$=new Relational($1, RELATIONAL_OPERATOR.MENEQ , $3, @1.first_line, @1.first_column); }
+  | '!' EXP                                   { $$ = new Logic($2, LOGIC_OPERATOR.NOT, null, @1.first_line, @1.first_column); }
+  | '-' EXP %prec UMENOS                      { $$ = new Aritmetica($2, ARITMETIC_OPERATOR.UMENOS, null, @1.first_line, @1.first_column); }
+  | EXP '<'  EXP                              { $$ = new Relational($1, RELATIONAL_OPERATOR.MENQ , $3, @1.first_line, @1.first_column); }
+  | EXP '>'  EXP                              { $$ = new Relational($1, RELATIONAL_OPERATOR.MAYQ , $3, @1.first_line, @1.first_column); }
+  | EXP '&&' EXP                              { $$ = new Logic($1, LOGIC_OPERATOR.AND, $3, @1.first_line, @1.first_column); }
+  | EXP '||' EXP                              { $$ = new Logic($1, LOGIC_OPERATOR.OR, $3, @1.first_line, @1.first_column); }
+  | EXP '!=' EXP                              { $$ = new Relational($1, RELATIONAL_OPERATOR.DIFFERENT , $3, @1.first_line, @1.first_column); }
+  | EXP '==' EXP                              { $$ = new Relational($1, RELATIONAL_OPERATOR.IDENT , $3, @1.first_line, @1.first_column); }
+  | EXP '>=' EXP                              { $$ = new Relational($1, RELATIONAL_OPERATOR.MAYEQ , $3, @1.first_line, @1.first_column); }
+  | EXP '<=' EXP                              { $$ = new Relational($1, RELATIONAL_OPERATOR.MENEQ , $3, @1.first_line, @1.first_column); }
   | CALL_FUNCTION                             { $$=$1; }
   | PRIMITIVO                                 { $$=$1; }
   | PAROP EXP PARCLS                          { $$=$2; }
