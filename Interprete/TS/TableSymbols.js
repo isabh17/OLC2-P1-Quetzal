@@ -42,7 +42,7 @@ class TableSymbols{
           return null;
         }else{
           ErrorList.addError(new ErrorNode(symbol.getRow(),symbol.getColumn(),new ErrorType(EnumErrorType.SEMANTIC),`No se puede asignar tipos distintos a las variables.`,ENVIRONMENT.NULL));
-          return new Exception("Semantico", "No se puede asignar tipos distintos a las variables", symbol.getRow(), symbol.getEnvironment());
+          return new Exception("Semantico", "No se puede asignar tipos distintos a las variables", symbol.getRow(), /*symbol.getEnvironment()*/ null);
         }
       }else{
         actualTable = actualTable.previous;

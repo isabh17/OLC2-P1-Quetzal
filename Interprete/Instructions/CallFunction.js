@@ -74,6 +74,7 @@ class CallFunction extends Instruction{
   executeNative(tree, table){
     var funct = new Natives(this.name, this.parameters, this.row, this.column);
     var result = funct.execute(tree, table);
+    this.type = funct.type;
     return result;
   }
 }

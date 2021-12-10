@@ -43,5 +43,6 @@ class While extends Instruction{
         return new Exception("Semantico", "Error en while, la expresion no retorna un booleano.", this.row, this.column);
       }
     }
+    return null;
   }
 }
