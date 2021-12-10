@@ -6,6 +6,19 @@ class Primitive extends Instruction{
   }
 
   execute(tree, table){
-    return this.value;
+    return this.getVal(this.type, this.value);
+  }
+  
+  getVal(type, value){
+    if (type === Type.INT){
+      return parseInt(value);
+    }else if( type === Type.DOUBLE){
+      return parseFloat(value);
+    }else if( type === Type.BOOLEAN){
+      return Boolean(value);
+    }else if( type === Type.CHAR){
+      return parseInt(value.charCodeAt(0));
+    }
+    return String(value);
   }
 }

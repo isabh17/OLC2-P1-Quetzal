@@ -5,7 +5,7 @@ class CaseSwitch extends Instruction {
         this.instructionsCase = instructionsCase;
     }
 
-    execute(tree, table) { 
+    execute(tree, table) {
         for(var instruction of this.instructionsCase){
             var result = instruction.execute(tree, table);
             if (result instanceof Exception) {

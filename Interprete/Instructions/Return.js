@@ -2,7 +2,7 @@ class Return extends Instruction{
   constructor(expression, row, column){
     super(row, column);
     this.expression = expression;
-    this.tipo = null;
+    this.type = null;
     this.result = null;
   }
 

@@ -145,7 +145,7 @@ SENTENCES
 ;
 
 SENTENCE
-  : FUNCTIO                     { $$ = $1; }
+  : FUNCT                       { $$ = $1; }
   | PRINT                       { $$ = $1; }
   | DECLARATION                 { $$ = $1; }
   | ASSIGNMENT                  { $$ = $1; }
@@ -225,9 +225,8 @@ EXP
 ;
 
 L_E
-  : L_E COMA EXP                { $$=($1.toString()+$2.toString()+$3.toString()); }
-  | EXP DOSPTOS EXP             { $$=($1.toString()+$2.toString()+$3.toString()); }
-  | EXP                         { $$=$1; }
+  : L_E COMA EXP                { $$=$1; $$.push($3); }
+  | EXP                         { $$=[]; $$.push($1); }
 ;
 
 PRIMITIVO
@@ -246,6 +245,7 @@ TIPO
   | BOOLEAN                                   { $$=Type.BOOLEAN; }
   | STRING                                    { $$=Type.STRING; }
   | CHAR                                      { $$=Type.CHAR; }
+  | VOID                                      { $$=Type.NULL; }
 ;
 
 SENTENCE_FOR
@@ -315,6 +315,7 @@ CASES
   : CASE EXP BLOCK_CASES        { $$ = new CaseSwitch($2, $3, this._$.first_line, this._$.first_column);}
   | DEFAULT BLOCK_CASES         { $$ = new CaseSwitch(null, $2, this._$.first_line, this._$.first_column);}
 ;
+
 BLOCK_CASES
   : DOSPTOS SENTENCES       { $$ = $2; }
   | DOSPTOS                 { $$ = []; }
@@ -328,33 +329,26 @@ SENTENCE_DO_WHILE
   : DO BLOCK WHILE PAROP EXP PARCLS PTOCOMA { $$ = new Do($5, $2, @1.first_line, @1.first_column); }
 ;
 
-FUNCTION
-  : FUNCTION_HEADER ID PAROP PARCLS BLOCK               {  }
-  | FUNCTION_HEADER ID PAROP PARAMETERS PARCLS BLOCK    {  }
-;
-
-FUNCTION_HEADER
-  : TIPO                { $$=$1; }
-  | VOID                { $$=$1; }
+FUNCT
+  : TIPO ID PAROP PARCLS BLOCK               { $$ =new Function($1, $2, {}, $5, @1.first_line,  @1.first_column); }
+  | TIPO ID PAROP PARAMETERS PARCLS BLOCK    { $$ =new Function($1, $2, $4, $6, @1.first_line,  @1.first_column); }
 ;
 
 PARAMETERS
-  : PARAMETERS COMA PARAMETER   { $$=($1.toString()+$2.toString()+$3.toString()); }
-  | PARAMETER                   { $$=$1.toString(); }
+  : PARAMETERS COMA PARAMETER   { $$=$1; $$[$3.Identifier] = $3; }
+  | PARAMETER                   { $$={}; $$[$1.Identifier] = $1; }
 ;
 
 PARAMETER
-  : TIPO ID                     { $$=($1.toString()+$2.toString()); }
-  | TIPO ID COROP CORCLS        { $$=($1.toString()+$2.toString()+$3.toString()+$4.toString()); }
-  | ID ID                       { $$=($1.toString()+$2.toString()); }
+  : TIPO ID                     { $$={"Identifier":$2, "Type":$1}; }
+  //| TIPO ID COROP CORCLS        { $$=($1.toString()+$2.toString()+$3.toString()+$4.toString()); }
+  | ID ID                       { $$={"Identifier":$2, "Type":$1}; }
 ;
 
 CALL_FUNCTION
-  : ID PAROP L_E PARCLS         { $$ = new CallFunction(this._$.first_line,this._$.first_column,$1,$3,true); }
-  | ID PAROP PARCLS             { $$ = new CallFunction(this._$.first_line,this._$.first_column,$1,[],true); }
+  : ID PAROP L_E PARCLS         { $$ = new CallFunction($1, $3, @1.first_line,  @1.first_column); }
+  | ID PAROP PARCLS             { $$ = new CallFunction($1, [], @1.first_line,  @1.first_column); }
 ;
-
-
 
 BREAKS
   : BREAK PTOCOMA       { $$ = new Break(@1.first_line,  @1.first_column); }

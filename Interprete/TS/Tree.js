@@ -1,17 +1,17 @@
 class Tree{
-  constructor(instruction){
-    this.instruction = instruction;
+  constructor(instructions){
+    this.instructions = instructions;
     this.functions = [];
     this.out = "";
     this.globalTable = null;
   }
 
-  getInstruction(){ 
-    return this.instruction;
+  getInstructions(){ 
+    return this.instructions;
   }
   
-  setInstruccion(instruction){
-    this.instruction = instruction;
+  setInstruccions(instructions){
+    this.instructions = instructions;
   }
 
   getOut(){
@@ -32,5 +32,22 @@ class Tree{
   
   setGlobalTable(globalTable){
     this.globalTable = globalTable;
+  }
+
+  addFunction(funct){
+    this.functions.push(funct);
+  }
+
+  getFunctions(){
+    return this.functions;
+  }
+
+  getFunction(name){
+    for(var funct of this.functions){
+      if(funct.name === name){
+        return funct;
+      }
+    }
+    return null;
   }
 }

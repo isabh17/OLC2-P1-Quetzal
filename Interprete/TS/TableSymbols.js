@@ -17,7 +17,7 @@ class TableSymbols{
     }
   }
 
-  getSymbol(id){//getTabla
+  getSymbol(id){
     var actualTable = this;
     while(actualTable.table != null){
       if (id in actualTable.table){

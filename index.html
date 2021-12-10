@@ -149,6 +149,8 @@
     <script src="./Interprete/Instructions/InstructionError.js"></script>
     <script src="./Interprete/Instructions/Switch.js"></script>
     <script src="./Interprete/Instructions/CaseSwitch.js"></script>
+    <script src="./Interprete/Instructions/Function.js"></script>
+    <script src="./Interprete/Instructions/CallFunction.js"></script>
 
 
     <!-- Utils-->
@@ -215,13 +217,17 @@
             var tree = new Tree(instructions);
             var tsGlobal = new TableSymbols(null);
             tree.setGlobalTable(tsGlobal);
-            tree.getInstruction().forEach(instruction=>{
-                var value = instruction.execute(tree, tsGlobal);
-                if (value instanceof Exception){
-                    console.log(value);
-                }else if(value !== null){
-                    for(var err of value){
-                        console.log(err);
+            tree.getInstructions().forEach(instruction=>{
+                if(instruction instanceof Function){
+                    tree.addFunction(instruction);
+                }else{
+                    var value = instruction.execute(tree, tsGlobal);
+                    if (value instanceof Exception){
+                        console.log(value);
+                    }else if(value !== null){
+                        for(var err of value){
+                            console.log(err);
+                        }
                     }
                 }
             });

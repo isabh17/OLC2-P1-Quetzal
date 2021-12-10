@@ -6,7 +6,7 @@ class Aritmetica extends Instruction{
     this.operRight = operRight;
     this.type = null;
   }
-
+  
   execute(tree, table){
     var left = this.operLeft.execute(tree, table);
     if (left instanceof Exception) return left;
