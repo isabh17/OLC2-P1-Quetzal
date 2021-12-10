@@ -211,7 +211,7 @@
         Consola.setSize("1170","300");
 
         function Compile(texto){
-            Consola.setValue("");
+            Salida.setValue("");
             var instructions = gramatica.parse(texto);
             var tree = new Tree(instructions);
             var tsGlobal = new TableSymbols(null);
@@ -226,7 +226,7 @@
                     }
                 }
             });
-            Consola.setValue(tree.getOut());
+            Salida.setValue(tree.getOut());
               /*if (document.getElementById("grafo")) {
                 document.getElementById("grafo").remove();
             }*/
