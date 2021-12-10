@@ -89,7 +89,19 @@ void main() {
         }else{
           print("Diferente");
         }
-
+int valor = 2;
+switch(valor){
+  case 1:
+    print("Es uno");
+    break;
+  case 2:
+    print("Es dos");
+  case 3:
+    print("Es tres");
+  default:
+    print("Default");
+    break;
+}
 
 /*
 int val1 = 1;
@@ -135,6 +147,7 @@ println("Hola " * string(carnet));
 println(typeof(val1) & " " & typeof(rel1));
 println("---------------------------------");
 */
+<<<<<<< HEAD
 
 /*
 string valor = "El valor del area es: ";
@@ -144,3 +157,5 @@ void area(int base, int altura, string val){
 }
 area(10, 5, valor);
 */
+=======
+>>>>>>> 2bd2910869f7ec0ab224679160a3be8eaf8a947d

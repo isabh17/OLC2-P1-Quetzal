@@ -149,8 +149,12 @@
     <script src="./Interprete/Instructions/InstructionError.js"></script>
     <script src="./Interprete/Instructions/Switch.js"></script>
     <script src="./Interprete/Instructions/CaseSwitch.js"></script>
+<<<<<<< HEAD
     <script src="./Interprete/Instructions/Function.js"></script>
     <script src="./Interprete/Instructions/CallFunction.js"></script>
+=======
+    <script src="./Interprete/Instructions/For.js"></script>
+>>>>>>> 2bd2910869f7ec0ab224679160a3be8eaf8a947d
 
 
     <!-- Utils-->
@@ -212,7 +216,7 @@
         Consola.setSize("1170","300");
 
         function Compile(texto){
-            Consola.setValue("");
+            Salida.setValue("");
             var instructions = gramatica.parse(texto);
             var tree = new Tree(instructions);
             var tsGlobal = new TableSymbols(null);
@@ -231,7 +235,7 @@
                     }
                 }
             });
-            Consola.setValue(tree.getOut());
+            Salida.setValue(tree.getOut());
               /*if (document.getElementById("grafo")) {
                 document.getElementById("grafo").remove();
             }*/
