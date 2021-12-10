@@ -7,37 +7,8 @@ class ForIn extends Instruction {
         this.expression = expression;
         this.block = block;
 
-        this.translatedCode = "";
     }
-
-    getTranslated(){
-        this.translatedCode += `for(${this.declaration.getTranslated().replace("\n","").replace(";","")} in ${this.expression.getTranslated()})`;
-        this.translatedCode += `${this.block.getTranslated()}\n\n`;
-        return this.translatedCode;
-    }
-
-    translatedSymbolsTable(e){
-        TableReport.addTranslated(
-            new NodeTableSymbols(
-              this.linea,
-              this.column,
-              "FOR IN",
-              null,
-              e.enviromentType,
-              null
-            )
-        );
-      
-        var env = new Environment(e,new EnvironmentType(EnumEnvironmentType.FOR,""));
-        this.declaration.translatedSymbolsTable(env);
-        this.expression.translatedSymbolsTable(env);
-        this.block.translatedSymbolsTable(env);
-    }
-
-    executeSymbolsTable(e){
-        return "implementar";
-    }
-
+    
     execute(e) {
         var resultExpresion;
         var idVariable;

@@ -134,7 +134,7 @@ break;
 case 33:
  this.$ = new Assignation($$[$0-3], $$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column); 
 break;
-case 34: case 35: case 115: case 116:
+case 34: case 35: case 79: case 115: case 116:
   
 break;
 case 36:
@@ -240,16 +240,13 @@ case 75:
  this.$=Type.CHAR; 
 break;
 case 76:
- console.log($$[$0-11],$$[$0-10],$$[$0-9],$$[$0-8],$$[$0-7],$$[$0-6],$$[$0-5],$$[$0-4],$$[$0-3],$$[$0-2],$$[$0-1]); 
+ this.$ = new For($$[$0-9],$$[$0-8],$$[$0-6],$$[$0-4],$$[$0-2],$$[$0], _$[$0-11].first_line, _$[$0-11].first_column)  
 break;
 case 77:
- console.log($$[$0-10],$$[$0-9],$$[$0-8],$$[$0-7],$$[$0-6],$$[$0-5],$$[$0-4],$$[$0-3],$$[$0-2],$$[$0-1]); 
+ this.$ = new For(null,$$[$0-8],$$[$0-6],$$[$0-4],$$[$0-2],$$[$0], _$[$0-10].first_line, _$[$0-10].first_column) 
 break;
 case 78:
- console.log($$[$0-8],$$[$0-7],$$[$0-6],$$[$0-5],$$[$0-4],$$[$0-3],$$[$0-2],$$[$0-1],$$[$0]); 
-break;
-case 79:
- console.log($$[$0-4],$$[$0-3],$$[$0-2],$$[$0-1],$$[$0]); 
+ this.$ = new For(null,$$[$0-6],null,$$[$0-4],$$[$0-2],$$[$0], _$[$0-8].first_line, _$[$0-8].first_column)
 break;
 case 81: case 98: case 106: case 112:
  this.$ = []; 

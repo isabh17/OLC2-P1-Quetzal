@@ -89,7 +89,19 @@ void main() {
         }else{
           print("Diferente");
         }
-
+int valor = 2;
+switch(valor){
+  case 1:
+    print("Es uno");
+    break;
+  case 2:
+    print("Es dos");
+  case 3:
+    print("Es tres");
+  default:
+    print("Default");
+    break;
+}
 
 /*
 int val1 = 1;

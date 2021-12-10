@@ -249,10 +249,10 @@ TIPO
 ;
 
 SENTENCE_FOR
-  : FOR PAROP TIPO ID '=' EXP PTOCOMA EXP PTOCOMA POST_FIXED PARCLS BLOCK  { console.log($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11); }
-  | FOR PAROP ID '=' EXP PTOCOMA EXP PTOCOMA POST_FIXED PARCLS BLOCK       { console.log($1,$2,$3,$4,$5,$6,$7,$8,$9,$10); }
-  | FOR PAROP ID PTOCOMA EXP PTOCOMA POST_FIXED PARCLS BLOCK               { console.log($1,$2,$3,$4,$5,$6,$7,$8,$9); }
-  | FOR ID IN EXP BLOCK                                                    { console.log($1,$2,$3,$4,$5); }
+  : FOR PAROP TIPO ID '=' EXP PTOCOMA EXP PTOCOMA POST_FIXED PARCLS BLOCK  { $$ = new For($3,$4,$6,$8,$10,$12, @1.first_line, @1.first_column)  }
+  | FOR PAROP ID '=' EXP PTOCOMA EXP PTOCOMA POST_FIXED PARCLS BLOCK       { $$ = new For(null,$3,$5,$7,$9,$11, @1.first_line, @1.first_column) }
+  | FOR PAROP ID PTOCOMA EXP PTOCOMA POST_FIXED PARCLS BLOCK               { $$ = new For(null,$3,null,$5,$7,$9, @1.first_line, @1.first_column)}
+  | FOR ID IN EXP BLOCK                                                    {  }
 ;
 
 BLOCK
