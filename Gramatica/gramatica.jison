@@ -138,8 +138,8 @@ SENTENCES
 SENTENCE
   : FUNCT                       { $$ = $1; }
   | PRINT                       { $$ = $1; }
-  | DECLARATION                 { $$ = $1; }
-  | ASSIGNMENT                  { $$ = $1; }
+  | DECLARATION PTOCOMA         { $$ = $1; }
+  | ASSIGNMENT PTOCOMA          { $$ = $1; }
   | SENTENCE_IF                 { $$ = $1; }
   | SENTENCE_WHILE              { $$ = $1; }
   | SENTENCE_DO_WHILE           { $$ = $1; }
@@ -170,10 +170,10 @@ PRINT
 ;
 
 DECLARATION
-  : TIPO IDENTIFIERS PTOCOMA                    { $$ = new Declaration($1, $2, null, @1.first_line, @1.first_column); }
-  | TIPO ID '=' EXP PTOCOMA                     { $$ = new Declaration($1, $2, $4, @1.first_line, @1.first_column); }
-  | TIPO COROP CORCLS IDENTIFIERS PTOCOMA       { $$ = new Declaration(null, null, null, @1.first_line, @1.first_column); }
-  | TIPO COROP CORCLS ID '=' EXP PTOCOMA        { $$ = new Declaration(null, null, null, @1.first_line, @1.first_column); }
+  : TIPO IDENTIFIERS                    { $$ = new Declaration($1, $2, null, @1.first_line, @1.first_column); }
+  | TIPO ID '=' EXP                     { $$ = new Declaration($1, $2, $4, @1.first_line, @1.first_column); }
+  | TIPO COROP CORCLS IDENTIFIERS       { $$ = new Declaration(null, null, null, @1.first_line, @1.first_column); }
+  | TIPO COROP CORCLS ID '=' EXP        { $$ = new Declaration(null, null, null, @1.first_line, @1.first_column); }
 ;
 
 IDENTIFIERS
@@ -182,9 +182,9 @@ IDENTIFIERS
 ;
 
 ASSIGNMENT
-  : ID '=' EXP PTOCOMA                                            { $$ = new Assignation($1, $3, @1.first_line, @1.first_column); }
-  | ID COROP CORCLS '=' PARAMETROS                                {  }
-  | COROP CORCLS ID '=' COROP PARAMETROS CORCLS PTOCOMA           {  }
+  : ID '=' EXP                                            { $$ = new Assignation($1, $3, @1.first_line, @1.first_column); }
+  | ID COROP CORCLS '=' PARAMETROS                        {  }
+  //| COROP CORCLS ID '=' COROP PARAMETROS CORCLS           {  }
 ;
 
 EXP
@@ -240,10 +240,10 @@ TIPO
 ;
 
 SENTENCE_FOR
-  : FOR PAROP TIPO ID '=' EXP PTOCOMA EXP PTOCOMA ID POST_FIXED PARCLS BLOCK  { $$ = new For($3,$4,$6,$8,$10,$11,$13, @1.first_line, @1.first_column); }
-  | FOR PAROP ID '=' EXP PTOCOMA EXP PTOCOMA ID POST_FIXED PARCLS BLOCK       { $$ = new For(null,$3,$5,$7,$9,$10,$12, @1.first_line, @1.first_column); }
-  | FOR PAROP ID PTOCOMA EXP PTOCOMA ID POST_FIXED PARCLS BLOCK               { $$ = new For(null,$3,null,$5,$7,$8,$10, @1.first_line, @1.first_column);}
-  | FOR ID IN EXP BLOCK                                                       { $$ = new ForIn($2,$4,$5);}
+  : FOR PAROP DECLARATION PTOCOMA EXP PTOCOMA POST_FIXED PARCLS BLOCK      { $$ = new For($3, $5, $7, $9, @1.first_line, @1.first_column); }
+  | FOR PAROP ASSIGNMENT PTOCOMA EXP PTOCOMA POST_FIXED PARCLS BLOCK       { $$ = new For($3, $5, $7, $9, @1.first_line, @1.first_column); }
+  | FOR PAROP ID PTOCOMA EXP PTOCOMA POST_FIXED PARCLS BLOCK               { $$ = new For($3, $5, $7, $9, @1.first_line, @1.first_column); }
+  | FOR ID IN EXP BLOCK                                                    { $$ = new ForIn($2,$4,$5);}
 ;
 
 BLOCK
