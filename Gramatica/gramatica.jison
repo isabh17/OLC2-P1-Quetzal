@@ -252,7 +252,7 @@ SENTENCE_FOR
   : FOR PAROP TIPO ID '=' EXP PTOCOMA EXP PTOCOMA ID POST_FIXED PARCLS BLOCK  { $$ = new For($3,$4,$6,$8,$10,$11,$13, @1.first_line, @1.first_column); }
   | FOR PAROP ID '=' EXP PTOCOMA EXP PTOCOMA ID POST_FIXED PARCLS BLOCK       { $$ = new For(null,$3,$5,$7,$9,$10,$12, @1.first_line, @1.first_column); }
   | FOR PAROP ID PTOCOMA EXP PTOCOMA ID POST_FIXED PARCLS BLOCK               { $$ = new For(null,$3,null,$5,$7,$8,$10, @1.first_line, @1.first_column);}
-  | FOR ID IN EXP BLOCK                                                       {  }
+  | FOR ID IN EXP BLOCK                                                       { $$ = new ForIn($2,$4,$5);}
 ;
 
 BLOCK
