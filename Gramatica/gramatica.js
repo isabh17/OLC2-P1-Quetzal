@@ -134,7 +134,7 @@ break;
 case 33:
  this.$ = new Assignation($$[$0-3], $$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column); 
 break;
-case 34: case 35: case 79:
+case 34: case 35:
   
 break;
 case 36:
@@ -244,6 +244,9 @@ case 77:
 break;
 case 78:
  this.$ = new For(null,$$[$0-7],null,$$[$0-5],$$[$0-3],$$[$0-2],$$[$0], _$[$0-9].first_line, _$[$0-9].first_column);
+break;
+case 79:
+ this.$ = new ForIn($$[$0-3],$$[$0-1],$$[$0]);
 break;
 case 81: case 98: case 106: case 112:
  this.$ = []; 
