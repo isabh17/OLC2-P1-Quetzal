@@ -25,9 +25,21 @@ class Function extends Instruction{
         //tree.actualizar_consola_salto(err.__str__())
       }
       if (value instanceof Return){
-        this.type = value.type;
-        return value.result;
+        if(this.type === Type.NULL){//Si la funcion es de tipo void
+          if(value!==null){// Si la funcion recibe un return con expresion y aun así devuelve algo
+            return new Exception("Semantico", "Error en funcion "+ this.name+ ", se retorna una expresion y se esperaba vacio.", this.row, this.column);
+          }
+        }else{
+          if(this.type === value.type){//Si la funcion retorna un valor se verifica que sean del tipo que debe retornar
+            return value.result;
+          }else{
+            return new Exception("Semantico", "Error en funcion "+ this.name+ ", se retorna un valor del tipo incorrecto de esta funcion.", this.row, this.column);
+          }
+        }
       }
+    }
+    if(this.type!==Type.NULL){
+      return new Exception("Semantico", "Error en funcion "+ this.name+ ", se esperaba que se retornara un valor.", this.row, this.column);
     }
     return null;
   }

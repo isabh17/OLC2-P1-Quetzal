@@ -89,20 +89,11 @@ lex_identificador   [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*
 "return"            return 'RETURN';
 "continue"          return 'CONTINUE';
 
-"typeof"            return 'TYPEOF';
 "touppercase"       return 'TOUPPER';
 "tolowercase"       return 'TOLOWER';
 "caracterOfPosition" return 'CARACTERPOSC';
 "struct"            return 'STRUCT'
-"pow"               return 'POW';
 "parse"             return 'PARSE';
-"toint"             return 'TOINT';
-"todouble"          return 'TODOUBLE';
-"sin"               return 'SIN';
-"cos"               return 'COS';
-"tan"               return 'TAN';
-"sqrt"              return 'SQRT';
-"log10"             return 'LOG10';
 
 {lex_identificador} return 'ID'
 

@@ -147,7 +147,6 @@ println("Hola " * string(carnet));
 println(typeof(val1) & " " & typeof(rel1));
 println("---------------------------------");
 */
-<<<<<<< HEAD
 
 /*
 string valor = "El valor del area es: ";
@@ -157,5 +156,3 @@ void area(int base, int altura, string val){
 }
 area(10, 5, valor);
 */
-=======
->>>>>>> 2bd2910869f7ec0ab224679160a3be8eaf8a947d

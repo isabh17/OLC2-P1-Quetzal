@@ -7,6 +7,9 @@ class CallFunction extends Instruction{
   }
   
   execute(tree, table){
+    if(this.verifyNative()){
+      return this.executeNative(tree, table);
+    }
     var result = tree.getFunction(this.name);
     if (result === null){
       return new Exception("Semantico", "No existe una funcionn con ese name: " + this.name, this.row, this.column);
@@ -57,5 +60,20 @@ class CallFunction extends Instruction{
     this.type = result.type;
     //tree.removeAmbito()
     return value;
+  }
+
+  verifyNative(){//Metodo usado para verificar si  se debe ejecutar una funcion nativa
+    var name = this.name;
+    if(name==="pow"||name==="sqrt"||name==="sin"||name==="cos"||name==="tan"||name==="log10"||name==="toInt"||name==="toDouble"||name==="string"||name==="typeof"){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  executeNative(tree, table){
+    var funct = new Natives(this.name, this.parameters, this.row, this.column);
+    var result = funct.execute(tree, table);
+    return result;
   }
 }
