@@ -34,7 +34,7 @@ class Aritmetica extends Instruction{
         this.type = Type.INT;
         return this.getVal(this.operLeft.type, left) + this.getVal(this.operRight.type, right);
       }
-      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`Tipos erroneos en operación suma.`,ENVIROMMENT.NULL));
+      //ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`Tipos erroneos en operación suma.`,ENVIROMMENT.NULL));
       return new Exception("Semantico", "Tipos erroneos en operación suma."+this.operLeft.type+"!="+this.operRight.type, this.row, this.column);
     
     }else if (this.operator === ARITMETIC_OPERATOR.REST){

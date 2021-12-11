@@ -111,7 +111,7 @@ class Natives extends Instruction {
       }
       var result = 0;
       result = Math.pow(base, exponent);
-      if (Number.isInteger(value)) {
+      if (Number.isInteger(result)) {
         this.type = Type.INT;
       } else {
         this.type = Type.DOUBLE;

@@ -24,7 +24,7 @@ class Post_fixed extends Instruction{
       ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"Solo se puede incrementar o decrementar variables de tipo INT",ENVIRONMENT.NULL));
       return new Exception("Semantico", "Solo se puede incrementar o decrementar variables de tipo INT", this.row, this.column);
     }
-    symbol = new Symbol(symbol.getId(), symbol.getType(), value, symbol.getRow(), symbol.getColumn(), null);
+    symbol = new Symbol(symbol.getId(), symbol.getType(), value, symbol.getRow(), symbol.getColumn(), null, null);
     var res = table.updateValueSymbol(symbol);
     if (res instanceof Exception) return res;
     this.type = Type.INT;

@@ -23,7 +23,7 @@ class Assignation extends Instruction{
       }
     }
 
-    symbol = new Symbol(symbol.getId(), this.expression.type, value, symbol.getRow(), symbol.getColumn(), null);
+    symbol = new Symbol(symbol.getId(), this.expression.type, value, symbol.getRow(), symbol.getColumn(), null, null);
     var res = table.updateValueSymbol(symbol);
     if (res instanceof Exception) return res;
     return null;

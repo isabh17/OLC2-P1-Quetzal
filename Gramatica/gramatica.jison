@@ -151,18 +151,18 @@ SENTENCE
   | CONTINU                     { $$ = $1; }
   | CALL_FUNCTION PTOCOMA       { $$ = $1; }
   | POST_FIXED PTOCOMA          { $$ = $1; }
-  | TEMPLATE_STRUCT             { }
+  | TEMPLATE_STRUCT             { $$ = $1; }
   | CREATE_STRUCT               { }
   | error PTOCOMA               { ErrorList.addError(new ErrorNode(this._$.first_line,this._$.first_column,new ErrorType(EnumErrorType.SYNTACTIC),` Error sintactico `,ENVIRONMENT.NULL)); $$ = new InstructionError(); }
   | error KEYCLS                { ErrorList.addError(new ErrorNode(this._$.first_line,this._$.first_column,new ErrorType(EnumErrorType.SYNTACTIC),` Error sintactico `,ENVIRONMENT.NULL)); $$ = new InstructionError(); }
 ;
 
 CREATE_STRUCT
-  : ID ID '=' ID PAROP L_E PARCLS PTOCOMA             {console.log($1, $2, $3, $4, $5, $6, $7, $8); }
+  : ID ID '=' ID PAROP L_E PARCLS PTOCOMA             { $$ = new CreateStruct($1, $2, $4, $6, @1.first_line, @1.first_column); }
 ;
 
 TEMPLATE_STRUCT
-  : STRUCT ID KEYOP PARAMETERS KEYCLS PTOCOMA            { console.log($1, $2, $3, $4, $5, $6); }
+  : STRUCT ID KEYOP PARAMETERS KEYCLS PTOCOMA  { $$ = new TemplateStruct($2, $4, @1.first_line, @1.first_column); }
 ;
 
 PRINT

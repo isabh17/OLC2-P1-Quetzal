@@ -14,7 +14,7 @@ class Declaration extends Instruction{
         ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Los types de variables no concuerdan: "+String(this.type)+"!="+String(this.expression.type),ENVIRONMENT.NULL));
         return new Exception("Semantico", "Los types de variables no concuerdan: "+String(this.type)+"!="+String(this.expression.type));
       }
-      var symbol = new Symbol(String(this.identifier), this.type, value, this.row, this.column, null);
+      var symbol = new Symbol(String(this.identifier), this.type, value, this.row, this.column, null, null);
       var res = table.addSymbol(symbol);
       if (res instanceof Exception) return res;
       return null;
@@ -33,7 +33,7 @@ class Declaration extends Instruction{
         }else if(this.type===Type.CHAR){
           value = '';
         }
-        var symbol = new Symbol(String(variable), this.type, value, this.row, this.column, null);
+        var symbol = new Symbol(String(variable), this.type, value, this.row, this.column, null, null);
         var res = table.addSymbol(symbol);
         if(res instanceof Exception) exceptions.push(res);
       }

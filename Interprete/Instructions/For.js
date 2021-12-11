@@ -8,7 +8,6 @@ class For extends Instruction {
     }
 
     execute(tree, table) {
-        console.log(this.verifyExistId(tree, table));
         if(!this.verifyExistId(tree, table)){
             ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "La variable a iterar no existe",ENVIRONMENT.FOR));
             return new Exception("Semantico", "La variable a iterar no existe", this.row, this.column);

@@ -1,11 +1,12 @@
 class Symbol{
-  constructor(id, type, value, row, column, ambit){
+  constructor(id, type, value, row, column, ambit, objectType){
     this.id = id;
     this.type = type;
     this.row = row;
     this.column = column;
     this.value = value;
     this.ambit = ambit;
+    this.objectType = objectType;
   }
 
   getId(){

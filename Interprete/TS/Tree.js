@@ -2,6 +2,7 @@ class Tree{
   constructor(instructions){
     this.instructions = instructions;
     this.functions = [];
+    this.structTemplates = [];
     this.out = "";
     this.globalTable = null;
   }
@@ -46,6 +47,23 @@ class Tree{
     for(var funct of this.functions){
       if(funct.name === name){
         return funct;
+      }
+    }
+    return null;
+  }
+  
+  addStruct(struct){
+    this.structTemplates.push(struct);
+  }
+
+  getStructs(){
+    return this.structTemplates;
+  }
+
+  getStruct(name){
+    for(var struct of this.structTemplates){
+      if(struct.name === name){
+        return struct;
       }
     }
     return null;

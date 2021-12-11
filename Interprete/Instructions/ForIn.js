@@ -15,10 +15,10 @@ class ForIn extends Instruction {
         }
         if (value instanceof Exception) return value;
         let cadena_array = value.split('');
-        var symbol = new Symbol(String(this.identifier), this.expression.type, cadena_array[0], this.row, this.column, null);
+        var symbol = new Symbol(String(this.identifier), this.expression.type, cadena_array[0], this.row, this.column, null, null);
         value = newTable.addSymbol(symbol);
         for(let letter of cadena_array){
-            symbol = new Symbol(symbol.getId(), symbol.getType(), letter, symbol.getRow(), symbol.getColumn(), null);
+            symbol = new Symbol(symbol.getId(), symbol.getType(), letter, symbol.getRow(), symbol.getColumn(), null, null);
             let res = newTable.updateValueSymbol(symbol);
             if(res instanceof Exception){
                 return res;

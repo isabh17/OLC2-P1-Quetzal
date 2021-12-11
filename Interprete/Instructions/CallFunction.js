@@ -37,7 +37,7 @@ class CallFunction extends Instruction{
           }else if (typeof(value) === 'string'){
             type = Type.STRING;
           }
-          var symbol = new Symbol(String(result.parameters[parameter].Identifier), type,  value, this.row, this.column, null);
+          var symbol = new Symbol(String(result.parameters[parameter].Identifier), type,  value, this.row, this.column, null, null);
           var resultTable = newTable.addSymbol(symbol);
           if (resultTable instanceof Exception){
             //tree.removeAmbito()

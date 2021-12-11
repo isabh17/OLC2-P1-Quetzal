@@ -177,19 +177,17 @@
     <script src="./Interprete/Instructions/For.js"></script>
     <script src="./Interprete/Instructions/ForIn.js"></script>
     <script src="./Interprete/Instructions/Natives.js"></script>
-    <script src="./Interprete/Instructions/Change.js"></script>
     <script src="./Interprete/Instructions/Post_fixed.js"></script>
     <script src="./Interprete/Instructions/Ternary.js"></script>
     <script src="./Interprete/Instructions/NativeMethods.js"></script>
-
+    <script src="./Interprete/Instructions/TemplateStruct.js"></script>
+    <script src="./Interprete/Instructions/CreateStruct.js"></script>
 
     <!-- Utils-->
     <script src="Utils/ErrorList.js"></script>
     <script src="Utils/ErrorType.js"></script>
     <script src="Utils/ErrorNode.js"></script>
     <script src="Utils/Node.js"></script>
-
-
 
     <!-- load the d3.js library -->    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>   
@@ -251,6 +249,8 @@
             tree.getInstructions().forEach(instruction=>{
                 if(instruction instanceof Function){
                     tree.addFunction(instruction);
+                }else if(instruction instanceof TemplateStruct){
+                    tree.addStruct(instruction);
                 }else{
                     var value = instruction.execute(tree, tsGlobal);
                     if (value instanceof Exception){
@@ -274,7 +274,6 @@
             var Codigo = Fuente.getValue();
             Compile(Codigo);
         }
- 
 
         function newNode(yy, state, ...nodes) {
             const parent = getNonTerminal(yy, state);
