@@ -18,7 +18,7 @@ class Assignation extends Instruction{
       if(symbol.getType() === Type.DOUBLE && this.expression.type === Type.INT){
         this.expression.type = Type.DOUBLE;
       }else{
-        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`Los tipos de variables no concuerdan:` +String(symbol.getType())+"!=",table.getEnvironment()));
+        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`Los tipos de variables no concuerdan:` +String(symbol.getType())+"!=",ENVIRONMENT.NULL));
         return new Exception("Semantico", "Los tipos de variables no concuerdan: "+String(symbol.getType())+"!="+String(this.expression.type));
       }
     }

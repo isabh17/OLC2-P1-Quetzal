@@ -9,9 +9,11 @@ class For extends Instruction {
 
     execute(tree, table) {
         if(!this.verifyExistId(tree, table)){
+            ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "La variable a iterar no existe",ENVIRONMENT.FOR));
             return new Exception("Semantico", "La variable a iterar no existe", this.row, this.column);
         }
         if(!this.verifyId()){
+            ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Los iteradores no son los mismos",ENVIRONMENT.FOR));
             return new Exception("Semantico", "Los iteradores no son los mismos", this.row, this.column);
         }
         var newTable = new TableSymbols(table);
@@ -21,6 +23,7 @@ class For extends Instruction {
             var resultCondition = this.condition.execute(tree, newTable);
             if(resultCondition instanceof Exception) return variable;
             if(this.condition.type!==Type.BOOLEAN){
+                ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Se esperaba una condicion booleana",ENVIRONMENT.FOR));
                 return new Exception("Semantico", "Se esperaba una condicion booleana", this.row, this.column);   
             }
             if(!resultCondition){
