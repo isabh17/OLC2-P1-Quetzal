@@ -33,6 +33,10 @@ class Function extends Instruction{
           if(this.type === value.type){//Si la funcion retorna un valor se verifica que sean del tipo que debe retornar
             return value.result;
           }else{
+            if(this.type === Type.DOUBLE && value.type === Type.INT){
+              value.type = Type.DOUBLE;
+              return value.result;
+            }
             return new Exception("Semantico", "Error en funcion "+ this.name+ ", se retorna un valor del tipo incorrecto de esta funcion.", this.row, this.column);
           }
         }

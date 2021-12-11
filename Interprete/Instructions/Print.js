@@ -12,7 +12,6 @@ class Print extends Instruction{
       return null;
     }
     if(this.jump){
-      //tree.updateOut("\n"+value);
       tree.updateOut(value+"\n");
     }else{
       tree.updateOut(value);

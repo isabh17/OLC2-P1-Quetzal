@@ -71,10 +71,6 @@ lex_identificador   [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*
 "boolean"           return 'BOOLEAN';
 "char"              return 'CHAR';
 
-"push"              return 'PUSH';
-"pop"               return 'POP';
-"length"            return 'LENGTH';
-
 "if"                return 'IF';
 "for"               return 'FOR';
 "in"                return 'IN';
@@ -90,9 +86,13 @@ lex_identificador   [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*
 "return"            return 'RETURN';
 "continue"          return 'CONTINUE';
 
-"touppercase"       return 'TOUPPER';
-"tolowercase"       return 'TOLOWER';
+"toUppercase"       return 'TOUPPER';
+"toLowercase"       return 'TOLOWER';
+"subString"         return 'SUBSTR';
+"length"            return 'LENGTH';
 "caracterOfPosition" return 'CARACTERPOSC';
+"push"              return 'PUSH';
+"pop"               return 'POP';
 "struct"            return 'STRUCT'
 "parse"             return 'PARSE';
 
@@ -214,6 +214,22 @@ EXP
   | ID                                        { $$ = new Identifier($1, @1.first_line, @1.first_column, ENVIRONMENT.NULL); }
   | POST_FIXED                                { $$ = $1; }
   | TERNARY                                   { $$ = $1; }
+  | METHODS                                   { $$ = $1; }
+;
+
+METHODS
+  : TIPO PTO METHOD PAROP L_E PARCLS           { $$ = new NativeMethods($1, $3, $5, @1.first_line, @1.first_column); }
+  | ID PTO METHOD PAROP L_E PARCLS             { $$ = new NativeMethods($1, $3, $5, @1.first_line, @1.first_column); }
+  | ID PTO METHOD PAROP PARCLS                 { $$ = new NativeMethods($1, $3, [], @1.first_line, @1.first_column); }
+;
+
+METHOD
+  : TOUPPER             { $$ = $1; }
+  | TOLOWER             { $$ = $1; }
+  | SUBSTR              { $$ = $1; }
+  | LENGTH              { $$ = $1; }
+  | CARACTERPOSC        { $$ = $1; }
+  | PARSE               { $$ = $1; }
 ;
 
 TERNARY
@@ -345,14 +361,7 @@ CALL_FUNCTION
   : ID PAROP L_E PARCLS                         { $$ = new CallFunction($1, $3, @1.first_line,  @1.first_column); }
   | ID PAROP PARCLS                             { $$ = new CallFunction($1, [], @1.first_line,  @1.first_column); }
   | STRING PAROP L_E PARCLS                     { $$ = new CallFunction($1, $3, @1.first_line,  @1.first_column); }
-  //| CHANGE_HEADERS PTO PARSE PAROP EXP PARCLS   { $$ = new Change($1, $5, @1.first_line,  @1.first_column ); }
-  /*| CHANGE_HEADERS PTO PARSE PAROP PARCLS       { $$ = new Change($1, null, @1.first_line,  @1.first_column); }*/
 ;
-
-/*CHANGE_HEADERS
-  : TIPO            { $$ = $1; }
-  | ID              { $$ = $1; }
-;*/
 
 BREAKS
   : BREAK PTOCOMA       { $$ = new Break(@1.first_line,  @1.first_column); }

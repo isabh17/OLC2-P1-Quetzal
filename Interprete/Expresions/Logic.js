@@ -44,7 +44,7 @@ class Logic extends Instruction{
     }else if( type === Type.DOUBLE){
       return parseFloat(value);
     }else if(type === Type.BOOLEAN){
-      return Boolean(value);
+      return (JSON.parse(value)===true);
     }else if(type === Type.CHAR){
       return parseInt(value.charCodeAt(0));
     }
