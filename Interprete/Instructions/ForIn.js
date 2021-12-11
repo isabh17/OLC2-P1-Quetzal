@@ -10,6 +10,7 @@ class ForIn extends Instruction {
         var newTable = new TableSymbols(table);
         var value = this.expression.execute(tree, table);
         if(this.expression.type !== Type.STRING){
+            ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Solo se permite iterar variables string en ForIn",ENVIRONMENT.FORIN));
             return new Exception("Semantico", "Solo se permite iterar variables string en forIn", this.row, this.column);
         }
         if (value instanceof Exception) return value;

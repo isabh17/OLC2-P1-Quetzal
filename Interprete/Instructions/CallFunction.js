@@ -12,6 +12,7 @@ class CallFunction extends Instruction{
     }
     var result = tree.getFunction(this.name);
     if (result === null){
+      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"No existe una funcionn con ese name: " + this.name,ENVIRONMENT.FUNCTION));
       return new Exception("Semantico", "No existe una funcionn con ese name: " + this.name, this.row, this.column);
     }
     var newTable = new TableSymbols(tree.getGlobalTable());
@@ -44,12 +45,14 @@ class CallFunction extends Instruction{
           }
         }else{
           //tree.removeAmbito()
+          ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"Tipo de dato diferente en parametros de la llamada.",ENVIRONMENT.FUNCTION));
           return new Exception("Semantico", "Tipo de dato diferente en parametros de la llamada.", this.row, this.column);
         }
         count += 1;
       }
     }else{
       //tree.removeAmbito()
+      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "El numero de parametros enviado no coincide con los que recibe la funcion.",ENVIRONMENT.FUNCTION));
       return new Exception("Semantico", "El numero de parametros enviado no coincide con los que recibe la funcion.", this.row, this.column);
     }
     var value = result.execute(tree, newTable);

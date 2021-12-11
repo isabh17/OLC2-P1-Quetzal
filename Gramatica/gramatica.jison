@@ -64,7 +64,7 @@ lex_identificador   [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*
 "!"                 return '!';
 
 //-----------------------------Reservadas-------------------------------------
-"string"            return 'STRING';
+"String"            return 'STRING';
 "double"            return 'DOUBLE';
 "int"               return 'INT';
 "void"              return 'VOID';

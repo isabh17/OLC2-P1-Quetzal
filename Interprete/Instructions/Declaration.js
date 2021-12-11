@@ -11,7 +11,8 @@ class Declaration extends Instruction{
       var value = this.expression.execute(tree, table);
       if (value instanceof Exception) return value;
       if (this.type != this.expression.type){
-          return new Exception("Semantico", "Los types de variables no concuerdan: "+String(this.type)+"!="+String(this.expression.type));
+        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Los types de variables no concuerdan: "+String(this.type)+"!="+String(this.expression.type),ENVIRONMENT.NULL));
+        return new Exception("Semantico", "Los types de variables no concuerdan: "+String(this.type)+"!="+String(this.expression.type));
       }
       var symbol = new Symbol(String(this.identifier), this.type, value, this.row, this.column, null);
       var res = table.addSymbol(symbol);

@@ -18,7 +18,7 @@ class Strings extends Instruction{
       this.type = Type.STRING;
       return String(this.getVal(this.operLeft.type, left)) + String(this.getVal(this.operRight.type, right));
     }
-    ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumType.SEMANTIC),`Tipo de Operacion no Especificado.`,ENVIRONMENT.NULL));
+    ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`Tipo de Operacion no Especificado.`,ENVIRONMENT.NULL));
     return new Exception("Semantico", "Tipo de Operacion no Especificado.", this.row, this.column);
   }
 
