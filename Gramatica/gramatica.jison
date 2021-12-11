@@ -69,6 +69,7 @@ lex_identificador   [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*
 "int"               return 'INT';
 "void"              return 'VOID';
 "boolean"           return 'BOOLEAN';
+"char"              return 'CHAR';
 
 "push"              return 'PUSH';
 "pop"               return 'POP';

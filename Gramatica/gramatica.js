@@ -989,60 +989,62 @@ case 46:return 74;
 break;
 case 47:return 71;
 break;
-case 48:return 'PUSH';
+case 48:return 73;
 break;
-case 49:return 'POP';
+case 49:return 'PUSH';
 break;
-case 50:return 'LENGTH';
+case 50:return 'POP';
 break;
-case 51:return 82;
+case 51:return 'LENGTH';
 break;
-case 52:return 75;
+case 52:return 82;
 break;
-case 53:return 77;
+case 53:return 75;
 break;
-case 54:return 92;
+case 54:return 77;
 break;
-case 55:return 93;
+case 55:return 92;
 break;
-case 56:return 33;
+case 56:return 93;
 break;
-case 57:return 35;
+case 57:return 33;
 break;
-case 58:return 84;
+case 58:return 35;
 break;
-case 59:return 85;
+case 59:return 84;
 break;
-case 60:return 89;
+case 60:return 85;
 break;
-case 61:return 91;
+case 61:return 89;
 break;
-case 62:return 95;
+case 62:return 91;
 break;
-case 63:return 97;
+case 63:return 95;
 break;
-case 64:return 96;
+case 64:return 97;
 break;
-case 65:return 'TOUPPER';
+case 65:return 96;
 break;
-case 66:return 'TOLOWER';
+case 66:return 'TOUPPER';
 break;
-case 67:return 'CARACTERPOSC';
+case 67:return 'TOLOWER';
 break;
-case 68:return 30
+case 68:return 'CARACTERPOSC';
 break;
-case 69:return 'PARSE';
+case 69:return 30
 break;
-case 70:return 25
+case 70:return 'PARSE';
 break;
-case 71:return 5;
+case 71:return 25
 break;
-case 72: ErrorList.addError(new ErrorNode(yy_.yylloc.first_line,yy_.yylloc.first_column,new ErrorType(EnumErrorType.LEXICO),`El caracter: "${yy_.yytext}" no pertenece al lenguaje`,ENVIRONMENT.NULL)); 
+case 72:return 5;
+break;
+case 73: ErrorList.addError(new ErrorNode(yy_.yylloc.first_line,yy_.yylloc.first_column,new ErrorType(EnumErrorType.LEXICO),`El caracter: "${yy_.yytext}" no pertenece al lenguaje`,ENVIRONMENT.NULL)); 
 break;
 }
 },
-rules: [/^(?:\/\/.*)/,/^(?:[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])/,/^(?:[ \r\t]+)/,/^(?:\n)/,/^(?:null\b)/,/^(?:true\b)/,/^(?:false\b)/,/^(?:[0-9]+(\.[0-9]+)+\b)/,/^(?:[0-9]+\b)/,/^(?:"((\\")|[^\n\"])*")/,/^(?:'((\\')|[^\n\'])*')/,/^(?:print\b)/,/^(?:println\b)/,/^(?:\()/,/^(?:\))/,/^(?:;)/,/^(?:,)/,/^(?::)/,/^(?:\[)/,/^(?:\])/,/^(?:\{)/,/^(?:\})/,/^(?:\.)/,/^(?:\+\+)/,/^(?:\+)/,/^(?:--)/,/^(?:-)/,/^(?:\*)/,/^(?:\^)/,/^(?:\/)/,/^(?:%)/,/^(?:\?)/,/^(?:>=)/,/^(?:>)/,/^(?:<=)/,/^(?:<)/,/^(?:==)/,/^(?:!=)/,/^(?:=)/,/^(?:&&)/,/^(?:&)/,/^(?:\|\|)/,/^(?:!)/,/^(?:string\b)/,/^(?:double\b)/,/^(?:int\b)/,/^(?:void\b)/,/^(?:boolean\b)/,/^(?:push\b)/,/^(?:pop\b)/,/^(?:length\b)/,/^(?:if\b)/,/^(?:for\b)/,/^(?:in\b)/,/^(?:while\b)/,/^(?:do\b)/,/^(?:print\b)/,/^(?:println\b)/,/^(?:else\b)/,/^(?:switch\b)/,/^(?:case\b)/,/^(?:default\b)/,/^(?:break\b)/,/^(?:return\b)/,/^(?:continue\b)/,/^(?:touppercase\b)/,/^(?:tolowercase\b)/,/^(?:caracterOfPosition\b)/,/^(?:struct\b)/,/^(?:parse\b)/,/^(?:([A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*))/,/^(?:$)/,/^(?:.)/],
-conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72],"inclusive":true}}
+rules: [/^(?:\/\/.*)/,/^(?:[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])/,/^(?:[ \r\t]+)/,/^(?:\n)/,/^(?:null\b)/,/^(?:true\b)/,/^(?:false\b)/,/^(?:[0-9]+(\.[0-9]+)+\b)/,/^(?:[0-9]+\b)/,/^(?:"((\\")|[^\n\"])*")/,/^(?:'((\\')|[^\n\'])*')/,/^(?:print\b)/,/^(?:println\b)/,/^(?:\()/,/^(?:\))/,/^(?:;)/,/^(?:,)/,/^(?::)/,/^(?:\[)/,/^(?:\])/,/^(?:\{)/,/^(?:\})/,/^(?:\.)/,/^(?:\+\+)/,/^(?:\+)/,/^(?:--)/,/^(?:-)/,/^(?:\*)/,/^(?:\^)/,/^(?:\/)/,/^(?:%)/,/^(?:\?)/,/^(?:>=)/,/^(?:>)/,/^(?:<=)/,/^(?:<)/,/^(?:==)/,/^(?:!=)/,/^(?:=)/,/^(?:&&)/,/^(?:&)/,/^(?:\|\|)/,/^(?:!)/,/^(?:string\b)/,/^(?:double\b)/,/^(?:int\b)/,/^(?:void\b)/,/^(?:boolean\b)/,/^(?:char\b)/,/^(?:push\b)/,/^(?:pop\b)/,/^(?:length\b)/,/^(?:if\b)/,/^(?:for\b)/,/^(?:in\b)/,/^(?:while\b)/,/^(?:do\b)/,/^(?:print\b)/,/^(?:println\b)/,/^(?:else\b)/,/^(?:switch\b)/,/^(?:case\b)/,/^(?:default\b)/,/^(?:break\b)/,/^(?:return\b)/,/^(?:continue\b)/,/^(?:touppercase\b)/,/^(?:tolowercase\b)/,/^(?:caracterOfPosition\b)/,/^(?:struct\b)/,/^(?:parse\b)/,/^(?:([A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*))/,/^(?:$)/,/^(?:.)/],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73],"inclusive":true}}
 });
 return lexer;
 })();
