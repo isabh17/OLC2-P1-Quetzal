@@ -168,6 +168,7 @@ TEMPLATE_STRUCT
 PRINT
   : Rprint PAROP EXP PARCLS PTOCOMA		  { $$ = new Print(this._$.first_line,this._$.first_column,$3,false); }
   | Rprintln PAROP EXP PARCLS PTOCOMA		{ $$ = new Print(this._$.first_line,this._$.first_column,$3,true); }
+  
 ;
 
 DECLARATION

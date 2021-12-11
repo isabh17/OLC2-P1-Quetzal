@@ -332,7 +332,7 @@ int ackerman(int m, int n)
 println("===============ACKERMAN==============================");
 println(ackerman(3, 5));
 println(ackerman(3,7));
-
+println(ackerman(3,3));
 void hanoi( int discos,  int origen, int auxiliar, int destino){
     if (discos == 1){
         println("Mover de " & origen & " a " & destino);
