@@ -210,9 +210,13 @@ EXP
   | PAROP EXP PARCLS                          { $$ = $2; }
   | COROP L_E CORCLS                          { $$ = ($1.toString()+$2.toString()+$3.toString()); }
   | ID COROP L_E CORCLS                       { $$ = ($1.toString()+$2.toString()+$3.toString()+$4.toString()); }
-  | EXP '?' EXP DOSPTOS EXP                   { $$ = ($1.toString()+$2.toString()+$3.toString()+$4.toString()+$5.toString()); }
-  | ID                                        { $$ = new Identifier($1, @1.first_line, @1.first_column,ENVIRONMENT.NULL); }
+  | ID                                        { $$ = new Identifier($1, @1.first_line, @1.first_column, ENVIRONMENT.NULL); }
   | POST_FIXED                                { $$ = $1; }
+  | TERNARY                                   { $$ = $1; }
+;
+
+TERNARY
+  : EXP '?' EXP DOSPTOS EXP                   { $$ = new Ternary($1, $3, $5, @1.first_line, @1.first_column);}
 ;
 
 L_E
@@ -243,7 +247,7 @@ SENTENCE_FOR
   : FOR PAROP DECLARATION PTOCOMA EXP PTOCOMA POST_FIXED PARCLS BLOCK      { $$ = new For($3, $5, $7, $9, @1.first_line, @1.first_column); }
   | FOR PAROP ASSIGNMENT PTOCOMA EXP PTOCOMA POST_FIXED PARCLS BLOCK       { $$ = new For($3, $5, $7, $9, @1.first_line, @1.first_column); }
   | FOR PAROP ID PTOCOMA EXP PTOCOMA POST_FIXED PARCLS BLOCK               { $$ = new For($3, $5, $7, $9, @1.first_line, @1.first_column); }
-  | FOR ID IN EXP BLOCK                                                    { $$ = new ForIn($2,$4,$5);}
+  | FOR ID IN EXP BLOCK                                                    { $$ = new ForIn($2, $4, $5, @1.first_line, @1.first_column);}
 ;
 
 BLOCK
