@@ -40,6 +40,7 @@ class Function extends Instruction{
               value.type = Type.DOUBLE;
               return value.result;
             }
+            ErrorList.addError(new ErrorNode(this.row, this.column,new ErrorType(EnumErrorType.SEMANTIC),"Error en funcion "+ this.name+ ", se retorna un valor del tipo incorrecto de esta funcion.",ENVIRONMENT.FUNCTION));
             return new Exception("Semantico", "Error en funcion "+ this.name+ ", se retorna un valor del tipo incorrecto de esta funcion.", this.row, this.column);
           }
         }
