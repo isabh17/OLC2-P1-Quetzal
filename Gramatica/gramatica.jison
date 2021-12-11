@@ -108,13 +108,13 @@ lex_identificador   [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*
 %left '||'
 %left '&&'
 %left '?'
-%left '^'
+%left '&'
 %right '!'
 %left '==' '!=' '<' '<=' '>' '>='
 %left '+' '-'
 %left '*' '/' '%'
 %right '++' '--'
-%right '&'
+%left '^'
 %right UMENOS
 %left 'PAROP' 'PARCLS'
 
