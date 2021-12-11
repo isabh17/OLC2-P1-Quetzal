@@ -78,17 +78,11 @@ class Natives extends Instruction {
         return value;
       }
       var result = "";
-      if (Number.isInteger(value)) {
-        result = "int";
-      } else if (Number.isInteger(value) === false && typeof (value) === 'number') {
-        result = "double";
-      } else if (typeof (value) === 'boolean') {
-        result = "boolean";
-      } else if (typeof (value) === 'string' && value.length === 1) {
-        result = "char";
-      } else if (typeof (value) === 'string') {
-        result = "string";
-      }
+      if(this.parameters[0].type === Type.INT) result = "int";
+      if(this.parameters[0].type === Type.DOUBLE) result = "double";
+      if(this.parameters[0].type === Type.BOOLEAN) result = "boolean";
+      if(this.parameters[0].type === Type.CHAR) result = "char";
+      if(this.parameters[0].type === Type.STRING) result = "string";
       this.type = Type.STRING;
       if (result === "") {
         ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"No se encontro referencia al parametro en funcion nativa:  " + this.name,ENVIROMMENT.NULL));
@@ -138,16 +132,17 @@ class Natives extends Instruction {
           ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"No se pudo realizar el parse a INT",ENVIROMMENT.NULL));
           return new Exception("Semantico", "No se pudo realizar el parse a INT", this.row, this.column);
         }
-        this.type = Type.DOUBLE;
+        this.type = Type.INT;
+        return value;
       }else{
         value = parseFloat(value);
         if(isNaN(value)){
           ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"No se pudo realizar el parse a DOUBLE",ENVIROMMENT.NULL));
           return new Exception("Semantico", "No se pudo realizar el parse a DOUBLE", this.row, this.column);
         }
-        this.type = Type.INT;
+        this.type = Type.DOUBLE;
+        return value-0.00000000001;
       }
-      return value;
     }
   }
 }

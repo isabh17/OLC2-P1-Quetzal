@@ -99,14 +99,17 @@ class NativeMethods extends Instruction {
         value =parseInt(value);
         if(isNaN(value)) return new Exception("Semantico", "No se pudo parsear a entero:", this.row, this.column);
         this.type = Type.INT;
+        return value;
       }else if(this.name === Type.DOUBLE){
         value =parseFloat(value);
         if(isNaN(value)) return new Exception("Semantico", "No se pudo parsear a double:", this.row, this.column);
         this.type = Type.DOUBLE;
+        return value;
       }else if(this.name === Type.BOOLEAN){
         value = JSON.parse(value)===true;
         if(isNaN(value)) return new Exception("Semantico", "No se pudo parsear a double:", this.row, this.column);
         this.type = Type.BOOLEAN;
+        return value;
       }
     }
     return null;
