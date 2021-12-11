@@ -8,6 +8,7 @@ class For extends Instruction {
     }
 
     execute(tree, table) {
+        console.log(this.verifyExistId(tree, table));
         if(!this.verifyExistId(tree, table)){
             ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "La variable a iterar no existe",ENVIRONMENT.FOR));
             return new Exception("Semantico", "La variable a iterar no existe", this.row, this.column);
@@ -51,10 +52,12 @@ class For extends Instruction {
     verifyId(){
         if(this.variable instanceof Declaration || this.variable instanceof Assignation){
             if(String(this.variable.identifier) !== this.inc_decre.identifier){
+                console.log("f1");
                 return false;
             }
         }else{
             if(String(this.variable) !== String(this.inc_decre.identifier)){
+                console.log("f");
                 return false;
             }
         }
@@ -62,12 +65,18 @@ class For extends Instruction {
     }
 
     verifyExistId(tree, table){
-        if(!(this.variable instanceof Declaration) || !(this.variable instanceof Assignation)){
+        //console.log(this.variable);
+        let val = !this.variable instanceof Declaration;
+        let val1 =  !this.variable instanceof Assignation
+        //console.log(val);
+        //console.log(val1);
+        //console.log(val||val1);
+        if(val||val1){
             var symbol = table.getSymbol(String(this.variable));
             if(symbol===null){
                 return false;
             }
         }
-        return true;
+        return true;        
     }
 }

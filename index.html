@@ -243,6 +243,7 @@
 
         function Compile(texto){
             Salida.setValue("");
+            ErrorList.cleanErrorList();
             var instructions = gramatica.parse(texto);
             var tree = new Tree(instructions);
             var tsGlobal = new TableSymbols(null);
