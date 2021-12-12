@@ -8,7 +8,6 @@ class For extends Instruction {
     }
 
     execute(tree, table) {
-        //console.log(this.verifyExistId(tree, table));
         if(!this.verifyExistId(tree, table)){
             ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "La variable a iterar no existe",ENVIRONMENT.FOR));
             return new Exception("Semantico", "La variable a iterar no existe", this.row, this.column);
@@ -17,10 +16,10 @@ class For extends Instruction {
             ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Los iteradores no son los mismos",ENVIRONMENT.FOR));
             return new Exception("Semantico", "Los iteradores no son los mismos", this.row, this.column);
         }
-        var newTable = new TableSymbols(table);
-        var variable = typeof(this.variable)==='string' ? null : this.variable.execute(tree, newTable);
+        var variable = typeof(this.variable)==='string' ? null : this.variable.execute(tree, table);
         if(variable instanceof Exception) return variable;
         while(true){
+            var newTable = new TableSymbols(table);
             var resultCondition = this.condition.execute(tree, newTable);
             if(resultCondition instanceof Exception) return variable;
             if(this.condition.type!==Type.BOOLEAN){

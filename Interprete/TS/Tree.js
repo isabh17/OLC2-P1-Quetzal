@@ -4,6 +4,8 @@ class Tree{
     this.functions = [];
     this.structTemplates = [];
     this.out = "";
+    this.environment = ["Global"];
+    this.variables = [];
     this.globalTable = null;
   }
 
@@ -67,5 +69,25 @@ class Tree{
       }
     }
     return null;
+  }
+
+  addVariable(variable){
+    this.variables.push(variable);
+  }
+
+  getVariables(){
+    return this.variables;
+  }
+
+  getEnvironment(){
+    return this.environment[this.environment.length-1];
+  }
+
+  addEnvironment(environment){
+    this.environment.push(environment);
+  }
+
+  removeEnvironment(){
+    this.environment.pop();
   }
 }
