@@ -127,7 +127,7 @@ lex_identificador   [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*
 
 %% /* Definición de la gramática */
 
-INIT: SENTENCES EOF             {  return $1;}
+INIT: SENTENCES EOF             {  return $1; }
     | EOF
 ;
 
@@ -163,7 +163,14 @@ CHANGE_VALUE_STRUCT
 ;
 
 CREATE_STRUCT
-  : ID ID '=' ID PAROP L_E PARCLS PTOCOMA             { $$ = new CreateStruct($1, $2, $4, $6, @1.first_line, @1.first_column); }
+  : ID ID '=' ID PAROP L_E PARCLS PTOCOMA      { $$ = new CreateStruct($1, $2, $4, $6, @1.first_line, @1.first_column); }
+  | ID ID '=' STRUCT_CASES PTOCOMA             { $$ = new CreateStruct($1, $2, $4, null @1.first_line, @1.first_column); }
+;
+
+STRUCT_CASES
+  : ID PAROP PARCLS                           { $$ = $1; }
+  | ID PTO ACCESS                             { $$ = new AccessAtributeStruct($1, $3, @1.first_line, @1.first_column); }
+  | ID                                        { $$ = $1; }
 ;
 
 TEMPLATE_STRUCT
