@@ -142,9 +142,9 @@ function generateTree(treeData) {
 }
 
 function getTreeLength(tree) {
-    if(tree.children.length==='undefined'){
+    /*if(tree.children.length==='undefined'){
         console.log(tree.children.name);
-    }
+    }*/
     if (tree.children.length > 0) {
         let size = tree.children.length;
         for (let node of tree.children) {

@@ -114,14 +114,20 @@ class NativeMethods extends Instruction {
       }
       if(this.name === Type.INT){
         value =parseInt(value);
-        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Solo se permite parsear entero:",ENVIRONMENT.NULL));
-        if(isNaN(value)) return new Exception("Semantico", "No se pudo parsear a entero:", this.row, this.column);
+        //ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Solo se permite parsear entero:",ENVIRONMENT.NULL));
+        if(isNaN(value)){
+          ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Solo se permite parsear entero:",ENVIRONMENT.NULL));
+          return new Exception("Semantico", "No se pudo parsear a entero:", this.row, this.column);
+        } 
         this.type = Type.INT;
         return value;
       }else if(this.name === Type.DOUBLE){
         value =parseFloat(value);
-        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Solo se permite parsear a double:",ENVIRONMENT.NULL));
-        if(isNaN(value)) return new Exception("Semantico", "No se pudo parsear a double:", this.row, this.column);
+        
+        if(isNaN(value)){
+           ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Solo se permite parsear a double:",ENVIRONMENT.NULL));
+           return new Exception("Semantico", "No se pudo parsear a double:", this.row, this.column);
+        }
         this.type = Type.DOUBLE;
         return value;
       }else if(this.name === Type.BOOLEAN){

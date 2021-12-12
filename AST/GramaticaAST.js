@@ -167,8 +167,8 @@ break;
 case 89:
  this.$ = { val: 0, node: newNode(yy, yystate, $$[$0-4],$$[$0-3],$$[$0-2],$$[$0-1].node,$$[$0].node)};
 break;
-case 90: case 107:
- this.$ = { val: 0, node: newNode(yy, yystate,$$[$0-2], $$[$0-1].node,$$[$0])}; 
+case 90: case 115: case 137:
+ this.$ = { val: 0, node: newNode(yy, yystate,$$[$0-2],$$[$0-1].node,$$[$0])}; 
 break;
 case 91: case 92: case 93:
  this.$ = { val: 0, node: newNode(yy, yystate, $$[$0-1],$$[$0])}; 
@@ -179,8 +179,14 @@ break;
 case 104:
   this.$ = { val: 0, node: newNode(yy, yystate, $$[$0-1].node,$$[$0])}; 
 break;
-case 105: case 106:
-  this.$ = { val: 0, node: newNode(yy, yystate, 'error')}; 
+case 105:
+  this.$ = { val: 0, node: newNode(yy, yystate, '; error')}; 
+break;
+case 106:
+  this.$ = { val: 0, node: newNode(yy, yystate, '} error')}; 
+break;
+case 107:
+ this.$ = { val: 0, node: newNode(yy, yystate,$$[$0-2], $$[$0-1].node,$$[$0])}; 
 break;
 case 108:
  this.$ = { val: 0, node: newNode(yy, yystate,$$[$0-1], $$[$0])}; 
@@ -202,9 +208,6 @@ case 113:
 break;
 case 114: case 123:
  this.$ = { val: 0, node: newNode(yy, yystate,$$[$0-4],$$[$0-3],$$[$0-2].node,$$[$0-1],$$[$0].node)}; 
-break;
-case 115:
- this.$ = { val: 0, node: newNode(yy, yystate,$$[$0-2],$$[$0-1].node,$$[$0])}; 
 break;
 case 116: case 130: case 134: case 135: case 136:
  this.$ = { val: 0, node: newNode(yy, yystate,$$[$0-1],$$[$0])}; 
@@ -231,7 +234,7 @@ case 125:
  this.$ = { val: 0, node: newNode(yy, yystate,$$[$0-4].node,$$[$0-3],$$[$0-2],$$[$0-1],$$[$0].node)}; 
 break;
 case 126:
- this.$ = { val: 0, node: newNode(yy, yystate,$$[$0-5].node,$$[$0-4],$$[$0-3],$$[$0-2],$$[$0-1],$$[$0].node)}; 
+ this.$ = { val: 0, node: newNode(yy, yystate,$$[$0-5].node,$$[$0-4],$$[$0-3],$$[$0-2].node,$$[$0-1],$$[$0].node)}; 
 break;
 case 127:
  this.$ = { val: 0, node: newNode(yy, yystate,$$[$0-2].node,$$[$0-1],$$[$0].node)}; 
@@ -244,9 +247,6 @@ case 131: case 133:
 break;
 case 132:
  this.$ = { val: 0, node: newNode(yy, yystate,$$[$0-2],$$[$0-1],$$[$0])}; 
-break;
-case 137:
- this.$ = { val: 0, node: newNode(yy, yystate,$$[$0-2],$$[$0-1])}; 
 break;
 }
 },

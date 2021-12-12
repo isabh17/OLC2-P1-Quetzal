@@ -269,7 +269,7 @@ SENTENCE_FOR
 ;
 
 BLOCK
-  : KEYOP SENTENCES KEYCLS  { $$ = { val: 0, node: newNode(yy, yystate,$1, $2.node,$3)}; }
+  : KEYOP SENTENCES KEYCLS  { $$ = { val: 0, node: newNode(yy, yystate,$1,$2.node,$3)}; }
   | KEYOP KEYCLS            { $$ = { val: 0, node: newNode(yy, yystate, $1,$2)}; }
 ;
 
@@ -290,8 +290,8 @@ CUERPO
   | BREAKS                      {  $$ = { val: 0, node: newNode(yy, yystate, $1.node)}; }
   | CONTINU                     {  $$ = { val: 0, node: newNode(yy, yystate, $1.node)}; }
   | CALL_FUNCTION PTOCOMA       {  $$ = { val: 0, node: newNode(yy, yystate, $1.node,$2)}; }
-  | error PTOCOMA               {  $$ = { val: 0, node: newNode(yy, yystate, 'error')}; }
-  | error KEYCLS                {  $$ = { val: 0, node: newNode(yy, yystate, 'error')}; }
+  | error PTOCOMA               {  $$ = { val: 0, node: newNode(yy, yystate, '; error')}; }
+  | error KEYCLS                {  $$ = { val: 0, node: newNode(yy, yystate, '} error')}; }
 ;
 
 BLOCK_IF
@@ -344,7 +344,7 @@ SENTENCE_DO_WHILE
 
 FUNCT
   : TIPO ID PAROP PARCLS BLOCK               { $$ = { val: 0, node: newNode(yy, yystate,$1.node,$2,$3,$4,$5.node)}; }
-  | TIPO ID PAROP PARAMETERS PARCLS BLOCK    { $$ = { val: 0, node: newNode(yy, yystate,$1.node,$2,$3,$4,$5,$6.node)}; }
+  | TIPO ID PAROP PARAMETERS PARCLS BLOCK    { $$ = { val: 0, node: newNode(yy, yystate,$1.node,$2,$3,$4.node,$5,$6.node)}; }
 ;
 
 PARAMETERS
@@ -374,5 +374,5 @@ CONTINU
 
 RETUR
   : RETURN PTOCOMA     { $$ = { val: 0, node: newNode(yy, yystate,$1,$2)}; }
-  | RETURN EXP PTOCOMA { $$ = { val: 0, node: newNode(yy, yystate,$1,$2)}; }
+  | RETURN EXP PTOCOMA { $$ = { val: 0, node: newNode(yy, yystate,$1,$2.node,$3)}; }
 ;

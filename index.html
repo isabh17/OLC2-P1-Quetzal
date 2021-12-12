@@ -17,6 +17,7 @@
     <link href="css/theme/isotope.css" rel="stylesheet"/>
     <link href="css/theme/darcula.css" rel="stylesheet"/>
     <link href="css/theme/dracula.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="./AST/chart/chart.css">
     <title>Quetzal Grupo #40</title>
@@ -29,7 +30,7 @@
             <!-- Image and text -->
             <nav class="navbar navbar-light bg-light">
                 <a class="navbar-brand" href="#">
-                <img src="./CSS/Quetzal.jpg" width="30" height="30" class="d-inline-block align-top" alt="">
+                <img src="CSS/Quetzal.jpg" width="30" height="30" class="d-inline-block align-top" alt="">
                 Quetzal-OLC2-P1-G40
                 </a>
             </nav>
@@ -42,7 +43,16 @@
                 </li>-->
 
                 <li class="nav-item">
-                    <input type="button" value="Compilar" class="btn btn-block btn-md btn-success" id="BtnCompilar">
+                    <a class="btn btn-lg btn-outline-success" id="BtnCompilar">
+                        <i class="fas fa-cogs"></i> Compilar<br></a>
+                    <!--<span class="input-group-text" id="inputGroupPrepend"><i class="ti-search"></i> </span>
+                    <input type="button" value="Compilar" class="btn btn-block btn-md btn-success" id="BtnCompilar">-->
+                    <br>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-lg btn-outline-info" id="BtnLimpiar">
+                        <i class="fas fa-broom"></i> Limpiar<br></a>
+                    <!--<span class="input" id="BtnLimpiar"><i class="fas fa-broom"></i> </span>-->
                 </li>
                 <!--
                 <li class="nav-item">
@@ -145,12 +155,7 @@
                     </div>                    
                 </div>
             </div>
-        </div>
-        <div class="col-12">
-            <div _ngcontent-pyl-c58="" id="graph-container" name="graph-container">
-                
-            </div>
-        </div>
+        </div>        
         <div class="row justify-content-md-center">
             <div class="col-12">
               <div _ngcontent-pyl-c58="" id="graph-container" name="graph-container" style="text-align: center">
@@ -332,6 +337,10 @@
             var Codigo = Fuente.getValue();
             Compile(Codigo);
             arbolast(Codigo);
+        }
+        document.getElementById('BtnLimpiar').onclick = function (){
+            Fuente.setValue("");
+           
         }
 
         function arbolast(content){
