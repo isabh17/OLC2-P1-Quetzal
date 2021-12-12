@@ -8,9 +8,9 @@ class Function extends Instruction{
   }
   
   execute(tree, table){
-    var newTable = new TableSymbols(table);
+    //var newTable = new TableSymbols(table);
     for (var instruction of this.instructions){
-      var value = instruction.execute(tree, newTable);
+      var value = instruction.execute(tree, table);
       if (value instanceof Exception){
         return value;
       }

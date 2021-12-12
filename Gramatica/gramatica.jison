@@ -140,6 +140,7 @@ SENTENCE
   : FUNCT                       { $$ = $1; }
   | PRINT                       { $$ = $1; }
   | DECLARATION PTOCOMA         { $$ = $1; }
+  | CHANGE_VALUE_STRUCT         { $$ = $1; }
   | ASSIGNMENT PTOCOMA          { $$ = $1; }
   | SENTENCE_IF                 { $$ = $1; }
   | SENTENCE_WHILE              { $$ = $1; }
@@ -152,9 +153,13 @@ SENTENCE
   | CALL_FUNCTION PTOCOMA       { $$ = $1; }
   | POST_FIXED PTOCOMA          { $$ = $1; }
   | TEMPLATE_STRUCT             { $$ = $1; }
-  | CREATE_STRUCT               { }
+  | CREATE_STRUCT               { $$ = $1; }
   | error PTOCOMA               { ErrorList.addError(new ErrorNode(this._$.first_line,this._$.first_column,new ErrorType(EnumErrorType.SYNTACTIC),` Error sintactico `,ENVIRONMENT.NULL)); $$ = new InstructionError(); }
   | error KEYCLS                { ErrorList.addError(new ErrorNode(this._$.first_line,this._$.first_column,new ErrorType(EnumErrorType.SYNTACTIC),` Error sintactico `,ENVIRONMENT.NULL)); $$ = new InstructionError(); }
+;
+
+CHANGE_VALUE_STRUCT
+  : ID PTO ACCESS '=' EXP PTOCOMA       { $$ = new ChangeValueStruct($1, $3, $5, @1.first_line, @1.first_column); }
 ;
 
 CREATE_STRUCT
@@ -214,7 +219,13 @@ EXP
   | ID                                        { $$ = new Identifier($1, @1.first_line, @1.first_column, ENVIRONMENT.NULL); }
   | POST_FIXED                                { $$ = $1; }
   | TERNARY                                   { $$ = $1; }
+  | ID PTO ACCESS                             { $$ = new AccessAtributeStruct($1, $3, @1.first_line, @1.first_column); }
   | METHODS                                   { $$ = $1; }
+;
+
+ACCESS
+  : ID PTO ACCESS                           { $$=$3; $$.push($1); }
+  | ID                                      { $$=[]; $$.push($1) }
 ;
 
 METHODS

@@ -40,28 +40,36 @@ class CallFunction extends Instruction{
           var symbol = new Symbol(String(result.parameters[parameter].Identifier), type,  value, this.row, this.column, null, null);
           var resultTable = newTable.addSymbol(symbol);
           if (resultTable instanceof Exception){
-            //tree.removeAmbito()
             return resultTable;
           }
         }else{
-          //tree.removeAmbito()
-          ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"Tipo de dato diferente en parametros de la llamada.",ENVIRONMENT.FUNCTION));
-          return new Exception("Semantico", "Tipo de dato diferente en parametros de la llamada.", this.row, this.column);
+          if(this.parameters[count].type===Type.STRUCT && typeof(result.parameters[parameter].Type)==='string'){
+            if(this.parameters[count].typeObject===result.parameters[parameter].Type){
+              var symbol = new Symbol(String(result.parameters[parameter].Identifier), Type.STRUCT,  value, this.row, this.column, null, this.parameters[count].typeObject);
+              var resultTable = newTable.addSymbol(symbol);
+              if (resultTable instanceof Exception){
+                return resultTable;
+              }
+            }else{
+              ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"Tipo de dato diferente en parametros de la llamada.",ENVIRONMENT.FUNCTION));
+              return new Exception("Semantico", "Tipo de dato diferente en parametros de la llamada.", this.row, this.column);              
+            }
+          }else{
+            ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"Tipo de dato diferente en parametros de la llamada.",ENVIRONMENT.FUNCTION));
+            return new Exception("Semantico", "Tipo de dato diferente en parametros de la llamada.", this.row, this.column);
+          }
         }
         count += 1;
       }
     }else{
-      //tree.removeAmbito()
       ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "El numero de parametros enviado no coincide con los que recibe la funcion.",ENVIRONMENT.FUNCTION));
       return new Exception("Semantico", "El numero de parametros enviado no coincide con los que recibe la funcion.", this.row, this.column);
     }
     var value = result.execute(tree, newTable);
     if (value instanceof Exception){
-      //tree.removeAmbito()
       return value;
     }
     this.type = result.type;
-    //tree.removeAmbito()
     return value;
   }
 
@@ -81,3 +89,20 @@ class CallFunction extends Instruction{
     return result;
   }
 }
+
+/*
+struct Estructura{
+    int x
+};
+
+void cambiarAtributo(Estructura s){
+    s.x = 10;
+}
+
+Estructura a = Estructura(0);
+println(a);             // Imprime 'Estructura(0)'
+println(a.x);			// Imprime 0
+
+cambiarAtributo(a);
+/*println(a);             // Imprime 'Estructura(10)'
+println(a.x);           // Imprime 10*/

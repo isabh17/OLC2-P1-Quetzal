@@ -13,7 +13,9 @@ class Post_fixed extends Instruction{
       return new Exception("Semantico", "La variable "+this.identifier+" no existe", this.row, this.column);
     }
     var value = 0;
+    var previousValue = 0;
     if (symbol.getType() === Type.INT){
+      previousValue = symbol.value;
       if(this.action === "++"){
         value = symbol.value + 1;
       }else{
@@ -28,6 +30,6 @@ class Post_fixed extends Instruction{
     var res = table.updateValueSymbol(symbol);
     if (res instanceof Exception) return res;
     this.type = Type.INT;
-    return null;
+    return previousValue;
   }
 }
