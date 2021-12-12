@@ -60,7 +60,7 @@ class If extends Instruction {
         }
       }
     } else {
-      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`La expresion a evaluar en el if debe devolver true o false`,ENVIROMMENT.IF));
+      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`La expresion a evaluar en el if debe devolver true o false`,ENVIRONMENT.IF));
       return new Exception("Semantico", "La expresion a evaluar en el if debe devolver true o false", this.row, this.column);
     }
     return null;

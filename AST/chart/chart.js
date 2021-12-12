@@ -1,5 +1,6 @@
 function generateTree(treeData) {
     let size = getTreeLength(treeData[0]);
+    //console.log("tama;o");
     console.log(size);
     // ************** Generate the tree diagram	 *****************
     var margin = { top: 20, right: 00, bottom: 20, left: 0 },
@@ -16,7 +17,7 @@ function generateTree(treeData) {
     var diagonal = d3.svg.diagonal()
         .projection(function(d) { return [d.x, d.y]; });
 
-    var svg = d3.select("app-analizador").attr("class","container1").append("svg")          
+    var svg = d3.select("body").append("svg")          
         .attr("width", width + margin.right + margin.left)
         .attr("height", height + margin.top + margin.bottom)
         .attr("id", "grafo")
@@ -141,6 +142,9 @@ function generateTree(treeData) {
 }
 
 function getTreeLength(tree) {
+    if(tree.children.length==='undefined'){
+        console.log(tree.children.name);
+    }
     if (tree.children.length > 0) {
         let size = tree.children.length;
         for (let node of tree.children) {

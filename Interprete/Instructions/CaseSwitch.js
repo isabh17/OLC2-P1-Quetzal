@@ -12,7 +12,7 @@ class CaseSwitch extends Instruction {
 
             var result = instruction.execute(tree, table);
             //console.log("valores del case")
-            console.log(result);
+            //console.log(result);
             if (result instanceof Exception) {
                 //tree.get_excepcion().append(result)
                 //tree.update_consola(result.__str__())

@@ -10,28 +10,39 @@
     <script src="css/lib/codemirror.js"></script>
     <script src="css/addon/edit/closetag.js"></script>
     <script src="css/javascript/javascript.js"></script>
+    
+    <!-- CSS only -->
     <link href="css/lib/codemirror.css" rel="stylesheet"/>
     <link href="css/theme/erlang-dark.css" rel="stylesheet"/>
     <link href="css/theme/isotope.css" rel="stylesheet"/>
     <link href="css/theme/darcula.css" rel="stylesheet"/>
     <link href="css/theme/dracula.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="AST/chart/chart.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="./AST/chart/chart.css">
     <title>Quetzal Grupo #40</title>
   </head>
   <body>
     <div><p></p></div>
     <div class="container-fluid">
-        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+
+        <nav class="navbar navbar-expand-sm bg-secondary navbar-light bg-light">
+            <!-- Image and text -->
+            <nav class="navbar navbar-light bg-light">
+                <a class="navbar-brand" href="#">
+                <img src="./CSS/Quetzal.jpg" width="30" height="30" class="d-inline-block align-top" alt="">
+                Quetzal-OLC2-P1-G40
+                </a>
+            </nav>
             <ul class="navbar-nav">
                 <li class="nav-item" href="AST.html">
-                    <input type="file" name="" class="btn btn-block btn-md btn-outline-warning" id="open-file" >
+                    <input type="file" name="" class="btn btn-block btn-md btn-warning" id="open-file" >
                 </li>
                 <!--<li class="nav-item">
                     <input type="button" value="Guardar Archivo" class="btn btn-block btn-md btn-outline-light" id="BtnGuardarArchivo">
                 </li>-->
 
                 <li class="nav-item">
-                    <input type="button" value="Compilar" class="btn btn-block btn-md btn-outline-success" id="BtnCompilar">
+                    <input type="button" value="Compilar" class="btn btn-block btn-md btn-success" id="BtnCompilar">
                 </li>
                 <!--
                 <li class="nav-item">
@@ -42,9 +53,9 @@
                     <a href="Errores.html" class="btn btn-block btn-md btn-outline-danger" id="BtnReporteErrores">Reporte de Errores</a>  
                 </li>-->
 
-                <li class="nav-item">
+                <!--<li class="nav-item">
                     <a href="AST.html" class="btn btn-block btn-md btn-outline-warning">Arbol AST</a>                    
-                </li>
+                </li>-->
                 <!--<li class="nav-item">
                     <a href="#" class="btn btn-block btn-md btn-outline-primary">Reporte Gramatical</a>                    
                 </li>-->
@@ -135,6 +146,11 @@
                 </div>
             </div>
         </div>
+        <div class="col-12">
+            <div _ngcontent-pyl-c58="" id="graph-container" name="graph-container">
+                
+            </div>
+        </div>
         <div class="row justify-content-md-center">
             <div class="col-12">
               <div _ngcontent-pyl-c58="" id="graph-container" name="graph-container" style="text-align: center">
@@ -144,9 +160,11 @@
             
         </div>     
         
-    </div>  
+    </div>    
     <!-- Gramatica-->
     <script type="text/javascript" src="./Gramatica/gramatica.js"></script>
+    <!-- Arbol AST-->
+    <script type="text/javascript" src="./AST/GramaticaAST.js"></script>
     <!--Interprete-->
     <script src="./Interprete/Abstract/Instruction.js"></script>
     <script src="./Interprete/Expresions/Primitive.js"></script>
@@ -191,10 +209,14 @@
     <script src="Utils/ErrorNode.js"></script>
     <script src="Utils/Node.js"></script>
 
-    <!-- load the d3.js library -->    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>   
+    <!-- load the d3.js library --> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+    <script src="./AST/chart/chart.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@1,500&display=swap" rel="stylesheet">
-    <script src="AST/chart/chart.js"></script>
+
+    <!--<script src="./AST/chart/chart.css"></script>-->
+    <script src="./Utils/moveDivs.js"></script>
     <script>
         
         var openFile = document.getElementById("open-file");
@@ -266,6 +288,7 @@
                 }
             });
             Salida.setValue(tree.getOut());
+            
               /*if (document.getElementById("grafo")) {
                 document.getElementById("grafo").remove();
             }*/
@@ -307,11 +330,23 @@
         document.getElementById('BtnCompilar').onclick = function (){
             var Codigo = Fuente.getValue();
             Compile(Codigo);
+            arbolast(Codigo);
+        }
+
+        function arbolast(content){
+            treeData = [];
+            if (document.getElementById("grafo")) {
+                document.getElementById("grafo").remove();
+            }
+            var result = GramaticaAST.parse(content);
+            //document.getElementById("salida").value = result.val;
+            generateTree([result.node]);
         }
 
         function newNode(yy, state, ...nodes) {
             const parent = getNonTerminal(yy, state);
             const children = [];
+            //console.log(nodes);
             for (let node of nodes) {
                 node.parent = node.parent ? node.parent : parent;
                 if (node.parent == parent) {

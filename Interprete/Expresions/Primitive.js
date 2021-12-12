@@ -75,7 +75,7 @@ class Primitive extends Instruction {
       var exists = false;
       for (var word of value) {
         if (word.includes('$')) {
-          console.log(word);
+          //console.log(word);
           exists = true;
         }
       }
