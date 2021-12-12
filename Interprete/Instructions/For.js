@@ -8,6 +8,7 @@ class For extends Instruction {
     }
 
     execute(tree, table) {
+        //console.log(this.verifyExistId(tree, table));
         if(!this.verifyExistId(tree, table)){
             ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "La variable a iterar no existe",ENVIRONMENT.FOR));
             return new Exception("Semantico", "La variable a iterar no existe", this.row, this.column);
@@ -36,9 +37,10 @@ class For extends Instruction {
                     //tree.update_consola(result._str_())
                     return result;
                 }
-                //if (result instanceof Break) return null;
-                //if (result instanceof Return) return result;
-                //if (result instanceof Continue) return result;
+                //console.log(result);
+                if (result instanceof Break) return null;
+                if (result instanceof Return) return result;
+                if (result instanceof Continue) return result;
             }
             var resIncr_decr = this.inc_decre.execute(tree, newTable);
             if(resIncr_decr instanceof Exception){
@@ -72,6 +74,7 @@ class For extends Instruction {
         //console.log(val||val1);
         if(val||val1){
             var symbol = table.getSymbol(String(this.variable));
+            console.log(symbol);
             if(symbol===null){
                 return false;
             }
