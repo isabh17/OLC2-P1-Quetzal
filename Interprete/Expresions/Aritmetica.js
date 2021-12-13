@@ -8,6 +8,7 @@ class Aritmetica extends Instruction{
   }
   
   execute(tree, table){
+    //tree.addEnvironment("Ari");
     var left = this.operLeft.execute(tree, table);
     if (left instanceof Exception) return left;
     if (this.operRight != null){

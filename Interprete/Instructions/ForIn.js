@@ -7,9 +7,11 @@ class ForIn extends Instruction {
     }
 
     execute(tree, table) {
+        tree.addEnvironment("FOR-IN");
         var newTable = new TableSymbols(table);
         var value = this.expression.execute(tree, table);
         if(this.expression.type !== Type.STRING){
+            tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
             ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Solo se permite iterar variables string en ForIn",ENVIRONMENT.FORIN));
             return new Exception("Semantico", "Solo se permite iterar variables string en forIn", this.row, this.column);
         }
@@ -21,19 +23,28 @@ class ForIn extends Instruction {
             symbol = new Symbol(symbol.getId(), symbol.getType(), letter, symbol.getRow(), symbol.getColumn(), null, null);
             let res = newTable.updateValueSymbol(symbol);
             if(res instanceof Exception){
+                tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
                 return res;
             }
             for (var instrForIn of this.instructions) {
                 var result = instrForIn.execute(tree, newTable);
                 if (result instanceof Exception) {
+                    tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
                     //tree.get_excepcion().append(result)
                     //tree.update_consola(result.__str__())
                 }
-                if (result instanceof Break) return null;
-                if (result instanceof Return) return result;
+                if (result instanceof Break){
+                    tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+                    return null;
+                }
+                if (result instanceof Return){
+                    tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+                    return result;
+                }
                 if (result instanceof Continue) return result;
             }
         }
+        tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
         return null;
     }
 }

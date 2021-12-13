@@ -7,6 +7,7 @@ class If extends Instruction {
   }
 
   execute(tree, table) {
+    tree.addEnvironment("IF");
     var condition = this.condition.execute(tree, table);
     if (condition instanceof Exception) return condition;
     if (this.condition.type === Type.BOOLEAN) {
@@ -16,21 +17,37 @@ class If extends Instruction {
           for (var instrIF of this.instructionsIf) {
             var result = instrIF.execute(tree, newTable);
             if (result instanceof Exception) {
+              tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
               //tree.get_excepcion().append(result)
               //tree.update_consola(result.__str__())
             }
-            if (result instanceof Break) return result;
-            if (result instanceof Return) return result;
-            if (result instanceof Continue) return result;
+            if (result instanceof Break) {
+              tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+              return result;
+            }
+            if (result instanceof Return) {
+              tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+              return result;
+            }
+            if (result instanceof Continue){
+              return result;
+            }
           }
         } else {
           var result = this.instructionsIf.execute(tree, newTable);
           if (result instanceof Exception) {
+            tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
             //tree.get_excepcion().append(result)
             //tree.update_consola(result.__str__())
           }
-          if (result instanceof Break) return result;
-          if (result instanceof Return) return result;
+          if (result instanceof Break) {
+            tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+            return result;
+          }
+          if (result instanceof Return) {
+            tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+            return result;
+          }
           if (result instanceof Continue) return result;
         }
       } else {
@@ -40,29 +57,45 @@ class If extends Instruction {
             for (var instrElse of this.instructionsElse) {
               var result = instrElse.execute(tree, newTable);
               if (result instanceof Exception) {
+                tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
                 //tree.get_excepcion().append(result)
                 //tree.update_consola(result.__str__()) 
               }
-              if (result instanceof Break) return result;
-              if (result instanceof Return) return result;
+              if (result instanceof Break) {
+                tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+                return result;
+              }
+              if (result instanceof Return) {
+                tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+                return result;
+              }
               if (result instanceof Continue) return result;
             }
           } else {
             var result = this.instructionsElse.execute(tree, newTable);
             if (result instanceof Exception) {
+              tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
               //tree.get_excepcion().append(result)
               //tree.update_consola(result.__str__())
             }
-            if (result instanceof Break) return result;
-            if (result instanceof Return) return result;
+            if (result instanceof Break) {
+              tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+              return result;
+            }
+            if (result instanceof Return) {
+              tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+              return result;
+            }
             if (result instanceof Continue) return result;
           }
         }
       }
     } else {
+      tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
       ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`La expresion a evaluar en el if debe devolver true o false`,ENVIRONMENT.IF));
       return new Exception("Semantico", "La expresion a evaluar en el if debe devolver true o false", this.row, this.column);
     }
+    tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
     return null;
   }
 }

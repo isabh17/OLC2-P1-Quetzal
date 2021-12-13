@@ -69,7 +69,7 @@ class CallFunction extends Instruction{
     if (value instanceof Exception){
       return value;
     }
-    this.type = result.type;
+    this.type = result.type;    
     return value;
   }
 

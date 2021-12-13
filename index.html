@@ -213,6 +213,7 @@
     <script src="Utils/ErrorType.js"></script>
     <script src="Utils/ErrorNode.js"></script>
     <script src="Utils/Node.js"></script>
+    <SCRipt src="Utils/TableReport.js"></SCRipt>
 
     <!-- load the d3.js library --> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
@@ -271,6 +272,7 @@
         function Compile(texto){
             Salida.setValue("");
             ErrorList.cleanErrorList();
+            TableReport.cleanTableReport();
             texto = deleteKeys(texto);
             var instructions = gramatica.parse(texto);
             var tree = new Tree(instructions);
@@ -292,7 +294,7 @@
                     }
                 }
             });
-            console.log(tree.getVariables());
+            //console.log(tree.getVariables());
             Salida.setValue(tree.getOut());
             
               /*if (document.getElementById("grafo")) {
@@ -300,6 +302,7 @@
             }*/
             //generateTree([res.node]);
             showTableErrorsSymbols();
+            showTableExecuteSymbols();
         }
 
         function deleteKeys(text){
@@ -405,7 +408,7 @@
         }
     
 
-        function showTableErrorsSymbols() {
+        function showTableErrorsSymbols() {            
             document.getElementById("ReportErrors").innerHTML = "";
         
             var html = "<h2>Reporte de Errores</h2>\n";
@@ -440,8 +443,44 @@
             //console.log(html);
             document.getElementById("ReportErrors").innerHTML = html;
         }
+        function showTableExecuteSymbols() {
+            console.log(TableReport.SymbolList);
+            document.getElementById("TableSimbol").innerHTML = "";
+
+            var html = "<h2>Tabla de Simbolos Ejecucion</h2>\n";
+            html += '<table class="table table-dark" id="TableSimbol">';
+            html += '<thead class="thead-light">';
+            html += "<tr>";
+            html += '<th scope="col">#</th>';
+            html += '<th scope="col">IDENTIFICADOR</th>';
+            html += '<th scope="col">TIPO</th>';
+            html += '<th scope="col">LINEA</th>';
+            html += '<th scope="col">COLUMNA</th>';
+            html += '<th scope="col">VALOR</th>';
+            html += '<th scope="col">ENTORNO</th>';
+            html += "</tr>";
+            html += " </thead>";
+            html += "<tbody>";
+            var nodes = TableReport.getTableReport();
+            for (var i = 0; i < nodes.length; i++) {
+                var item = nodes[i];
+                html += "<tr>";
+                html += `<td>${i + 1}</td>`;
+                html += `<td>${item.name}</td>`;
+                html += `<td>${item.type==1?'INT':item.type==2?'DOUBLE':item.type==3?'STRING':item.type==4?'CHAR':item.type==5?'BOOLEAN':item.type==6?'STRUCT':item.type==7?'ARRAY':'NULL'}</td>`;
+                html += `<td>${item.line}</td>`;
+                html += `<td>${item.column}</td>`;
+                html += `<td>${item.value}</td>`;
+                html += `<td>${item.typeEnviroment}</td>`;
+                html += "</tr>";
+            }
+
+            html += "</tbody>";
+            html += "</table>";
+            document.getElementById("TableSimbol").innerHTML = html;
+        }
     </script>
-   
+    
 
     <div id="root"></div>
   </body>

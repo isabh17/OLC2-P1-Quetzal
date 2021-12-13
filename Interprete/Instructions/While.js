@@ -6,7 +6,7 @@ class While extends Instruction{
   }
 
   execute(tree, table){
-    tree.addEnvironment("While");
+    tree.addEnvironment("WHILE");
     while (true){
       var condition = this.condition.execute(tree, table)
       if (condition instanceof Exception){
@@ -42,6 +42,7 @@ class While extends Instruction{
         return new Exception("Semantico", "Error en while, la expresion no retorna un booleano.", this.row, this.column);
       }
     }
+    tree.removeEnvironment();//DUDA
     return null;
   }
 }

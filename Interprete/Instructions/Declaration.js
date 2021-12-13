@@ -16,8 +16,9 @@ class Declaration extends Instruction{
       }
       var symbol = new Symbol(String(this.identifier), this.type, value, this.row, this.column, null, null);
       var res = table.addSymbol(symbol);
-      tree.addVariable([String(this.identifier), this.type, tree.getEnvironment(), this.row, this.column]);
+      //tree.addVariable([String(this.identifier), this.type, tree.getEnvironment(), this.row, this.column]);
       if (res instanceof Exception) return res;
+      TableReport.addTableSymbol(new NodeTableSymbols(this.row,this.column,String(this.identifier), this.type, tree.getEnvironment(),value));
       return null;
     }else{
       var exceptions = [];

@@ -6,6 +6,7 @@ class Switch extends Instruction {
     }
     
     execute(tree, table) { 
+        tree.addEnvironment("SWITCH");
         var step = false;
         var condition = this.condition.execute(tree, table);
         if (condition instanceof Exception) return condition;
@@ -22,16 +23,25 @@ class Switch extends Instruction {
                         //tree.get_excepcion().append(result)
                         //tree.update_consola(result._str_())
                     }
-                    if (result instanceof Break) return null;
-                    if (result instanceof Return) return result;
+                    
+                    if (result instanceof Break) {
+                        tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+                        return null;
+                    }
+                    if (result instanceof Return) {
+                        tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+                        return result;
+                    }
                     if (result instanceof Continue) return result;
                     step = true;
                 }
             }
         } else {
+            tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
             ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`La expresion a evaluar en el Case debe devolver true o false`,ENVIRONMENT.SWITCH));
             return new Exception("Semantico", "La expresion a evaluar en el Case debe devolver true o false", this.row, this.column)
         }
+        tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
         return null;
     }
 }

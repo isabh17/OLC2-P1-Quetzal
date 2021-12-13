@@ -8,25 +8,36 @@ class For extends Instruction {
     }
 
     execute(tree, table) {
+        tree.addEnvironment("FOR");
         if(!this.verifyExistId(tree, table)){
+            tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
             ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "La variable a iterar no existe",ENVIRONMENT.FOR));
             return new Exception("Semantico", "La variable a iterar no existe", this.row, this.column);
         }
         if(!this.verifyId()){
+            tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
             ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Los iteradores no son los mismos",ENVIRONMENT.FOR));
             return new Exception("Semantico", "Los iteradores no son los mismos", this.row, this.column);
         }
         var variable = typeof(this.variable)==='string' ? null : this.variable.execute(tree, table);
-        if(variable instanceof Exception) return variable;
+        if(variable instanceof Exception){
+            tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+            return variable;
+        }
         while(true){
             var newTable = new TableSymbols(table);
             var resultCondition = this.condition.execute(tree, newTable);
-            if(resultCondition instanceof Exception) return variable;
+            if(resultCondition instanceof Exception){
+                tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+                return variable;
+            }
             if(this.condition.type!==Type.BOOLEAN){
+                tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
                 ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Se esperaba una condicion booleana",ENVIRONMENT.FOR));
                 return new Exception("Semantico", "Se esperaba una condicion booleana", this.row, this.column);   
             }
             if(!resultCondition){
+                tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
                 break;
             };
             for (var instrFor of this.instructions_for) {
@@ -34,18 +45,27 @@ class For extends Instruction {
                 if (result instanceof Exception) {
                     //tree.get_excepcion().append(result)
                     //tree.update_consola(result._str_())
+                    tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
                     return result;
                 }
                 //console.log(result);
-                if (result instanceof Break) return null;
-                if (result instanceof Return) return result;
-                if (result instanceof Continue) return result;
+                if (result instanceof Break){
+                    tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+                    return null;
+                }
+                if (result instanceof Return){
+                    tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+                    return result;
+                }
+                if (result instanceof Continue) return result; //DUDA
             }
             var resIncr_decr = this.inc_decre.execute(tree, newTable);
             if(resIncr_decr instanceof Exception){
+                tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
                 return resIncr_decr;
             }
         }
+        tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
         return null;
     }
 
