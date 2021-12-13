@@ -10,7 +10,7 @@ class CreateStruct extends Instruction {
   execute(tree, table) {
     if(this.structName2 instanceof CallFunction){
       return this.createWithCallFunction(tree, table);
-    }else if(this.structName instanceof AccessAtributeStruct){
+    }else if(this.structName2 instanceof AccessAtributeStruct){
       return this.createWithAccess(tree, table);
     }else{
       return this.normalCreate(tree, table);
@@ -18,12 +18,27 @@ class CreateStruct extends Instruction {
   }
 
   createWithAccess(tree, table){
-
+    var result = tree.getStruct(this.structName);
+    if (result == null) {
+      tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "No existe un struct declarado con ese nombre: " + this.structName,ENVIRONMENT.STRUCT));
+      return new Exception("Semantico", "No existe un struct declarado con ese nombre: " + this.nombre, this.row, this.column);
+    }
+    var value = this.structName2.execute(tree, table);
+    if(value instanceof Exception) return value;
+    var symbol = new Symbol(String(this.nameObject), Type.STRUCT, value, this.row, this.column , null, String(this.structName));
+    var result = table.addSymbol(symbol);
+    if(result = null){
+      tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"Ya existe una variable o struct con este nombre.",ENVIRONMENT.STRUCT));
+      return new Exception("Semantico", "Ya existe una variable o struct con este nombre.", this.row, this.column);
+    }
+    tree.removeEnvironment(); 
+    return null;
   }
 
   createWithCallFunction(tree, table){
     var result = tree.getStruct(this.structName);
-    //console.log(result);
     if (result == null) {
       tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
       ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "No existe un struct declarado con ese nombre: " + this.structName,ENVIRONMENT.STRUCT));
@@ -38,6 +53,12 @@ class CreateStruct extends Instruction {
     }
     var symbol = new Symbol(String(this.nameObject), Type.STRUCT, value, this.row, this.column , null, String(this.structName));
     var result = table.addSymbol(symbol);
+    if(result = null){
+      tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"Ya existe una variable o struct con este nombre.",ENVIRONMENT.STRUCT));
+      return new Exception("Semantico", "Ya existe una variable o struct con este nombre.", this.row, this.column);
+    }
+    tree.removeEnvironment(); 
     return null;
   }
 

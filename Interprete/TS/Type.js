@@ -6,8 +6,7 @@ const Type = {
   BOOLEAN : 5,
   STRUCT : 6,
   ARRAY : 7,
-  NULL : 8/*,
-  NULL : 9*/
+  NULL : 8
 }
 
 const ARITMETIC_OPERATOR = {
