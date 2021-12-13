@@ -108,7 +108,7 @@ case 25:
  this.$ = new CreateStruct($$[$0-7], $$[$0-6], $$[$0-4], $$[$0-2], _$[$0-7].first_line, _$[$0-7].first_column); 
 break;
 case 26:
- this.$ = new CreateStruct($$[$0-4], $$[$0-3], $$[$0-1], null _$[$0-4].first_line, _$[$0-4].first_column); 
+ this.$ = new CreateStruct($$[$0-4], $$[$0-3], $$[$0-1], null, _$[$0-4].first_line, _$[$0-4].first_column); 
 break;
 case 27:
  this.$ = $$[$0-2]; 

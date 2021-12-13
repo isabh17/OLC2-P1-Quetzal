@@ -164,7 +164,7 @@ CHANGE_VALUE_STRUCT
 
 CREATE_STRUCT
   : ID ID '=' ID PAROP L_E PARCLS PTOCOMA      { $$ = new CreateStruct($1, $2, $4, $6, @1.first_line, @1.first_column); }
-  | ID ID '=' STRUCT_CASES PTOCOMA             { $$ = new CreateStruct($1, $2, $4, null @1.first_line, @1.first_column); }
+  | ID ID '=' STRUCT_CASES PTOCOMA             { $$ = new CreateStruct($1, $2, $4, null, @1.first_line, @1.first_column); }
 ;
 
 STRUCT_CASES

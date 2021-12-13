@@ -10,6 +10,7 @@ class CreateStruct extends Instruction {
   execute(tree, table) {
     //tree.addEnvironment("STRUCT");
     var result = tree.getStruct(this.structName);
+    console.log(result);
     if (result == null) {
       tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
       ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "No existe un struct declarado con ese nombre: " + this.structName,ENVIRONMENT.STRUCT));
