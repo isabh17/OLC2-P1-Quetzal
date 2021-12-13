@@ -615,4 +615,163 @@ void main(){
 }
 
 main();
->>>>>>> e8f577ceae59e524beda189acd865b535d755e15
+
+println("--------------------STRUCTS---------------------------------------------");
+struct Node{
+    int value;
+    Node next;
+}
+
+struct List{
+    List first;
+}
+
+void insertFirst(List list, int value){
+    Node aux = list.first;
+    Node newNode = Node(value, aux);
+    list.first = newNode;
+}
+
+void insertLast(List list, int value){
+    Node aux = list.first;
+    while (aux.next != null){
+        aux = aux.next;
+    }
+    Node newNode = Node(value, null)
+    aux.next = newNode
+}
+
+void printList(List list){
+    Node aux = list.first;
+    while(aux != null){
+        if (aux.next == null)
+            println(aux.value);
+        else
+            print("$(aux.value)->");
+        
+        aux = aux.next;
+    }
+}
+
+lista = List(null);
+insertFirst(lista, 5);
+insertFirst(lista, 4);
+insertFirst(lista, 3);
+insertFirst(lista, 2);
+
+insertLast(lista, 10);
+insertLast(lista, 20);
+insertLast(lista, 30);
+insertLast(lista, 40);
+
+println("---IMPRIMIR LISTA---");
+printList(lista);
+println("---FIN IMPRIMIR---");
+
+
+/* pruebas de if o while */
+String cadenaFigura = "";
+	int i; 
+	int n = 10;
+		
+	i=-3*n/2;
+	// iniciando dibujo
+	
+	while(i<=n){
+		cadenaFigura = "";
+		int j; 
+		j=-3*n/2;
+		while(j<=3*n){
+			int absolutoi;
+			absolutoi = i;
+			int absolutoj;
+			absolutoj = j;
+			if(i < 0) {
+				absolutoi = i * -1;
+			}
+			if(j < 0) {
+				absolutoj = j * -1;
+			}
+			if((absolutoi + absolutoj < n)
+					|| ((-n / 2 - i) * (-n / 2 - i) + (n / 2 - j) * (n / 2 - j) <= n * n / 2)
+					|| ((-n / 2 - i) * (-n / 2 - i) + (-n / 2 - j) * (-n / 2 - j) <= n * n / 2)) {
+				cadenaFigura = cadenaFigura & "* ";
+			}
+			else
+			{
+				cadenaFigura = cadenaFigura & ". ";
+			}
+			j=j+1;
+		}
+            println(cadenaFigura);
+            i=i+1;
+        }
+        println("Si la figura es un corazón, te aseguro que tendrás un 100 :3");
+    }
+    //PARA PROBAR EL for
+    String cadenaFigura = "";
+	int i; 
+	int n = 10;
+		
+	
+	for(i = -3*n/2;i<=n; i++){
+		cadenaFigura = "";
+		int j; 
+		for(j = -3*n/2; j<=3*n; j++){
+			int absolutoi;
+			absolutoi = i;
+			int absolutoj;
+			absolutoj = j;
+			if(i < 0)
+			{
+				absolutoi = i * -1;
+			}
+			if(j < 0)
+			{
+				absolutoj = j * -1;
+			}
+			if((absolutoi + absolutoj < n)
+					|| ((-n / 2 - i) * (-n / 2 - i) + (n / 2 - j) * (n / 2 - j) <= n * n / 2)
+					|| ((-n / 2 - i) * (-n / 2 - i) + (-n / 2 - j) * (-n / 2 - j) <= n * n / 2)) {
+				cadenaFigura = cadenaFigura & "* ";
+			}
+			else
+			{
+				cadenaFigura = cadenaFigura & ". ";
+			}
+		}
+            println(cadenaFigura);
+        }
+        println("Si la figura es un corazón, te aseguro que tendrás un 100 :3");
+    }
+
+/*
+---------------------------SALIDA ESPERADA-----------------------
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+. . . . . . . . . * * * . . . . . . . * * * . . . . . . . . . . . . . . . . . . . . . . . . 
+. . . . . . . * * * * * * * . . . * * * * * * * . . . . . . . . . . . . . . . . . . . . . . 
+. . . . . * * * * * * * * * * * * * * * * * * * * * . . . . . . . . . . . . . . . . . . . . 
+. . . . . * * * * * * * * * * * * * * * * * * * * * . . . . . . . . . . . . . . . . . . . . 
+. . . . * * * * * * * * * * * * * * * * * * * * * * * . . . . . . . . . . . . . . . . . . . 
+. . . . * * * * * * * * * * * * * * * * * * * * * * * . . . . . . . . . . . . . . . . . . . 
+. . . * * * * * * * * * * * * * * * * * * * * * * * * * . . . . . . . . . . . . . . . . . . 
+. . . * * * * * * * * * * * * * * * * * * * * * * * * * . . . . . . . . . . . . . . . . . . 
+. . . * * * * * * * * * * * * * * * * * * * * * * * * * . . . . . . . . . . . . . . . . . . 
+. . . . * * * * * * * * * * * * * * * * * * * * * * * . . . . . . . . . . . . . . . . . . . 
+. . . . * * * * * * * * * * * * * * * * * * * * * * * . . . . . . . . . . . . . . . . . . . 
+. . . . . * * * * * * * * * * * * * * * * * * * * * . . . . . . . . . . . . . . . . . . . . 
+. . . . . * * * * * * * * * * * * * * * * * * * * * . . . . . . . . . . . . . . . . . . . . 
+. . . . . . . * * * * * * * * * * * * * * * * * . . . . . . . . . . . . . . . . . . . . . . 
+. . . . . . . . * * * * * * * * * * * * * * * . . . . . . . . . . . . . . . . . . . . . . . 
+. . . . . . . . . * * * * * * * * * * * * * . . . . . . . . . . . . . . . . . . . . . . . . 
+. . . . . . . . . . * * * * * * * * * * * . . . . . . . . . . . . . . . . . . . . . . . . . 
+. . . . . . . . . . . * * * * * * * * * . . . . . . . . . . . . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . * * * * * * * . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . * * * * * . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . * * * . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . * . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+
+*/

@@ -77,9 +77,11 @@
         <div class="row justify-content-md-center">
             <div class="col-md-6 ">
                 <h5 align="center">Editor</h5>
+                <!--<input type="button" value="Editor" class="btn btn-block btn-md btn-primary" >-->
             </div>
             <div class="col-md-6">
                 <h5 align="center">Salida</h5>
+                <!--<input type="button" value="Ejecucion" class="btn btn-block btn-md btn-success" > -->               
             </div>
         </div>
         <p></p>
@@ -97,7 +99,8 @@
         </div>
         <div class="row justify-content-md-center">
             <div class="col-md-6 justify-content-md-center">
-                <h5 align="center">Consola</h5>                
+                <!--<h5 align="center">Consola</h5> -->
+                <input type="button" value="Consola" class="btn btn-block btn-md btn-dark" >               
             </div>            
             <div class="col-md-6">
                 <input type="button" value="Reporte de Errores" class="btn btn-block btn-md btn-danger" >                
@@ -105,14 +108,16 @@
         </div>
         <p></p>
         <div class="row justify-content-md-center">
-            <div  class="col-md-6 justify-content-md-center">
-                <div class="jumbotron">
+            <div  class="col-md-6 justify-content-md-center" >
+                <div class="jumbotron" >
                     <textarea id="Consola"></textarea>
                 </div>
             </div>
             <div  class="col-md-6 justify-content-md-center">
                 <div class="jumbotron">
-                    <div class="col col-sm-12 col-md-10 col-lg-10 col-xl-10" id="ReportErrors">
+                    <!--<div class="col col-sm-12 col-md-10 col-lg-10 col-xl-10" style="width:820px; height:450px; overflow: scroll;" id="ReportErrors">-->
+
+                    <div class="col col-sm-12 col-md-10 col-lg-10 col-xl-10" style="height:400px; overflow: scroll;" id="ReportErrors">
                     
                     </div>
                 </div>
@@ -142,8 +147,9 @@
         <p></p>
         <div class="row justify-content-md-center">
             <div class="col-md-6 justify-content-md-center">
-                <div  class="jumbotron">                    
-                    <div class="col col-sm-12 col-md-10 col-lg-10 col-xl-10" style="width:802px; height:402px; overflow: scroll;" id="TableSimbol">
+                <div  class="jumbotron">
+                    <!--<div class="col col-sm-12 col-md-10 col-lg-10 col-xl-10" style="width:820px; height:450px; overflow: scroll;" id="TableSimbol">-->                    
+                    <div class="col col-sm-12 col-md-10 col-lg-10 col-xl-10" style="height:450px; overflow: scroll;" id="TableSimbol">
                     
                     </div>
                 </div>
@@ -278,6 +284,7 @@
             var tree = new Tree(instructions);
             var tsGlobal = new TableSymbols(null);
             tree.setGlobalTable(tsGlobal);
+            
             tree.getInstructions().forEach(instruction=>{
                 if(instruction instanceof Function){
                     tree.addFunction(instruction);
@@ -294,6 +301,7 @@
                     }
                 }
             });
+            console.log(tree.getInstructions());
             //console.log(tree.getVariables());
             Salida.setValue(tree.getOut());
             
@@ -342,7 +350,7 @@
             arbolast(Codigo);
         }
         document.getElementById('BtnLimpiar').onclick = function (){
-            Fuente.setValue("");
+            Fuente.setValue("");          
            
         }
 
@@ -467,7 +475,7 @@
                 html += "<tr>";
                 html += `<td>${i + 1}</td>`;
                 html += `<td>${item.name}</td>`;
-                html += `<td>${item.type==1?'INT':item.type==2?'DOUBLE':item.type==3?'STRING':item.type==4?'CHAR':item.type==5?'BOOLEAN':item.type==6?'STRUCT':item.type==7?'ARRAY':'NULL'}</td>`;
+                html += `<td>${item.type==1?'INT':item.type==2?'DOUBLE':item.type==3?'STRING':item.type==4?'CHAR':item.type==5?'BOOLEAN':item.type==6?'STRUCT':item.type==7?'ARRAY':item.type=='VOID'?'VOID':'NULL'}</td>`;
                 html += `<td>${item.line}</td>`;
                 html += `<td>${item.column}</td>`;
                 html += `<td>${item.value}</td>`;

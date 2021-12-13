@@ -6,7 +6,8 @@ const Type = {
   BOOLEAN : 5,
   STRUCT : 6,
   ARRAY : 7,
-  NULL : 8
+  NULL : 8/*,
+  NULL : 9*/
 }
 
 const ARITMETIC_OPERATOR = {
@@ -44,7 +45,8 @@ const ENVIRONMENT = {
   FOR : 'FOR',
   FUNCTION : 'FUNCTION',
   MAIN : 'MAIN',
-  NULL : 'NULL'
+  NULL : 'NULL',
+  VOID : 'VOID'
 }
 
 const STRINGS = {

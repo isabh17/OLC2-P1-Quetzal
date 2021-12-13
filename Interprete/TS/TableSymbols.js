@@ -16,7 +16,10 @@ class TableSymbols{
       return null;
     }
   }
-
+  op(){
+    var actualTable = this;
+    console.log(actualTable.table);
+  }
   getSymbol(id){
     var actualTable = this;
     while(actualTable.table != null){

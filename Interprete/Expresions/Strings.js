@@ -16,6 +16,7 @@ class Strings extends Instruction{
     }
     if (this.operator === STRINGS.CONCAT){
       this.type = Type.STRING;
+      
       return String(this.getVal(this.operLeft.type, left)) + String(this.getVal(this.operRight.type, right));
     }
     ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`Tipo de Operacion no Especificado.`,ENVIRONMENT.NULL));
@@ -30,7 +31,7 @@ class Strings extends Instruction{
     }else if( type === Type.BOOLEAN){
       return Boolean(value);
     }else if( type === Type.CHAR){
-      return String(value);
+      return  String.fromCharCode(value);
     }
     return String(value);
   }
