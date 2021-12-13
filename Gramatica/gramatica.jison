@@ -164,11 +164,11 @@ CHANGE_VALUE_STRUCT
 
 CREATE_STRUCT
   : ID ID '=' ID PAROP L_E PARCLS PTOCOMA      { $$ = new CreateStruct($1, $2, $4, $6, @1.first_line, @1.first_column); }
-  | ID ID '=' STRUCT_CASES PTOCOMA             { $$ = new CreateStruct($1, $2, $4, null @1.first_line, @1.first_column); }
+  | ID ID '=' STRUCT_CASES PTOCOMA             { $$ = new CreateStruct($1, $2, $4, null, @1.first_line, @1.first_column); }
 ;
 
 STRUCT_CASES
-  : ID PAROP PARCLS                           { $$ = $1; }
+  : ID PAROP PARCLS                           { $$ = new CallFunction($1, [], @1.first_line,  @1.first_column); }
   | ID PTO ACCESS                             { $$ = new AccessAtributeStruct($1, $3, @1.first_line, @1.first_column); }
   | ID                                        { $$ = $1; }
 ;
@@ -361,8 +361,10 @@ SENTENCE_DO_WHILE
 ;
 
 FUNCT
-  : TIPO ID PAROP PARCLS BLOCK               { $$ =new Function($1, $2, {}, $5, @1.first_line,  @1.first_column); }
-  | TIPO ID PAROP PARAMETERS PARCLS BLOCK    { $$ =new Function($1, $2, $4, $6, @1.first_line,  @1.first_column); }
+  : TIPO ID PAROP PARCLS BLOCK               { $$ =new Function($1, $2, {}, $5, @1.first_line,  @1.first_column, null); }
+  | TIPO ID PAROP PARAMETERS PARCLS BLOCK    { $$ =new Function($1, $2, $4, $6, @1.first_line,  @1.first_column, null); }
+  | ID ID PAROP PARCLS BLOCK                 { $$ =new Function(Type.STRUCT, $2, {}, $5, @1.first_line,  @1.first_column, $1); }
+  | ID ID PAROP PARAMETERS PARCLS BLOCK      { $$ =new Function(Type.STRUCT, $2, $4, $6, @1.first_line,  @1.first_column, $1); }
 ;
 
 PARAMETERS

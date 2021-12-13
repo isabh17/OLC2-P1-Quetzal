@@ -3,7 +3,7 @@ class Identifier extends Instruction{
     super(row, column);    
     this.identifier = identifier;
     this.type = null;
-    this.typeObject = null;
+    this.objectType = null;
     this.env = env;
   }
 
@@ -14,7 +14,7 @@ class Identifier extends Instruction{
       return new Exception("Semantico", "No se encontro la variable "+this.identifier+" declarada", this.row, this.column);
     }else{
       if(symbol.getType() === Type.STRUCT){
-        this.typeObject = symbol.objectType;
+        this.objectType = symbol.objectType;
       }
       this.type = symbol.getType();
       return symbol.getValue();

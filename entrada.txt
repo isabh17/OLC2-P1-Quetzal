@@ -319,3 +319,46 @@ insertLast(lista, 40);
 println("---IMPRIMIR LISTA---");
 printList(lista);
 println("---FIN IMPRIMIR---");
+
+
+//Probando structs 1
+/*
+struct Persona{
+	String nombre,
+    Persona padre
+};
+Persona getPadre(Persona actual){
+	return actual.padre;
+}
+void setPadre(Persona soon, Persona father){
+	soon.padre = father;
+}
+Persona persona1 = Persona("Tony", null);
+Persona persona2 = Persona("Samuel", null);
+setPadre(persona1, persona2);
+Persona persona3 = getPadre(persona1);
+persona2.nombre = "Daniel";
+println(persona2.nombre);
+println(persona3.nombre);
+*/
+
+//Probando structs 2
+/*
+struct Persona{
+	String nombre,
+    Persona padre
+};
+void addFather(Persona soon, Persona father){
+  soon.padre = father;
+}
+Persona newPerson(String name){
+	Persona people = Persona(name, null);
+  	return people;
+}
+Persona persona1 = newPerson("Tony");
+Persona persona2 = newPerson("Daniel");
+Persona persona3 = newPerson("Samuel");
+addFather(persona1, persona2);
+addFather(persona2, persona3);
+print(persona1.padre.padre.nombre);
+*/

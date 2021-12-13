@@ -8,7 +8,39 @@ class CreateStruct extends Instruction {
   }
 
   execute(tree, table) {
-    //tree.addEnvironment("STRUCT");
+    if(this.structName2 instanceof CallFunction){
+      return this.createWithCallFunction(tree, table);
+    }else if(this.structName instanceof AccessAtributeStruct){
+      return this.createWithAccess(tree, table);
+    }else{
+      return this.normalCreate(tree, table);
+    }
+  }
+
+  createWithAccess(tree, table){
+
+  }
+
+  createWithCallFunction(tree, table){
+    var result = tree.getStruct(this.structName);
+    if (result == null) {
+      tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "No existe un struct declarado con ese nombre: " + this.structName,ENVIRONMENT.STRUCT));
+      return new Exception("Semantico", "No existe un struct declarado con ese nombre: " + this.nombre, this.row, this.column);
+    }
+    var value = this.structName2.execute(tree, table);
+    if(value instanceof Exception) return value;
+    if(String(this.structName) !== String(this.structName2.objectType) ){
+      tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Se recibe un struct de tipo diferente al que se esperaba "+this.structName+"!="+this.structName2.objectType+".", ENVIRONMENT.STRUCT));
+      return new Exception("Semantico", "Se recibe un struct de tipo diferente al que se esperaba "+this.structName+"!="+this.structName2.objectType+".", this.row, this.column);
+    }
+    var symbol = new Symbol(String(this.nameObject), Type.STRUCT, value, this.row, this.column , null, String(this.structName));
+    var result = table.addSymbol(symbol);
+    return null;
+  }
+
+  normalCreate(tree, table){
     var result = tree.getStruct(this.structName);
     if (result == null) {
       tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
@@ -16,9 +48,29 @@ class CreateStruct extends Instruction {
       return new Exception("Semantico", "No existe un struct declarado con ese nombre: " + this.nombre, this.row, this.column);
     }
     if(String(this.structName) !== String(this.structName2) ){
-      tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
-      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Estructura para creacion de struct invalida",ENVIRONMENT.STRUCT));
-      return new Exception("Semantico", "Estructura para creacion de struct invalida", this.row, this.column);
+      var funct = new CallFunction(this.structName2, this.parameters, this.row, this.column);
+      var value = funct.execute(tree, table);
+      if(value instanceof Exception) return value;
+      if(funct.type !== Type.STRUCT){
+        tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Se esperaba un struct para la creación", ENVIRONMENT.STRUCT));
+        return new Exception("Semantico", "Se esperaba un struct para la creación", this.row, this.column);        
+      }else{
+        if(String(funct.objectType) !== String(this.structName)){
+          tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+          ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Se recibio un struct de diferente tipo", ENVIRONMENT.STRUCT));
+          return new Exception("Semantico", "Se recibio un struct de diferente tipo", this.row, this.column);
+        }
+        var symbol = new Symbol(String(this.nameObject), Type.STRUCT, value, this.row, this.column , null, String(this.structName));
+        var result = table.addSymbol(symbol);
+        if(result = null){
+          tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+          ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"Ya existe una variable o struct con este nombre "+this.nameObject+".", ENVIRONMENT.STRUCT));
+          return new Exception("Semantico", "Ya existe una variable o struct con este nombre "+this.nameObject+".", this.row, this.column);
+        }
+        tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+        return null;
+      }
     }
     if (Object.keys(result.parameters).length !== this.parameters.length){
       tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
@@ -38,8 +90,8 @@ class CreateStruct extends Instruction {
         return new Exception("Semantico", "El parametro enviado no coincide con el que recibe el struct.", this.row, this.column);
       }
       var symbol = "";
-      if(this.parameters[count].type === Type.STRUCT){
-        if(String(this.parameters[count].typeObject) !== String(result.parameters[parameter].Type)){ // Si se quiere enviar un struct de tipo diferente al que se espera
+      if(this.parameters[count].type === Type.STRUCT || this.parameters[count].type === Type.NULL){
+        if(String(this.parameters[count].objectType) !== String(result.parameters[parameter].Type) && !(this.parameters[count] instanceof Primitive)){ // Si se quiere enviar un struct de tipo diferente al que se espera
           tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
           ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"El struct que se envia es de un tipo distinto al que se recibe.",ENVIRONMENT.STRUCT));
           return new Exception("Semantico", "El struct que se envia es de un tipo distinto al que se recibe.", this.row, this.column);
@@ -59,7 +111,6 @@ class CreateStruct extends Instruction {
       return new Exception("Semantico", "Ya existe una variable o struct con este nombre.", this.row, this.column);
     }
     tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
-    //TableReport.addTableSymbol(new NodeTableSymbols(this.row,this.column,this.structName, this.type, tree.getEnvironment(),null));
     return null;
   }
 }

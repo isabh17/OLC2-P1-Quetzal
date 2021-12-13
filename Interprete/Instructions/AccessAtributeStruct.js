@@ -4,6 +4,7 @@ class AccessAtributeStruct extends Instruction{
     this.id = id;
     this.parameters = parameters;
     this.type = null;
+    this.objectType = null;
   }
 
   execute(tree, table){
@@ -30,6 +31,9 @@ class AccessAtributeStruct extends Instruction{
       actualValue = actualValue[this.parameters[i]];
     }
     this.type = actualValue.getType();
+    if(this.type === Type.STRUCT){
+      this.objectType = actualValue.objectType;
+    }
     if(actualValue.getValue() === null || actualValue.getValue() === "null"){
       this.type = Type.NULL;
     }

@@ -4,6 +4,7 @@ class CallFunction extends Instruction{
     this.name = name;
     this.parameters = parameters;
     this.type = null;
+    this.objectType = null;
   }
   
   execute(tree, table){
@@ -12,8 +13,8 @@ class CallFunction extends Instruction{
     }
     var result = tree.getFunction(this.name);
     if (result === null){
-      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"No existe una funcionn con ese name: " + this.name,ENVIRONMENT.FUNCTION));
-      return new Exception("Semantico", "No existe una funcionn con ese name: " + this.name, this.row, this.column);
+      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"No existe una funcion con ese name: " + this.name,ENVIRONMENT.FUNCTION));
+      return new Exception("Semantico", "No existe una funcion con ese name: " + this.name, this.row, this.column);
     }
     var newTable = new TableSymbols(tree.getGlobalTable());
     if (Object.keys(result.parameters).length === this.parameters.length){ //LA CANTIDAD DE parameters ES LA ADECUADA
@@ -44,8 +45,8 @@ class CallFunction extends Instruction{
           }
         }else{
           if(this.parameters[count].type===Type.STRUCT && typeof(result.parameters[parameter].Type)==='string'){
-            if(this.parameters[count].typeObject===result.parameters[parameter].Type){
-              var symbol = new Symbol(String(result.parameters[parameter].Identifier), Type.STRUCT,  value, this.row, this.column, null, this.parameters[count].typeObject);
+            if(this.parameters[count].objectType===result.parameters[parameter].Type){
+              var symbol = new Symbol(String(result.parameters[parameter].Identifier), Type.STRUCT,  value, this.row, this.column, null, this.parameters[count].objectType);
               var resultTable = newTable.addSymbol(symbol);
               if (resultTable instanceof Exception){
                 return resultTable;
@@ -69,7 +70,8 @@ class CallFunction extends Instruction{
     if (value instanceof Exception){
       return value;
     }
-    this.type = result.type;    
+    if(result.type === Type.STRUCT) this.objectType = result.objectType;
+    this.type = result.type;
     return value;
   }
 

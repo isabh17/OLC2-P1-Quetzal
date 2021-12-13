@@ -40,7 +40,7 @@ class ChangeValueStruct extends Instruction{
       return new Exception("Semantico", "Tipos erroneos al asignar valor a struct", this.row, this.column);
     }
     if(typeof(actualValue.getType())==='string'){
-      if(actualValue.getType() !== this.expression.typeObject && this.expression.type !== Type.NULL){
+      if(actualValue.getType() !== this.expression.objectType && this.expression.type !== Type.NULL){
         ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"Se esperaba la asignación de un struct en el parametro", ENVIRONMENT.NULL));
         return new Exception("Semantico", "Se esperaba la asignación de un struct en el parametro", this.row, this.column);
       }
