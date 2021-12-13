@@ -52,10 +52,8 @@ class Relational extends Instruction{
       }else if (this.operRight.type === Type.NULL){
         return false;
       }
-      console.log("Tipo Erroneo de operacion para ===.");
-      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`Tipo Erroneo de operacion para ===`,ENVIRONMENT.NULL));
-      //return Exception("Semantico", "Tipo Erroneo de operacion para ===.", this.row, this.column,  datetime.now().strftime('%Y-%m-%d %H){%M){%S'))
-
+      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"Tipo Erroneo de operacion para ===."+this.operLeft.type+" "+this.operRight.type, ENVIRONMENT.NULL));
+      return Exception("Semantico", "Tipo Erroneo de operacion para ==."+this.operLeft.type+" "+this.operRight.type, this.row, this.column)
     }else if (this.operator === RELATIONAL_OPERATOR.DIFFERENT){
       // INT
       if (this.operLeft.type === Type.INT && this.operRight.type === Type.INT){
@@ -98,9 +96,8 @@ class Relational extends Instruction{
       }else if (this.operRight.type === Type.NULL){
         return true;
       }
-      console.log("Tipo Erroneo de operacion para !=.");
-      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`Tipo Erroneo de operacion para =!.`,ENVIRONMENT.NULL));
-      //return Exception("Semantico", "Tipo Erroneo de operacion para =!.", this.row, this.column,  datetime.now().strftime('%Y-%m-%d %H){%M){%S'))
+      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"Tipo Erroneo de operacion para ===."+this.operLeft.type+" "+this.operRight.type, ENVIRONMENT.NULL));
+      return Exception("Semantico", "Tipo Erroneo de operacion para !=."+this.operLeft.type+" "+this.operRight.type, this.row, this.column)
     }else if ( this.operator === RELATIONAL_OPERATOR.MENQ){
       // INT
       if ( this.operLeft.type === Type.INT && this.operRight.type === Type.INT){
@@ -116,10 +113,8 @@ class Relational extends Instruction{
       }else if ( this.operLeft.type === Type.BOOLEAN && this.operRight.type === Type.BOOLEAN){
         return this.getVal(this.operLeft.type, left) < this.getVal(this.operRight.type, right);
       }
-      console.log("Tipo Erroneo de operacion para <.");
-      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`Tipo Erroneo de operacion para <.`,ENVIRONMENT.NULL));
-      //return Exception("Semantico", "Tipo Erroneo de operacion para <.", this.row, this.column,  datetime.now().strftime('%Y-%m-%d %H){%M){%S'))
-
+      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"Tipo Erroneo de operacion para ===."+this.operLeft.type+" "+this.operRight.type, ENVIRONMENT.NULL));
+      return Exception("Semantico", "Tipo Erroneo de operacion para <."+this.operLeft.type+" "+this.operRight.type, this.row, this.column)
     }else if ( this.operator === RELATIONAL_OPERATOR.MAYQ){
       // INT
       if ( this.operLeft.type === Type.INT && this.operRight.type === Type.INT){
@@ -135,10 +130,8 @@ class Relational extends Instruction{
       }else if ( this.operLeft.type === Type.BOOLEAN && this.operRight.type === Type.BOOLEAN){
         return this.getVal(this.operLeft.type, left) > this.getVal(this.operRight.type, right);
       }
-      console.log("Tipo Erroneo de operacion para >.");
-      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`Tipo Erroneo de operacion para >.`,ENVIRONMENT.NULL));
-      //return Exception("Semantico", "Tipo Erroneo de operacion para >.", this.row, this.column,  datetime.now().strftime('%Y-%m-%d %H){%M){%S'))
-        
+      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"Tipo Erroneo de operacion para ===."+this.operLeft.type+" "+this.operRight.type, ENVIRONMENT.NULL));
+      return Exception("Semantico", "Tipo Erroneo de operacion para >."+this.operLeft.type+" "+this.operRight.type, this.row, this.column)
     }else if ( this.operator === RELATIONAL_OPERATOR.MENEQ){
       // INT
       if ( this.operLeft.type === Type.INT && this.operRight.type === Type.INT){
@@ -154,9 +147,8 @@ class Relational extends Instruction{
       }else if ( this.operLeft.type === Type.BOOLEAN && this.operRight.type === Type.BOOLEAN){
         return this.getVal(this.operLeft.type, left) <= this.getVal(this.operRight.type, right);
       }
-      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`Tipo Erroneo de operacion para <=.`,ENVIRONMENT.NULL));
-      return new Exception("Semantico", "Tipo Erroneo de operacion para <=.", this.row, this.column,  datetime.now().strftime('%Y-%m-%d %H){%M){%S'))
-        
+      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"Tipo Erroneo de operacion para ===."+this.operLeft.type+" "+this.operRight.type, ENVIRONMENT.NULL));
+      return Exception("Semantico", "Tipo Erroneo de operacion para <=."+this.operLeft.type+" "+this.operRight.type, this.row, this.column)  
     }else if ( this.operator === RELATIONAL_OPERATOR.MAYEQ){
       // INT
       if ( this.operLeft.type === Type.INT && this.operRight.type === Type.INT){

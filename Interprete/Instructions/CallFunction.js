@@ -13,8 +13,12 @@ class CallFunction extends Instruction{
     }
     var result = tree.getFunction(this.name);
     if (result === null){
-      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"No existe una funcion con ese name: " + this.name,ENVIRONMENT.FUNCTION));
-      return new Exception("Semantico", "No existe una funcion con ese name: " + this.name, this.row, this.column);
+      result = tree.getStruct(this.name);
+      if(result === null){
+        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"No existe una funcion o una plantilla de struct con ese nombre: " + this.name,ENVIRONMENT.FUNCTION));
+        return new Exception("Semantico", "No existe una funcion o una plantilla de struct con ese nombre: " + this.name, this.row, this.column);
+      }
+      return this.createStruct(tree, table);
     }
     var newTable = new TableSymbols(tree.getGlobalTable());
     if (Object.keys(result.parameters).length === this.parameters.length){ //LA CANTIDAD DE parameters ES LA ADECUADA
@@ -44,7 +48,8 @@ class CallFunction extends Instruction{
             return resultTable;
           }
         }else{
-          if(this.parameters[count].type===Type.STRUCT && typeof(result.parameters[parameter].Type)==='string'){
+          if( (this.parameters[count].type===Type.STRUCT || this.parameters[count].type === Type.NULL) && typeof(result.parameters[parameter].Type)==='string'){//Cambio aqui
+            if(this.parameters[count].type === Type.NULL) this.parameters[count].type = Type.STRUCT;
             if(this.parameters[count].objectType===result.parameters[parameter].Type){
               var symbol = new Symbol(String(result.parameters[parameter].Identifier), Type.STRUCT,  value, this.row, this.column, null, this.parameters[count].objectType);
               var resultTable = newTable.addSymbol(symbol);
@@ -73,6 +78,42 @@ class CallFunction extends Instruction{
     if(result.type === Type.STRUCT) this.objectType = result.objectType;
     this.type = result.type;
     return value;
+  }
+  
+  createStruct(tree, table){
+    var result = tree.getStruct(this.name);
+    if (Object.keys(result.parameters).length !== this.parameters.length){
+      tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "El numero de parametros enviado no coincide con los que recibe el struct.",ENVIRONMENT.STRUCT));
+      return new Exception("Semantico", "El numero de parametros enviado no coincide con los que recibe el struct.", this.row, this.column);
+    }
+    var count = 0;
+    var paramsList = {};
+    for(var parameter in result.parameters){
+      var value = this.parameters[count].execute(tree, table);
+      if (value instanceof Exception)return value;
+      if ( (result.parameters[parameter].Type !== this.parameters[count].type) && (typeof(result.parameters[parameter].Type) === 'string' && this.parameters[count].type !== Type.NULL) && (typeof(result.parameters[parameter].Type) === 'string' && this.parameters[count].type !== Type.STRUCT)){
+        tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"Tipo de dato diferente en parametros de creacion del struct.", ENVIRONMENT.STRUCT));
+        return new Exception("Semantico", "El parametro enviado no coincide con el que recibe el struct.", this.row, this.column);
+      }
+      var symbol = "";
+      if(this.parameters[count].type === Type.STRUCT || this.parameters[count].type === Type.NULL){
+        if(String(this.parameters[count].objectType) !== String(result.parameters[parameter].Type) && !(this.parameters[count] instanceof Primitive)){ // Si se quiere enviar un struct de tipo diferente al que se espera
+          tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+          ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"El struct que se envia es de un tipo distinto al que se recibe.",ENVIRONMENT.STRUCT));
+          return new Exception("Semantico", "El struct que se envia es de un tipo distinto al que se recibe.", this.row, this.column);
+        }
+        symbol = new Symbol(String(result.parameters[parameter].Identifier), Type.STRUCT, value, this.row, this.column , null, result.parameters[parameter].Type);
+      }else{
+        symbol = new Symbol(String(result.parameters[parameter].Identifier), result.parameters[parameter].Type, value, this.row, this.column , null, null);
+      }
+      paramsList[String(result.parameters[parameter].Identifier)] = symbol;
+      count += 1;
+    }
+    this.type = Type.STRUCT;
+    this.objectType = this.name;
+    return paramsList;
   }
 
   verifyNative(){//Metodo usado para verificar si  se debe ejecutar una funcion nativa

@@ -17,6 +17,9 @@ class Identifier extends Instruction{
         this.objectType = symbol.objectType;
       }
       this.type = symbol.getType();
+      if(symbol.getValue() === null || symbol.getValue() === "null"){
+        this.type = Type.NULL;
+      }
       return symbol.getValue();
     }
   }

@@ -325,15 +325,15 @@
                         out += text[i];
                     }
                 }else if(state === 1){
-                    if(text[i]==='{'){
+                    if(text[i]==='('){
                         out += "\"&"
                         state = 3;
-                    }else if(text[i]!=='{'){
+                    }else if(text[i]!=='('){
                         out+=text[i];
                         state = 0;
                     }
                 }else if(state == 3){
-                    if(text[i]==='}'){
+                    if(text[i]===')'){
                         out += "&\""
                         state = 0;
                     }else{

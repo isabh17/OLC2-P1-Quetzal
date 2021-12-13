@@ -8,9 +8,9 @@ class Print extends Instruction{
   execute(tree, table){
     var value = this.expression.execute(tree, table);
     if (value instanceof Exception) return value;
-    if(value === null){
-      return null;
-    }
+    /*if(value === null){
+      return "null";
+    }*/
     if(this.expression.type === Type.STRUCT){
       value = this.getValueStruct(value);
     }

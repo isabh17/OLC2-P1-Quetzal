@@ -171,7 +171,7 @@ STRUCT_CASES
   : ID PAROP PARCLS                           { $$ = new CallFunction($1, [], @1.first_line,  @1.first_column); }
   | ID PTO ACCESS                             { $$ = new AccessAtributeStruct($1, $3, @1.first_line, @1.first_column); }
   | ID                                        { $$ = $1; }
-  | NULL                                      { $$ = Type.NULL; }
+  | nullVal                                   { $$ = Type.NULL; }
 ;
 
 TEMPLATE_STRUCT
@@ -181,7 +181,6 @@ TEMPLATE_STRUCT
 PRINT
   : Rprint PAROP EXP PARCLS PTOCOMA		  { $$ = new Print(this._$.first_line,this._$.first_column,$3,false); }
   | Rprintln PAROP EXP PARCLS PTOCOMA		{ $$ = new Print(this._$.first_line,this._$.first_column,$3,true); }
-  
 ;
 
 DECLARATION

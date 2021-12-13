@@ -12,9 +12,40 @@ class CreateStruct extends Instruction {
       return this.createWithCallFunction(tree, table);
     }else if(this.structName2 instanceof AccessAtributeStruct){
       return this.createWithAccess(tree, table);
+    }else if(this.structName2 === Type.NULL || (typeof(this.structName2)==='string' && this.parameters === null)){
+      return this.createWithIdOrNull(tree, table);
     }else{
       return this.normalCreate(tree, table);
     }
+  }
+
+  createWithIdOrNull(tree, table){
+    var result = tree.getStruct(this.structName);
+    if (result == null) {
+      tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "No existe un struct declarado con ese nombre: " + this.structName,ENVIRONMENT.STRUCT));
+      return new Exception("Semantico", "No existe un struct declarado con ese nombre: " + this.nombre, this.row, this.column);
+    }
+    var value;
+    if(this.structName2 === Type.NULL){
+      value = null;
+    }else{ //Se busca el id
+      value = table.getSymbol(this.structName2);
+      if(value === null){
+        tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"No se encontro la variable buscada "+String(this.structName2), ENVIRONMENT.STRUCT));
+        return new Exception("Semantico", "No se encontro la variable buscada "+String(this.structName2), this.row, this.column);
+      }
+      value = value.getValue();
+    }
+    var symbol = new Symbol(String(this.nameObject), Type.STRUCT, value, this.row, this.column , null, String(this.structName));
+    var result = table.addSymbol(symbol);
+    if(result = null){
+      tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+      ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"Ya existe una variable o struct con este nombre.", ENVIRONMENT.STRUCT));
+      return new Exception("Semantico", "Ya existe una variable o struct con este nombre.", this.row, this.column);
+    }
+    return null;
   }
 
   createWithAccess(tree, table){

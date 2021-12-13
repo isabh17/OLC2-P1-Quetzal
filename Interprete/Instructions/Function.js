@@ -9,10 +9,6 @@ class Function extends Instruction{
   }
   
   execute(tree, table){
-    //console.log('prueba');
-    //console.log('entro funcion'+this.row,this.column,this.name, this.type, tree.getEnvironment(),null)
-    //var newTable = new TableSymbols(table);
-    //TableReport.addTableSymbol(new NodeTableSymbols(this.row,this.column,String(this.name), this.type, tree.getEnvironment(),null));
     if(this.type === Type.NULL){//Si la funcion es de tipo void
       TableReport.addTableSymbol(new NodeTableSymbols(this.row,this.column,String(this.name),"VOID", tree.getEnvironment(),null));
       tree.addEnvironment("MAIN");
