@@ -16,10 +16,10 @@ lex_identificador   [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*
 "null"			    	              return "nullVal";
 "true"			    	              return "trueVal";
 "false"			    	              return "falseVal";
-[0-9]+("."[0-9]+)+\b                  return "doubleVal";
-[0-9]+\b                              return "intVal";
-\"((\\\")|[^\n\"])*\"                 { yytext = yytext.substr(1,yyleng-2); return 'stringVal'; }
-\'((\\\')|[^\n\'])*\'	        	  { yytext = yytext.substr(1,yyleng-2); return 'charVal'; }
+[0-9]+("."[0-9]+)+\b            return "doubleVal";
+[0-9]+\b                        return "intVal";
+\"((\\\")|[^\n\"])*\"           { yytext = yytext.substr(1,yyleng-2); return 'stringVal'; }
+\'((\\\')|[^\n\'])*\'	        	{ yytext = yytext.substr(1,yyleng-2); return 'charVal'; }
 //---------------------------------------------------------------------------------
 
 "print"			    		return "Rprint";
@@ -140,6 +140,7 @@ SENTENCE
   : FUNCT                       { $$ = { val: 0, node: newNode(yy, yystate, $1.node)}; }
   | PRINT                       { $$ = { val: 0, node: newNode(yy, yystate, $1.node)}; }
   | DECLARATION PTOCOMA         { $$ = { val: 0, node: newNode(yy, yystate, $1.node)}; }
+  | CHANGE_VALUE_STRUCT         { $$ = { val: 0, node: newNode(yy, yystate, $1.node)}; }
   | ASSIGNMENT PTOCOMA          { $$ = { val: 0, node: newNode(yy, yystate, $1.node)}; }
   | SENTENCE_IF                 { $$ = { val: 0, node: newNode(yy, yystate, $1.node)}; }
   | SENTENCE_WHILE              { $$ = { val: 0, node: newNode(yy, yystate, $1.node)}; }
@@ -157,8 +158,20 @@ SENTENCE
   | error KEYCLS                { $$ = { val: 0, node: newNode(yy, yystate,'error')}; }
 ;
 
+CHANGE_VALUE_STRUCT
+  : ID PTO ACCESS '=' EXP PTOCOMA       { $$ = { val: 0, node: newNode(yy, yystate, $1,$2,$3.node,$4,$5.node,$6)}; }
+;
+
+
 CREATE_STRUCT
   : ID ID '=' ID PAROP L_E PARCLS PTOCOMA             { $$ = { val: 0, node: newNode(yy, yystate, $1,$2,$3,$4,$5, $6.node ,$7,$8)}; }
+  | ID ID '=' STRUCT_CASES PTOCOMA                    { $$ = { val: 0, node: newNode(yy, yystate, $1,$2,$3,$4.node,$5)}; }
+;
+
+STRUCT_CASES
+  : ID PAROP PARCLS                           { $$ = { val: 0, node: newNode(yy, yystate, $1,$2,$3)}; }
+  | ID PTO ACCESS                             { $$ = { val: 0, node: newNode(yy, yystate, $1,$2,$3.node)}; }
+  | ID                                        { $$ = { val: 0, node: newNode(yy, yystate, $1)}; }
 ;
 
 TEMPLATE_STRUCT
@@ -215,7 +228,13 @@ EXP
   | ID                                        { $$ = { val: 0, node: newNode(yy, yystate, $1)}; }
   | POST_FIXED                                { $$ = { val: 0, node: newNode(yy, yystate, $1.node)}; }
   | TERNARY                                   { $$ = { val: 0, node: newNode(yy, yystate, $1.node)}; }
+  | ID PTO ACCESS                             { $$ = { val: 0, node: newNode(yy, yystate, $1,$2,$3.node)}; }
   | METHODS                                   { $$ = { val: 0, node: newNode(yy, yystate, $1.node)}; }
+;
+
+ACCESS
+  : ID PTO ACCESS                           { $$ = { val: 0, node: newNode(yy, yystate, $1,$2,$3.node)}; }
+  | ID                                      { $$ = { val: 0, node: newNode(yy, yystate, $1)}; }
 ;
 
 METHODS
@@ -345,6 +364,8 @@ SENTENCE_DO_WHILE
 FUNCT
   : TIPO ID PAROP PARCLS BLOCK               { $$ = { val: 0, node: newNode(yy, yystate,$1.node,$2,$3,$4,$5.node)}; }
   | TIPO ID PAROP PARAMETERS PARCLS BLOCK    { $$ = { val: 0, node: newNode(yy, yystate,$1.node,$2,$3,$4.node,$5,$6.node)}; }
+  | ID ID PAROP PARCLS BLOCK                 { $$ = { val: 0, node: newNode(yy, yystate,$1,$2,$3,$4,$5.node)}; }
+  | ID ID PAROP PARAMETERS PARCLS BLOCK      { $$ = { val: 0, node: newNode(yy, yystate,$1,$2,$3,$4.node,$5,$6.node)}; }
 ;
 
 PARAMETERS
