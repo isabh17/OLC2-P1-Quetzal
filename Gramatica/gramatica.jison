@@ -47,6 +47,7 @@ lex_identificador   [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*
 "/"                 return '/';
 "%"                 return '%';
 "?"                 return '?';
+"#"                 return '#';
 
 //-------------------------------Relacionales-----------------------------------
 ">="                return '>=';
@@ -229,6 +230,7 @@ EXP
   | COROP CORCLS                              { $$ = new ListObjects([], @1.first_line, @1.first_column);; }
   | ID ACCESS_ARRAY                           { $$ = new AccessArray($1, $2, @1.first_line, @1.first_column); }
   | ID                                        { $$ = new Identifier($1, @1.first_line, @1.first_column, ENVIRONMENT.NULL); }
+  | '#' ID                                    { $$ = new CopyArray($2, @1.first_line, @1.first_column); }
   | POST_FIXED                                { $$ = $1; }
   | TERNARY                                   { $$ = $1; }
   | ID PTO ACCESS                             { $$ = new AccessAtributeStruct($1, $3, @1.first_line, @1.first_column); }
