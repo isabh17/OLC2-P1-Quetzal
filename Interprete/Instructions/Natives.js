@@ -1,9 +1,11 @@
 class Natives extends Instruction {
-  constructor(name, parameters, row, column) {
+  constructor(name, parameters, forArray, row, column) {
     super(row, column);
     this.name = name;
     this.parameters = parameters;
+    this.forArray = forArray;
     this.type = null;
+    this.objectType = null;
   }
 
   execute(tree, table) {
@@ -16,11 +18,30 @@ class Natives extends Instruction {
       if(value instanceof Exception){
         return value;
       }
-      if (typeof (value) !== 'number') {
-        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`El value del logaritmo debe ser de tipo numerico`,ENVIRONMENT.NULL));
-        return Exception("Semantico", "El value del logaritmo debe ser de tipo numerico", this.row, this.column);
+      if (typeof (value) !== 'number' && this.forArray === false) {
+        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "El valor a operar en logaritmo debe ser numerico", ENVIRONMENT.NULL));
+        return new Exception("Semantico", "El valor a operar en logaritmo debe ser numerico", this.row, this.column);
       }
-      var result = Math.log10(value);
+      var result = 0;
+      if(this.forArray === true){
+        result = value;
+        if(this.parameters[0].type !== Type.ARRAY){
+          ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"Se desea realizar una operacion de array a una variable que no es de tipo array", ENVIRONMENT.NULL));
+          return new Exception("Semantico", "Se desea realizar una operacion de array a una variable que no es de tipo array", this.row, this.column);
+        }
+        this.objectType = this.parameters[0].objectType;
+        if(this.objectType !== Type.INT && this.objectType !== Type.DOUBLE){
+          ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"Solo se puede operar seno, coseno, tangente o raiz de numeros", ENVIRONMENT.NULL));
+          return new Exception("Semantico", "Solo se puede operar seno, coseno, tangente o raiz de numeros", this.row, this.column);
+        }
+      }
+      if(this.forArray === true){
+        for(var i=0; i<result.length; i++){
+          result[i] = Math.log10(result[i]);
+        }
+      }else{
+        result = Math.log10(value);
+      }
       if (Number.isInteger(result)) {
         this.type = Type.INT;
       } else {
@@ -36,19 +57,55 @@ class Natives extends Instruction {
       if(value instanceof Exception){
         return value;
       }
-      if (typeof (value) !== 'number') {
-        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"El value del logaritmo debe ser de tipo numerico",ENVIRONMENT.NULL));
-        return Exception("Semantico", "El value del logaritmo debe ser de tipo numerico", this.row, this.column);
+      if (typeof (value) !== 'number' && this.forArray === false) {
+        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "El valor a operar en seno, coseno, tangente o raiz debe ser numerico", ENVIRONMENT.NULL));
+        return new Exception("Semantico", "El valor a operar en seno, coseno, tangente o raiz debe ser numerico", this.row, this.column);
       }
       var result = 0;
+      if(this.forArray === true){
+        result = value;
+        if(this.parameters[0].type !== Type.ARRAY){
+          ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"Se desea realizar una operacion de array a una variable que no es de tipo array", ENVIRONMENT.NULL));
+          return new Exception("Semantico", "Se desea realizar una operacion de array a una variable que no es de tipo array", this.row, this.column);
+        }
+        this.objectType = this.parameters[0].objectType;
+        if(this.objectType !== Type.INT && this.objectType !== Type.DOUBLE){
+          ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"Solo se puede operar seno, coseno, tangente o raiz de numeros", ENVIRONMENT.NULL));
+          return new Exception("Semantico", "Solo se puede operar seno, coseno, tangente o raiz de numeros", this.row, this.column);
+        }
+      }
       if (this.name === 'sin') {
-        result = Math.sin(value*Math.PI/180);
+        if(this.forArray === true){
+          for(var i=0; i<result.length; i++){
+            result[i] = Math.sin(result[i]*Math.PI/180);
+          }
+        }else{
+          result = Math.sin(value*Math.PI/180);
+        }
       } else if (this.name === 'cos') {
-        result = Math.cos(value*Math.PI/180);
+        if(this.forArray === true){
+          for(var i=0; i<result.length; i++){
+            result[i] = Math.cos(result[i]*Math.PI/180);
+          }
+        }else{
+            result = Math.cos(value*Math.PI/180); 
+        }
       } else if (this.name === 'tan') {
-        result = Math.tan(value*Math.PI/180);
+        if(this.forArray === true){
+          for(var i=0; i<result.length; i++){
+            result[i] = Math.tan(result[i]*Math.PI/180);
+          }
+        }else{
+            result = Math.tan(value*Math.PI/180); 
+        }
       } else if (this.name === 'sqrt') {
-        result = Math.sqrt(value);
+        if(this.forArray === true){
+          for(var i=0; i<result.length; i++){
+            result[i] = Math.sqrt(result[i]);
+          }
+        }else{
+            result = Math.sqrt(value);
+        }
       }
       if (Number.isInteger(result)) {
         this.type = Type.INT;
@@ -83,6 +140,8 @@ class Natives extends Instruction {
       if(this.parameters[0].type === Type.BOOLEAN) result = "boolean";
       if(this.parameters[0].type === Type.CHAR) result = "char";
       if(this.parameters[0].type === Type.STRING) result = "string";
+      if(this.parameters[0].type === Type.ARRAY) result = "array";
+      if(this.parameters[0].type === Type.STRUCT) result = "struct";
       this.type = Type.STRING;
       if (result === "") {
         ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"No se encontro referencia al parametro en funcion nativa:  " + this.name,ENVIRONMENT.NULL));

@@ -19,6 +19,7 @@ class ChangeValueArray extends Instruction{
     }
     this.type = actualValue.objectType;
     actualValue = actualValue.getValue();
+    var positions = [];
     for(var i=0; i<this.parameters.length; i++){// Se verifica que todas las posiciones que vengan sean enteros
       var aux = this.parameters[i].execute(tree, table);
       if(aux instanceof Exception) return aux;
@@ -26,14 +27,14 @@ class ChangeValueArray extends Instruction{
         ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Se requiere un atributo numerico para la posicion del arreglo", ENVIRONMENT.DO));
         return new Exception("Semantico", "Se requiere un atributo numerico para la posicion del arreglo", this.row, this.column);
       }
-      this.parameters[i] = aux;
+      positions.push(aux);
     }
-    for(var i=0; i<this.parameters.length-1; i++){
-      if(this.parameters[i]< 0 || this.parameters[i]>actualValue.length-1){
+    for(var i=0; i<positions.length-1; i++){
+      if(positions[i]< 0 || positions[i]>actualValue.length-1){
         ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Se requiere un atributo numerico para la posicion del arreglo", ENVIRONMENT.DO));
         return new Exception("Semantico", "El arreglo no contiene la posicion solicitada "+String(this.parameters[i]), this.row, this.column);
       }
-      actualValue = actualValue[this.parameters[i]];
+      actualValue = actualValue[positions[i]];
     }
     var newVal = this.expression.execute(tree, table);
     if(newVal instanceof Exception) return newVal;
@@ -44,7 +45,7 @@ class ChangeValueArray extends Instruction{
       ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Tipos erroneos al asignar valor al arreglo "+this.expression.type+"!="+this.type, ENVIRONMENT.NULL));
       return new Exception("Semantico", "Tipos erroneos al asignar valor al arreglo "+this.expression.type+"!="+this.type, this.row, this.column);
     }
-    actualValue[this.parameters[this.parameters.length-1]] = newVal;
+    actualValue[positions[positions.length-1]] = newVal;
     return null;
   }
 }

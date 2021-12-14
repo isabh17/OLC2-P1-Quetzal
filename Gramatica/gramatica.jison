@@ -231,10 +231,17 @@ EXP
   | ID ACCESS_ARRAY                           { $$ = new AccessArray($1, $2, @1.first_line, @1.first_column); }
   | ID                                        { $$ = new Identifier($1, @1.first_line, @1.first_column, ENVIRONMENT.NULL); }
   | '#' ID                                    { $$ = new CopyArray($2, @1.first_line, @1.first_column); }
+  | ARRAY_DOT                                 { $$ = $1; }
   | POST_FIXED                                { $$ = $1; }
   | TERNARY                                   { $$ = $1; }
   | ID PTO ACCESS                             { $$ = new AccessAtributeStruct($1, $3, @1.first_line, @1.first_column); }
   | METHODS                                   { $$ = $1; }
+;
+
+ARRAY_DOT
+  : ID '#'                                    { new Dot($1, @1.first_line, @1.first_column); }
+  | ID ACCESS_ARRAY '#'                       { $$ = new AccessArray($1, $2, @1.first_line, @1.first_column); }
+  | ID COROP EXP DOSPTOS EXP CORCLS '#'       { $$ = new RangeArray($1, $3, $5, @1.first_line, @1.first_column); }
 ;
 
 ACCESS_ARRAY
@@ -389,14 +396,16 @@ PARAMETERS
 
 PARAMETER
   : TIPO ID                     { $$={"Identifier":$2, "Type":$1, "objectType": null}; }
-  | TIPO COROP CORCLS ID        { $$={"Identifier":$4, "Type":$1, "objectType": Type.ARRAY}; }
+  | TIPO COROP CORCLS ID        { $$={"Identifier":$4, "Type":Type.ARRAY, "objectType": $1}; }
   | ID ID                       { $$={"Identifier":$2, "Type":$1, "objectType":null}; }
 ;
 
 CALL_FUNCTION
-  : ID PAROP L_E PARCLS                         { $$ = new CallFunction($1, $3, @1.first_line,  @1.first_column); }
-  | ID PAROP PARCLS                             { $$ = new CallFunction($1, [], @1.first_line,  @1.first_column); }
-  | STRING PAROP L_E PARCLS                     { $$ = new CallFunction($1, $3, @1.first_line,  @1.first_column); }
+  : ID PAROP L_E PARCLS                         { $$ = new CallFunction($1, $3, false, @1.first_line,  @1.first_column); }
+  | ID '#' PAROP L_E PARCLS                     { $$ = new CallFunction($1, $4, true, @1.first_line,  @1.first_column); }
+  | ID PAROP PARCLS                             { $$ = new CallFunction($1, [], false, @1.first_line,  @1.first_column); }
+  | STRING PAROP L_E PARCLS                     { $$ = new CallFunction($1, $3, false, @1.first_line,  @1.first_column); }
+  | STRING '#' PAROP L_E PARCLS                 { $$ = new CallFunction($1, $4, true, @1.first_line,  @1.first_column); }
 ;
 
 BREAKS

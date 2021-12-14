@@ -5,10 +5,10 @@ class Aritmetica extends Instruction{
     this.operLeft = operLeft;
     this.operRight = operRight;
     this.type = null;
+    this.objectType = null;
   }
   
   execute(tree, table){
-    //tree.addEnvironment("Ari");
     var left = this.operLeft.execute(tree, table);
     if (left instanceof Exception) return left;
     if (this.operRight != null){
@@ -19,25 +19,32 @@ class Aritmetica extends Instruction{
       if (this.operLeft.type === Type.INT && this.operRight.type === Type.INT){
         this.type = Type.INT;
         return this.getVal(this.operLeft.type, left) + this.getVal(this.operRight.type, right);
-      }else if (this.operLeft.type == Type.INT && this.operRight.type == Type.DOUBLE || this.operLeft.type == Type.DOUBLE && this.operRight.type == Type.INT){
+      }else if (this.operLeft.type === Type.INT && this.operRight.type === Type.DOUBLE || this.operLeft.type === Type.DOUBLE && this.operRight.type === Type.INT){
         this.type = Type.DOUBLE;
         return this.getVal(this.operLeft.type, left) + this.getVal(this.operRight.type, right);
-      }else if (this.operLeft.type == Type.INT && this.operRight.type == Type.CHAR || this.operLeft.type == Type.CHAR && this.operRight.type == Type.INT){
+      }else if (this.operLeft.type === Type.INT && this.operRight.type === Type.CHAR || this.operLeft.type === Type.CHAR && this.operRight.type === Type.INT){
         this.type = Type.INT;
         return this.getVal(this.operLeft.type, left) + this.getVal(this.operRight.type, right);
-      }else if (this.operLeft.type == Type.DOUBLE && this.operRight.type == Type.DOUBLE ){
+      }else if (this.operLeft.type === Type.DOUBLE && this.operRight.type === Type.DOUBLE ){
         this.type = Type.DOUBLE;
         return this.getVal(this.operLeft.type, left) + this.getVal(this.operRight.type, right);
-      }else if (this.operLeft.type == Type.DOUBLE && this.operRight.type == Type.CHAR || this.operLeft.type == Type.CHAR && this.operRight.type == Type.DOUBLE){
+      }else if (this.operLeft.type === Type.DOUBLE && this.operRight.type === Type.CHAR || this.operLeft.type === Type.CHAR && this.operRight.type === Type.DOUBLE){
         this.type = Type.DOUBLE;
         return this.getVal(this.operLeft.type, left) + this.getVal(this.operRight.type, right);
-      }else if (this.operLeft.type == Type.CHAR && this.operRight.type == Type.CHAR ){
+      }else if (this.operLeft.type === Type.CHAR && this.operRight.type === Type.CHAR ){
         this.type = Type.INT;
         return this.getVal(this.operLeft.type, left) + this.getVal(this.operRight.type, right);
+      }else if (this.operLeft.type === Type.ARRAY && this.operRight.type === Type.INT){
+        this.type = Type.ARRAY;
+        this.objectType = this.operLeft.objectType;
+        var value = this.getVal(this.operRight.type, right);
+        for(var i=0; i<left.length; i++){
+          left[i] = left[i]+value;
+        }
+        return left;
       }
       ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`Tipos erroneos en operación suma.`,ENVIRONMENT.NULL));
       return new Exception("Semantico", "Tipos erroneos en operación suma."+this.operLeft.type+"!="+this.operRight.type, this.row, this.column);
-    
     }else if (this.operator === ARITMETIC_OPERATOR.REST){
       if (this.operLeft.type === Type.INT && this.operRight.type === Type.INT){
         this.type = Type.INT;
@@ -57,6 +64,14 @@ class Aritmetica extends Instruction{
       }else if (this.operLeft.type === Type.CHAR && this.operRight.type === Type.CHAR ){
         this.type = Type.INT;
         return this.getVal(this.operLeft.type, left) - this.getVal(this.operRight.type, right);
+      }else if (this.operLeft.type === Type.ARRAY && this.operRight.type === Type.INT ){
+        this.type = Type.ARRAY;
+        this.objectType = this.operLeft.objectType;
+        var value = this.getVal(this.operRight.type, right);
+        for(var i=0; i<left.length; i++){
+          left[i] = left[i]-value;
+        }
+        return left;
       }
       ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`Tipos erroneos en operación resta.`,ENVIRONMENT.NULL));
       return new new Exception("Semantico", "Tipos erroneos en operación resta.", this.row, this.column);
@@ -80,6 +95,14 @@ class Aritmetica extends Instruction{
       }else if (this.operLeft.type === Type.CHAR && this.operRight.type === Type.CHAR){
         this.type = Type.INT;
         return this.getVal(this.operLeft.type, left) * this.getVal(this.operRight.type, right);
+      }else if (this.operLeft.type === Type.ARRAY && this.operRight.type === Type.INT ){
+        this.type = Type.ARRAY;
+        this.objectType = this.operLeft.objectType;
+        var value = this.getVal(this.operRight.type, right);
+        for(var i=0; i<left.length; i++){
+          left[i] = left[i]*value;
+        }
+        return left;
       }
       ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`Tipos erroneos en operación multiplicación.`,ENVIRONMENT.NULL));
       return new Exception("Semantico", "Tipos erroneos en operación multiplicación.", this.row, this.column);
@@ -134,6 +157,18 @@ class Aritmetica extends Instruction{
         var result = this.getVal(this.operLeft.type, left) / this.getVal(this.operRight.type, right);
         Number.isInteger(result) ? this.type = Type.INT : this.type = Type.DOUBLE;
         return result;
+      }else if (this.operLeft.type === Type.ARRAY && this.operRight.type === Type.INT ){
+        this.type = Type.ARRAY;
+        this.objectType = this.operLeft.objectType;
+        var value = this.getVal(this.operRight.type, right);
+        if(value === 0){
+          ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`No es posible dividir entre cero`,ENVIRONMENT.NULL));
+          return new Exception("Semantico", "No es posible dividir entre cero", this.row, this.column);
+        }
+        for(var i=0; i<left.length; i++){
+          left[i] = left[i]/value;
+        }
+        return left;
       }
       ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`Tipos erroneos en operación división.`,ENVIRONMENT.NULL));
       return new Exception("Semantico", "Tipos erroneos en operación división.", this.row, this.column);
@@ -166,6 +201,14 @@ class Aritmetica extends Instruction{
           pr+=text;
         }
         return pr;
+      }else if (this.operLeft.type === Type.ARRAY && this.operRight.type === Type.INT ){
+        this.type = Type.ARRAY;
+        this.objectType = this.operLeft.objectType;
+        var value = this.getVal(this.operRight.type, right);
+        for(var i=0; i<left.length; i++){
+          left[i] = left[i]^value;
+        }
+        return left;
       }
       ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`Tipos erroneos en operación potencia.`,ENVIRONMENT.NULL));
       return new Exception("Semantico", "Tipos erroneos en operación potencia.", this.row, this.column);
@@ -219,6 +262,18 @@ class Aritmetica extends Instruction{
         var result = this.getVal(this.operLeft.type, left) % this.getVal(this.operRight.type, right);
         Number.isInteger(result) ? this.type = Type.INT : this.type = Type.DOUBLE;
         return result;
+      }else if (this.operLeft.type === Type.ARRAY && this.operRight.type === Type.INT ){
+        this.type = Type.ARRAY;
+        this.objectType = this.operLeft.objectType;
+        var value = this.getVal(this.operRight.type, right);
+        if(value === 0){
+          ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`No es posible dividir entre cero`,ENVIRONMENT.NULL));
+          return new Exception("Semantico", "No es posible dividir entre cero", this.row, this.column);
+        }
+        for(var i=0; i<left.length; i++){
+          left[i] = left[i]%value;
+        }
+        return left;
       }
       ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`Tipos erroneos en operación división.`,ENVIRONMENT.NULL));
       return new Exception("Semantico", "Tipos erroneos en operación división.", this.row, this.column);
@@ -251,6 +306,8 @@ class Aritmetica extends Instruction{
       return (JSON.parse(value)===true);
     }else if( type === Type.CHAR){
       return parseInt(value.charCodeAt(0));
+    }else if (type === Type.ARRAY){
+      return value;
     }
     return String(value);
   }

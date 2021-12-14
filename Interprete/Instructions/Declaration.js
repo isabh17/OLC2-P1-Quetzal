@@ -10,6 +10,11 @@ class Declaration extends Instruction{
     if(typeof(this.identifier)==='string'){//Para declarar multiples variables
       var value = this.expression.execute(tree, table);
       if (value instanceof Exception) return value;
+      if(this.type === Type.INT && this.expression.type === Type.DOUBLE){
+        if(Number.isInteger(value)){
+          this.expression.type = Type.INT;
+        }
+      }
       if (this.type != this.expression.type){
         ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Los types de variables no concuerdan: "+String(this.type)+"!="+String(this.expression.type),ENVIRONMENT.NULL));
         return new Exception("Semantico", "Los types de variables no concuerdan: "+String(this.type)+"!="+String(this.expression.type), this.row, this.column);
