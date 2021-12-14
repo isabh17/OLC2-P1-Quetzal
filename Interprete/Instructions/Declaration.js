@@ -12,21 +12,17 @@ class Declaration extends Instruction{
       if (value instanceof Exception) return value;
       if (this.type != this.expression.type){
         ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Los types de variables no concuerdan: "+String(this.type)+"!="+String(this.expression.type),ENVIRONMENT.NULL));
-        return new Exception("Semantico", "Los types de variables no concuerdan: "+String(this.type)+"!="+String(this.expression.type));
+        return new Exception("Semantico", "Los types de variables no concuerdan: "+String(this.type)+"!="+String(this.expression.type), this.row, this.column);
       }
       if(this.type===Type.CHAR){
-        //console.log(String.fromCharCode(value));
         value = String.fromCharCode(value);
       }
       var symbol = new Symbol(String(this.identifier), this.type, value, this.row, this.column, null, null);
-      //console.log(symbol);
       var res = table.addSymbol(symbol);
-      //tree.addVariable([String(this.identifier), this.type, tree.getEnvironment(), this.row, this.column]);
       if (res instanceof Exception) return res;
       TableReport.addTableSymbol(new NodeTableSymbols(this.row,this.column,String(this.identifier), this.type, tree.getEnvironment(),value));
       return null;
     }else{
-      var exceptions = [];
       for(var variable of this.identifier){
         var value = "";
         if(this.type===Type.INT){
@@ -42,13 +38,9 @@ class Declaration extends Instruction{
         }
         var symbol = new Symbol(String(variable), this.type, value, this.row, this.column, null, null);
         var res = table.addSymbol(symbol);
-        if(res instanceof Exception) exceptions.push(res);
+        if(res instanceof Exception) return res;
       }
-      if(exceptions===[]){
-        return null;
-      }else{
-        return exceptions;
-      }
+      return null;
     }
   }
 }

@@ -15,6 +15,8 @@ class Identifier extends Instruction{
     }else{
       if(symbol.getType() === Type.STRUCT){
         this.objectType = symbol.objectType;
+      }else if(symbol.getType() === Type.ARRAY){
+        this.objectType = symbol.objectType;
       }
       this.type = symbol.getType();
       if(symbol.getValue() === null || symbol.getValue() === "null"){

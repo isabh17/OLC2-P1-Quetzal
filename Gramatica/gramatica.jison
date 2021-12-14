@@ -154,6 +154,7 @@ SENTENCE
   | POST_FIXED PTOCOMA          { $$ = $1; }
   | TEMPLATE_STRUCT             { $$ = $1; }
   | CREATE_STRUCT               { $$ = $1; }
+  | METHODS PTOCOMA             { $$ = $1; }
   | error PTOCOMA               { ErrorList.addError(new ErrorNode(this._$.first_line,this._$.first_column,new ErrorType(EnumErrorType.SYNTACTIC),` Error sintactico `,ENVIRONMENT.NULL)); $$ = new InstructionError(); }
   | error KEYCLS                { ErrorList.addError(new ErrorNode(this._$.first_line,this._$.first_column,new ErrorType(EnumErrorType.SYNTACTIC),` Error sintactico `,ENVIRONMENT.NULL)); $$ = new InstructionError(); }
 ;
@@ -186,8 +187,10 @@ PRINT
 DECLARATION
   : TIPO IDENTIFIERS                    { $$ = new Declaration($1, $2, null, @1.first_line, @1.first_column); }
   | TIPO ID '=' EXP                     { $$ = new Declaration($1, $2, $4, @1.first_line, @1.first_column); }
-  | TIPO COROP CORCLS IDENTIFIERS       { $$ = new Declaration(null, null, null, @1.first_line, @1.first_column); }
-  | TIPO COROP CORCLS ID '=' EXP        { $$ = new Declaration(null, null, null, @1.first_line, @1.first_column); }
+  | TIPO COROP CORCLS ID '=' EXP        { $$ = new DeclarationArray($1, $4, $6, @1.first_line, @1.first_column); }
+  | TIPO COROP CORCLS IDENTIFIERS       { $$ = new DeclarationArray($1, $4, null, @1.first_line, @1.first_column); }
+  | ID COROP CORCLS ID '=' EXP          { $$ = new DeclarationArray($1, $4, $6, @1.first_line, @1.first_column); }
+  | ID COROP CORCLS IDENTIFIERS         { $$ = new DeclarationArray($1, $4, null, @1.first_line, @1.first_column); }
 ;
 
 IDENTIFIERS
@@ -196,9 +199,8 @@ IDENTIFIERS
 ;
 
 ASSIGNMENT
-  : ID '=' EXP                                            { $$ = new Assignation($1, $3, @1.first_line, @1.first_column); }
-  | ID COROP CORCLS '=' PARAMETROS                        {  }
-  //| COROP CORCLS ID '=' COROP PARAMETROS CORCLS           {  }
+  : ID '=' EXP                                     { $$ = new Assignation($1, $3, @1.first_line, @1.first_column); }
+  | ID ACCESS_ARRAY '=' EXP                        { $$ = new ChangeValueArray($1, $2, $4, @1.first_line, @1.first_column); }
 ;
 
 EXP
@@ -222,13 +224,20 @@ EXP
   | CALL_FUNCTION                             { $$ = $1; }
   | PRIMITIVO                                 { $$ = $1; }
   | PAROP EXP PARCLS                          { $$ = $2; }
-  | COROP L_E CORCLS                          { $$ = ($1.toString()+$2.toString()+$3.toString()); }
-  | ID COROP L_E CORCLS                       { $$ = ($1.toString()+$2.toString()+$3.toString()+$4.toString()); }
+  | ID COROP EXP DOSPTOS EXP CORCLS           { $$ = new RangeArray($1, $3, $5, @1.first_line, @1.first_column); }
+  | COROP L_E CORCLS                          { $$ = new ListObjects($2, @1.first_line, @1.first_column); }
+  | COROP CORCLS                              { $$ = new ListObjects([], @1.first_line, @1.first_column);; }
+  | ID ACCESS_ARRAY                           { $$ = new AccessArray($1, $2, @1.first_line, @1.first_column); }
   | ID                                        { $$ = new Identifier($1, @1.first_line, @1.first_column, ENVIRONMENT.NULL); }
   | POST_FIXED                                { $$ = $1; }
   | TERNARY                                   { $$ = $1; }
   | ID PTO ACCESS                             { $$ = new AccessAtributeStruct($1, $3, @1.first_line, @1.first_column); }
   | METHODS                                   { $$ = $1; }
+;
+
+ACCESS_ARRAY
+  : ACCESS_ARRAY COROP EXP CORCLS             { $$=$1; $$.push($3); }
+  | COROP EXP CORCLS                          { $$=[]; $$.push($2); }
 ;
 
 ACCESS
@@ -249,6 +258,8 @@ METHOD
   | LENGTH              { $$ = $1; }
   | CARACTERPOSC        { $$ = $1; }
   | PARSE               { $$ = $1; }
+  | PUSH                { $$ = $1; }
+  | POP                 { $$ = $1; }
 ;
 
 TERNARY
@@ -361,10 +372,12 @@ SENTENCE_DO_WHILE
 ;
 
 FUNCT
-  : TIPO ID PAROP PARCLS BLOCK               { $$ =new Function($1, $2, {}, $5, @1.first_line,  @1.first_column, null); }
-  | TIPO ID PAROP PARAMETERS PARCLS BLOCK    { $$ =new Function($1, $2, $4, $6, @1.first_line,  @1.first_column, null); }
-  | ID ID PAROP PARCLS BLOCK                 { $$ =new Function(Type.STRUCT, $2, {}, $5, @1.first_line,  @1.first_column, $1); }
-  | ID ID PAROP PARAMETERS PARCLS BLOCK      { $$ =new Function(Type.STRUCT, $2, $4, $6, @1.first_line,  @1.first_column, $1); }
+  : TIPO ID PAROP PARCLS BLOCK                            { $$ =new Function($1, $2, {}, $5, @1.first_line,  @1.first_column, null); }
+  | TIPO ID PAROP PARAMETERS PARCLS BLOCK                 { $$ =new Function($1, $2, $4, $6, @1.first_line,  @1.first_column, null); }
+  | TIPO COROP CORCLS ID PAROP PARAMETERS PARCLS BLOCK    { $$ =new Function(Type.ARRAY, $4, $6, $8, @1.first_line,  @1.first_column, $1); }
+  | TIPO COROP CORCLS ID PAROP PARCLS BLOCK               { $$ =new Function(Type.ARRAY, $4, {}, $7, @1.first_line,  @1.first_column, $1); }
+  | ID ID PAROP PARCLS BLOCK                              { $$ =new Function(Type.STRUCT, $2, {}, $5, @1.first_line,  @1.first_column, $1); }
+  | ID ID PAROP PARAMETERS PARCLS BLOCK                   { $$ =new Function(Type.STRUCT, $2, $4, $6, @1.first_line,  @1.first_column, $1); }
 ;
 
 PARAMETERS
@@ -373,9 +386,9 @@ PARAMETERS
 ;
 
 PARAMETER
-  : TIPO ID                     { $$={"Identifier":$2, "Type":$1}; }
-  //| TIPO ID COROP CORCLS        { $$=($1.toString()+$2.toString()+$3.toString()+$4.toString()); }
-  | ID ID                       { $$={"Identifier":$2, "Type":$1}; }
+  : TIPO ID                     { $$={"Identifier":$2, "Type":$1, "objectType": null}; }
+  | TIPO COROP CORCLS ID        { $$={"Identifier":$4, "Type":$1, "objectType": Type.ARRAY}; }
+  | ID ID                       { $$={"Identifier":$2, "Type":$1, "objectType":null}; }
 ;
 
 CALL_FUNCTION

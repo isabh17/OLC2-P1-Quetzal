@@ -51,14 +51,14 @@ class NativeMethods extends Instruction {
       if(symbol === null){
         ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"Error en "+this.name+", no se encontró la variable.",ENVIRONMENT.NULL));
         return new Exception("Semantico", "Error en "+this.name+", no se encontró la variable.", this.row, this.column);
-      }else if(symbol.getType()!== Type.STRING){
+      }else if(symbol.getType()!== Type.STRING && symbol.getType()!== Type.ARRAY){
         ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Error en "+this.name+", la variable no contiene un string.",ENVIRONMENT.NULL));
         return new Exception("Semantico", "Error en "+this.name+", la variable no contiene un string.", this.row, this.column);
       }
       var value = symbol.getValue();
-      value = value.length;
+      var leng = value.length;
       this.type = Type.INT;
-      return value;
+      return leng;
     } else if (this.method === 'subString') {
       if (this.parameters.length !== 2) {
         ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),  "Solo se admite 2 parameters en funcion nativa: " + this.name,ENVIRONMENT.NULL));
@@ -139,6 +139,44 @@ class NativeMethods extends Instruction {
         this.type = Type.BOOLEAN;
         return value;
       }
+    }else if (this.method === 'push') {
+      if (this.parameters.length !== 1) {
+        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Solo se admite 1 parameters en funcion nativa: " + this.name,ENVIRONMENT.NULL));
+        return new Exception("Semantico", "Solo se admite 1 parameters en funcion nativa: " + this.name, this.row, this.column);
+      }
+      var value = this.parameters[0].execute(tree, table);
+      if(value instanceof Exception ) return value;
+      var symbol = table.getSymbol(String(this.name));
+      if(symbol === null){
+        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Error en "+this.name+", no se encontró la variable.",ENVIRONMENT.NULL));
+        return new Exception("Semantico", "Error en "+this.name+", no se encontró la variable.", this.row, this.column);
+      }else if(symbol.getType()!== Type.ARRAY){
+        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Error en "+this.name+", la no es un arreglo.", ENVIRONMENT.NULL));
+        return new Exception("Semantico", "Error en "+this.name+", la no es un arreglo.", this.row, this.column);
+      }
+      if(this.parameters[0].type !== symbol.objectType){
+        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Error en "+this.name+", se intenta agregar un valor de tipo distinto al que tiene el array.", ENVIRONMENT.NULL));
+        return new Exception("Semantico", "Error en "+this.name+", se intenta agregar un valor de tipo distinto al que tiene el array.", this.row, this.column);
+      }
+      var arr = symbol.getValue();
+      arr.push(value);
+      return null;
+    }else if (this.method === 'pop') {
+      if (this.parameters.length !== 0) {
+        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Solo se admite 1 parameters en funcion nativa: " + this.name,ENVIRONMENT.NULL));
+        return new Exception("Semantico", "Solo se admite 1 parameters en funcion nativa: " + this.name, this.row, this.column);
+      }
+      var symbol = table.getSymbol(String(this.name));
+      if(symbol === null){
+        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Error en "+this.name+", no se encontró la variable.",ENVIRONMENT.NULL));
+        return new Exception("Semantico", "Error en "+this.name+", no se encontró la variable.", this.row, this.column);
+      }else if(symbol.getType()!== Type.ARRAY){
+        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Error en "+this.name+", la no es un arreglo.", ENVIRONMENT.NULL));
+        return new Exception("Semantico", "Error en "+this.name+", la no es un arreglo.", this.row, this.column);
+      }
+      var arr = symbol.getValue();
+      arr.pop();
+      return null;
     }
     return null;
   }

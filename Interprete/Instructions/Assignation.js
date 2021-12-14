@@ -12,7 +12,7 @@ class Assignation extends Instruction{
     var symbol = table.getSymbol(this.identifier);
     if (symbol === null){
       ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`La variable `+this.identifier+" no existe",ENVIRONMENT.NULL));
-      return new Exception("Semantico", "La variable "+this.identifier+" no existe");
+      return new Exception("Semantico", "La variable "+this.identifier+" no existe", this.row, this.column);
     }
     if (symbol.getType() !== this.expression.type && ( symbol.getType() === Type.STRUCT && this.expression.type !== Type.NULL) ){
       if(symbol.getType() === Type.DOUBLE && this.expression.type === Type.INT){

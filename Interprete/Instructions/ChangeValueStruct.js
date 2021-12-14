@@ -35,7 +35,9 @@ class ChangeValueStruct extends Instruction{
       actualValue = actualValue.getValue();
       actualValue = actualValue[this.parameters[i]];
     }
-    if( this.expression.type !== actualValue.getType() && (typeof(actualValue.getType()) === 'sring' && this.expression.type !== Type.STRUCT )){
+
+    /*Cambio aqui, antes estaba mal escrito "SRING" y se arreglo a "STRING                      v"*/
+    if( this.expression.type !== actualValue.getType() && (typeof(actualValue.getType()) === 'string' && this.expression.type !== Type.STRUCT )){
       ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"Tipos erroneos al asignar valor a struct", ENVIRONMENT.NULL));
       return new Exception("Semantico", "Tipos erroneos al asignar valor a struct", this.row, this.column);
     }
