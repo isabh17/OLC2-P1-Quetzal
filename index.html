@@ -138,7 +138,7 @@
         <hr>
         <div class="row justify-content-md-center">
             <div class="col-md-6 justify-content-md-center">
-                <input type="button" value="Tabla de Simbolos" class="btn btn-block btn-md btn-info" >
+                <input type="button" value="Tabla de Simbolos" class="btn btn-block btn-md btn-info" id="BtnTableSimbol">
             </div>
             <div class="col-md-6">
                 <input type="button" value="Reporte Gramatical" class="btn btn-block btn-md btn-warning" >
@@ -229,6 +229,7 @@
 
     <!--<script src="./AST/chart/chart.css"></script>-->
     <script src="./Utils/moveDivs.js"></script>
+    <script src="./jsPDF/jspdf.min.js"></script>
     <script>
         
         var openFile = document.getElementById("open-file");
@@ -310,7 +311,7 @@
             }*/
             //generateTree([res.node]);
             showTableErrorsSymbols();
-            //showTableExecuteSymbols();
+            //showTableExecuteSymbols();            
         }
 
         function deleteKeys(text){
@@ -343,7 +344,24 @@
             }
             return out;
         }
+        document.getElementById('BtnTableSimbol').onclick = function (){
+            var doc = new jspdf.jsPDF()
 
+                // Simple data example
+                var head = [['ID', 'Country', 'Rank', 'Capital']]
+                var body = [
+                [1, 'Denmark', 7.526, 'Copenhagen'],
+                [2, 'Switzerland', 7.509, 'Bern'],
+                [3, 'Iceland', 7.501, 'Reykjavík'],
+                ]
+                doc.autoTable({ head: head, body: body })
+
+                // Simple html example
+                doc.autoTable({ html: '#table' })
+
+                doc.save('table.pdf')
+            showTableExecuteSymbols();
+        }
         document.getElementById('BtnCompilar').onclick = function (){
             var Codigo = Fuente.getValue();
             Compile(Codigo);
