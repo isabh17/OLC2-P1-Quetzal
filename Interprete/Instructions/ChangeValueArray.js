@@ -24,14 +24,14 @@ class ChangeValueArray extends Instruction{
       var aux = this.parameters[i].execute(tree, table);
       if(aux instanceof Exception) return aux;
       if(this.parameters[i].type !== Type.INT){
-        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Se requiere un atributo numerico para la posicion del arreglo", ENVIRONMENT.DO));
+        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Se requiere un atributo numerico para la posicion del arreglo", ENVIRONMENT.NULL));
         return new Exception("Semantico", "Se requiere un atributo numerico para la posicion del arreglo", this.row, this.column);
       }
       positions.push(aux);
     }
     for(var i=0; i<positions.length-1; i++){
       if(positions[i]< 0 || positions[i]>actualValue.length-1){
-        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Se requiere un atributo numerico para la posicion del arreglo", ENVIRONMENT.DO));
+        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Se requiere un atributo numerico para la posicion del arreglo", ENVIRONMENT.NULL));
         return new Exception("Semantico", "El arreglo no contiene la posicion solicitada "+String(this.parameters[i]), this.row, this.column);
       }
       actualValue = actualValue[positions[i]];

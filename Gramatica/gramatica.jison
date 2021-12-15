@@ -317,17 +317,23 @@ POST_FIXED
 ;
 
 CUERPO
-  : PRINT                       {  $$ = $1; }
-  | DECLARATION                 {  $$ = $1; }
-  | ASSIGNMENT                  {  $$ = $1; }
-  | SENTENCE_WHILE              {  $$ = $1; }
-  | SENTENCE_DO_WHILE           {  $$ = $1; }
-  | SENTENCE_SWITCH             {  $$ = $1; }
-  | SENTENCE_FOR                {  $$ = $1; }
-  | RETUR                       {  $$ = $1; }
-  | BREAKS                      {  $$ = $1; }
-  | CONTINU                     {  $$ = $1; }
-  | CALL_FUNCTION PTOCOMA       {  $$ = $1,$2; }
+  : FUNCT                       { $$ = $1; }
+  | PRINT                       { $$ = $1; }
+  | DECLARATION PTOCOMA         { $$ = $1; }
+  | CHANGE_VALUE_STRUCT         { $$ = $1; }
+  | ASSIGNMENT PTOCOMA          { $$ = $1; }
+  | SENTENCE_WHILE              { $$ = $1; }
+  | SENTENCE_DO_WHILE           { $$ = $1; }
+  | SENTENCE_SWITCH             { $$ = $1; }
+  | SENTENCE_FOR                { $$ = $1; }
+  | RETUR                       { $$ = $1; }
+  | BREAKS                      { $$ = $1; }
+  | CONTINU                     { $$ = $1; }
+  | CALL_FUNCTION PTOCOMA       { $$ = $1; }
+  | POST_FIXED PTOCOMA          { $$ = $1; }
+  | TEMPLATE_STRUCT             { $$ = $1; }
+  | CREATE_STRUCT               { $$ = $1; }
+  | METHODS PTOCOMA             { $$ = $1; }
   | error PTOCOMA               { ErrorList.addError(new ErrorNode(this._$.first_line,this._$.first_column,new ErrorType(EnumErrorType.SYNTACTIC),` Error sintactico `,ENVIRONMENT.NULL)); $$ = new InstructionError(); }
   | error KEYCLS                { ErrorList.addError(new ErrorNode(this._$.first_line,this._$.first_column,new ErrorType(EnumErrorType.SYNTACTIC),` Error sintactico `,ENVIRONMENT.NULL)); $$ = new InstructionError(); }
 ;
