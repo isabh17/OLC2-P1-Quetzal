@@ -133,7 +133,7 @@ class CallFunction extends Instruction{
 
   verifyNative(){//Metodo usado para verificar si  se debe ejecutar una funcion nativa
     var name = this.name;
-    if(name==="pow"||name==="sqrt"||name==="sin"||name==="cos"||name==="tan"||name==="log10"||name==="toInt"||name==="toDouble"||name==="string"||name==="typeof"){
+    if(name==="pow"||name==="sqrt"||name==="sin"||name==="cos"||name==="tan"||name==="log10"||name==="toInt"||name==="toDouble"||name==="string"||name==="typeof" || name ==="graficar_ts"){
       return true;
     }else{
       return false;
@@ -141,6 +141,11 @@ class CallFunction extends Instruction{
   }
 
   executeNative(tree, table){
+    if(this.name === 'graficar_ts'){
+      console.log("Entramos");
+      showTableExecuteSymbols1();
+      return null;
+    }
     var funct = new Natives(this.name, this.parameters, this.forArray, this.row, this.column);
     var result = funct.execute(tree, table);
     this.type = funct.type;

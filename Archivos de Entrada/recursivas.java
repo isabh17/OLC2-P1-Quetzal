@@ -1,5 +1,4 @@
-int ackerman(int m, int n)
-{    
+int ackerman(int m, int n){    
     if (m == 0){
         return n + 1;
     }else if (m > 0 && n == 0){
@@ -9,8 +8,7 @@ int ackerman(int m, int n)
     }
 }
 
-void hanoi( int discos, int origen, int auxiliar, int destino)
-{
+void hanoi( int discos, int origen, int auxiliar, int destino){
     if (discos == 1){
         //println("Mover de ", origen, " a ", destino);
         println("Mover de "& origen& " a "& destino);
@@ -22,8 +20,7 @@ void hanoi( int discos, int origen, int auxiliar, int destino)
     }
 }
 
-int factorial(int num)
-{
+int factorial(int num){
     if (num == 1){
         return 1;
     }else{
@@ -31,8 +28,7 @@ int factorial(int num)
     }
 }
 
-void Main()
-{
+void main(){
     println("=====================================================");
     println("===========FUNCIONES RECURSIVAS======================");
     println("=====================================================");

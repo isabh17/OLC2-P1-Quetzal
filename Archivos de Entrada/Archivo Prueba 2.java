@@ -1,8 +1,6 @@
 int var1 = 1;
 int punteo = 0;
-
-void Main(){
-  
+void main(){
     println("-----------------CALIFICACION ARCHIVO 1-----------------");
     println("Valor: 15 pts");
     println("--------------------------------------------------------");
@@ -312,4 +310,3 @@ void Main(){
 
   
 }
-Main();

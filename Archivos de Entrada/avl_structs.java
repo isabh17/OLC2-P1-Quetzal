@@ -1,4 +1,3 @@
-println("--------------------------ARBOL AVL----------------");
 int index = 0;
 struct Nodo {
   int valor,
@@ -148,6 +147,7 @@ String graphnode(Nodo node){
 }
 
 void main(){
+  println("--------------------------ARBOL AVL----------------");
   root = insert(root, 10);
   root = insert(root, 20);
   println("");
@@ -163,4 +163,3 @@ void main(){
   println("Graphviz");
   graphviz(root);
 }
-main();

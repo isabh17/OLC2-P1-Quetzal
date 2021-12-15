@@ -32,6 +32,7 @@ void quickSort(int low, int high, int[] array){
     }
 }
 int[] array = [8, 48, 69, 12, 25, 98, 71, 33, 129, 5];
-println(array.length()-1);
-quickSort(0, array.length() - 1, array);
-println("QuickSort: "& array);
+void main(){
+    quickSort(0, array.length() - 1, array);
+    println("QuickSort: "& array);
+}

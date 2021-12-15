@@ -238,13 +238,11 @@
 
     <!--<script src="./AST/chart/chart.css"></script>-->
     <script src="./Utils/moveDivs.js"></script>
-    
-    <script>
-        
+    <script>        
         var openFile = document.getElementById("open-file");
         openFile.addEventListener("change", (event) => {
         const fileUpload = event.target.files;
-        console.log(fileUpload);
+        //console.log(fileUpload);
 
         if (fileUpload.lenght == 0) {
             alert("Error: Seleccione un archivo");
@@ -294,33 +292,47 @@
             var tree = new Tree(instructions);
             var tsGlobal = new TableSymbols(null);
             tree.setGlobalTable(tsGlobal);
-            
             tree.getInstructions().forEach(instruction=>{
                 if(instruction instanceof Function){
                     tree.addFunction(instruction);
                 }else if(instruction instanceof TemplateStruct){
                     tree.addStruct(instruction);
                 }else{
-                    var value = instruction.execute(tree, tsGlobal);
-                    if (value instanceof Exception){
-                        console.log(value);
-                    }else if(value !== null){
-                        for(var err of value){
-                            console.log(err);
+                    if(instruction instanceof Declaration || instruction instanceof DeclarationArray || instruction instanceof CreateStruct){
+                        var value = instruction.execute(tree, tsGlobal);
+                        if (value instanceof Exception){
+                            console.log(value);
                         }
+                    }else{
+                        ErrorList.addError(new ErrorNode(instruction.row, instruction.column,new ErrorType(EnumErrorType.SEMANTIC), "Instrucción fuera de función o metodo main", ENVIRONMENT.NULL));
                     }
                 }
             });
-            console.log(tree.getInstructions());
-            //console.log(tree.getVariables());
+            var exists = verifyMain(tree);
+            if(exists){
+                var newTable = new TableSymbols(tsGlobal);
+                var result = tree.getFunction("main").execute(tree, newTable);
+                if(result instanceof Exception) console.log(result);
+            }else{
+                console.log("Error, posibles causas: Hay más de un metodo main, no hay metodo main o el metodo main no es de tipo void ");
+            }
             Salida.setValue(tree.getOut());
-            
-              /*if (document.getElementById("grafo")) {
-                document.getElementById("grafo").remove();
-            }*/
-            //generateTree([res.node]);
             showTableErrorsSymbols();
-            //showTableExecuteSymbols();            
+        }
+
+        function verifyMain(tree){
+            var count = 0, pass = true;
+            var functions = tree.getFunctions();
+            for(var i = 0; i<functions.length; i++){
+                if(String(functions[i].name)==="main"){
+                    if(functions[i].type !== Type.NULL){
+                        pass = false;
+                    }
+                    count++;
+                }
+            }
+            if (count !== 1) pass = false;
+            return pass;
         }
 
         function deleteKeys(text){
@@ -517,7 +529,8 @@
                 doc.save('TablaSimbolos.pdf');*/
         }
         function showTableExecuteSymbols1() {
-            var doc = new jspdf.jsPDF()
+            console.log("Entramos");
+            var doc = new jspdf.jsPDF();
             SymbolList = [];
             var lineas = "{";    
             var nodes = TableReport.getTableReport();

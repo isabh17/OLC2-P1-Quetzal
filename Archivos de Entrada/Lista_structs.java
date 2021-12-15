@@ -1,4 +1,3 @@
-println("---------------------STRUCTS--------------------------------");
 struct Node{
     int value,
     Node next
@@ -35,16 +34,19 @@ void printList(List list){
 }
 
 List lista = List(null);
-insertFirst(lista, 5);
-insertFirst(lista, 4);
-insertFirst(lista, 3);
-insertFirst(lista, 2);
+void main(){
+    println("---------------------STRUCTS--------------------------------");
+    insertFirst(lista, 5);
+    insertFirst(lista, 4);
+    insertFirst(lista, 3);
+    insertFirst(lista, 2);
 
-insertLast(lista, 10);
-insertLast(lista, 20);
-insertLast(lista, 30);
-insertLast(lista, 40);
+    insertLast(lista, 10);
+    insertLast(lista, 20);
+    insertLast(lista, 30);
+    insertLast(lista, 40);
 
-println("---IMPRIMIR LISTA---");
-printList(lista);
-println("---FIN IMPRIMIR---");
+    println("---IMPRIMIR LISTA---");
+    printList(lista);
+    println("---FIN IMPRIMIR---");
+}

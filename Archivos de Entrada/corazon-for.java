@@ -38,7 +38,7 @@ void main() {
             println(cadenaFigura);
         }
         println("Si la figura es un corazón, te aseguro que tendrás un 100 :3");
-    }
+}
 
 
 /*

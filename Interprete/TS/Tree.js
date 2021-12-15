@@ -82,6 +82,7 @@ class Tree{
   get(){
     return this.environment;
   }
+  
   getEnvironment(){
     return this.environment[this.environment.length-1];
   }
