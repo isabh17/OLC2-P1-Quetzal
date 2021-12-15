@@ -285,6 +285,7 @@
 
         function Compile(texto){
             Salida.setValue("");
+            Consola.setValue("");
             ErrorList.cleanErrorList();
             TableReport.cleanTableReport();
             texto = deleteKeys(texto);
@@ -316,7 +317,7 @@
             }else{
                 console.log("Error, posibles causas: Hay más de un metodo main, no hay metodo main o el metodo main no es de tipo void ");
             }
-            Salida.setValue(tree.getOut());
+            Consola.setValue(tree.getOut());
             showTableErrorsSymbols();
         }
 
