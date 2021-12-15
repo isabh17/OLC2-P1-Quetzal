@@ -10,17 +10,6 @@ class TemplateStruct extends Instruction {
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
 /*if (this.parameters.length !== params.length) {
   return new Exception("Semantico", "La cantidad de parameters no coincide al crear el struct", this.row, this.column);
 }

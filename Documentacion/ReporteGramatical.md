@@ -406,12 +406,12 @@
         ;
 
         TIPO::= INT                                       
-        | DOUBLE                                    
-        | BOOLEAN                                   
-        | STRING                                    
-        | CHAR                                      
-        | VOID                                      
-        ;
+            | DOUBLE                                    
+            | BOOLEAN                                   
+            | STRING                                    
+            | CHAR                                      
+            | VOID                                      
+            ;
 
         SENTENCE_FOR::= FOR PAROP DECLARATION PTOCOMA EXP PTOCOMA POST_FIXED PARCLS BLOCK      
                 | FOR PAROP ASSIGNMENT PTOCOMA EXP PTOCOMA POST_FIXED PARCLS BLOCK      
@@ -457,28 +457,28 @@
         ;
 
         ELSE_IF::= ELSE IF PAROP EXP PARCLS BLOCK ELSE_IF  
-        | ELSE BLOCK_IF                           
-        | /*epsilone*/                            
-        ;
+                | ELSE BLOCK_IF                           
+                | /*epsilone*/                            
+                ;
 
         SENTENCE_SWITCH::= SWITCH PAROP EXP PARCLS BLOCK_SWITCH 
         ;
 
         BLOCK_SWITCH::= KEYOP L_CASE KEYCLS         
-        | KEYOP KEYCLS                
-        ;
+                    | KEYOP KEYCLS                
+                    ;
 
         L_CASE::= L_CASE CASES  
-        | CASES         
-        ;
+                | CASES         
+                ;
 
         CASES::= CASE EXP BLOCK_CASES        
-        | DEFAULT BLOCK_CASES         
-        ;
+                | DEFAULT BLOCK_CASES         
+                ;
 
         BLOCK_CASES::= DOSPTOS SENTENCES       
-        | DOSPTOS                 
-        ;
+                    | DOSPTOS                 
+                    ;
 
         SENTENCE_WHILE::= WHILE PAROP EXP PARCLS BLOCK            
         ;
@@ -487,28 +487,28 @@
         ;
 
         FUNCT::= TIPO ID PAROP PARCLS BLOCK                            
-        | TIPO ID PAROP PARAMETERS PARCLS BLOCK                 
-        | TIPO COROP CORCLS ID PAROP PARAMETERS PARCLS BLOCK    
-        | TIPO COROP CORCLS ID PAROP PARCLS BLOCK               
-        | ID ID PAROP PARCLS BLOCK                              
-        | ID ID PAROP PARAMETERS PARCLS BLOCK                   
-        ;
+                | TIPO ID PAROP PARAMETERS PARCLS BLOCK                 
+                | TIPO COROP CORCLS ID PAROP PARAMETERS PARCLS BLOCK    
+                | TIPO COROP CORCLS ID PAROP PARCLS BLOCK               
+                | ID ID PAROP PARCLS BLOCK                              
+                | ID ID PAROP PARAMETERS PARCLS BLOCK                   
+                ;
 
         PARAMETERS::= PARAMETERS COMA PARAMETER   
-        | PARAMETER                   
-        ;
+                    | PARAMETER                   
+                    ;
 
         PARAMETER::= TIPO ID                     
-        | TIPO COROP CORCLS ID        
-        | ID ID                       
-        ;
+                | TIPO COROP CORCLS ID        
+                | ID ID                       
+                ;
 
         CALL_FUNCTION::= ID PAROP L_E PARCLS                         
-        | ID '#' PAROP L_E PARCLS                    
-        | ID PAROP PARCLS                             
-        | STRING PAROP L_E PARCLS                    
-        | STRING '#' PAROP L_E PARCLS                 
-        ;
+                    | ID '#' PAROP L_E PARCLS                    
+                    | ID PAROP PARCLS                             
+                    | STRING PAROP L_E PARCLS                    
+                    | STRING '#' PAROP L_E PARCLS                 
+                    ;
 
         BREAKS::= BREAK PTOCOMA       
         ;
@@ -517,5 +517,5 @@
         ;
 
         RETUR::= RETURN PTOCOMA     
-        | RETURN EXP PTOCOMA 
-        ;
+                | RETURN EXP PTOCOMA 
+                ;
