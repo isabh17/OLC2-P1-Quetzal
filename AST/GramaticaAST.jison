@@ -155,7 +155,7 @@ SENTENCE
   | POST_FIXED PTOCOMA          { $$ = { val: 0, node: newNode(yy, yystate, $1.node, $2)}; }
   | TEMPLATE_STRUCT             { $$ = { val: 0, node: newNode(yy, yystate, $1.node)}; }
   | CREATE_STRUCT               { $$ = { val: 0, node: newNode(yy, yystate, $1.node)}; }
-  | METHODS PTOCOMA             { $$ = { val: 0, node: newNode(yy, yystate, $1.node)}; }
+  | METHODS PTOCOMA             { $$ = { val: 0, node: newNode(yy, yystate, $1.node,$2)}; }
   | error PTOCOMA               { $$ = { val: 0, node: newNode(yy, yystate,'ERROR')}; }
   | error KEYCLS                { $$ = { val: 0, node: newNode(yy, yystate,'ERROR')}; }
 ;
@@ -173,7 +173,7 @@ STRUCT_CASES
   : ID PAROP PARCLS                           { $$ = { val: 0, node: newNode(yy, yystate, $1,$2,$3)}; }
   | ID PTO ACCESS                             { $$ = { val: 0, node: newNode(yy, yystate, $1,$2,$3.node)}; }
   | ID                                        { $$ = { val: 0, node: newNode(yy, yystate, $1)}; }
-  | nullVal                                   { $$ = { val: 0, node: newNode(yy, yystate,Type.NULL)};}
+  | nullVal                                   { $$ = { val: 0, node: newNode(yy, yystate, 'NULL')};}
 ;
 
 TEMPLATE_STRUCT
@@ -191,7 +191,7 @@ DECLARATION
   | TIPO COROP CORCLS ID '=' EXP        { $$ = { val: 0, node: newNode(yy, yystate, $1.node, $2,$3,$4,$5,$6.node)}; }
   | TIPO COROP CORCLS IDENTIFIERS       { $$ = { val: 0, node: newNode(yy, yystate, $1.node, $2,$3,$4.node)}; }
   | ID COROP CORCLS ID '=' EXP          { $$ = { val: 0, node: newNode(yy, yystate, $1,$2,$3,$4,$5,$6.node)}; }
-  | ID COROP CORCLS IDENTIFIERS         { $$ = { val: 0, node: newNode(yy, yystate, $1, $2,$3,$4.node)}; }
+  | ID COROP CORCLS IDENTIFIERS         { $$ = { val: 0, node: newNode(yy, yystate, $1,$2,$3,$4.node)}; }
 ;
 
 IDENTIFIERS
@@ -333,7 +333,7 @@ CUERPO
   | POST_FIXED PTOCOMA          { $$ = { val: 0, node: newNode(yy, yystate, $1.node, $2)}; }
   | TEMPLATE_STRUCT             { $$ = { val: 0, node: newNode(yy, yystate, $1.node)}; }
   | CREATE_STRUCT               { $$ = { val: 0, node: newNode(yy, yystate, $1.node)}; }
-  | METHODS PTOCOMA             { $$ = { val: 0, node: newNode(yy, yystate, $1.node)}; }
+  | METHODS PTOCOMA             { $$ = { val: 0, node: newNode(yy, yystate, $1.node,$2)}; }
   | error PTOCOMA               { $$ = { val: 0, node: newNode(yy, yystate,'ERROR')}; }
   | error KEYCLS                { $$ = { val: 0, node: newNode(yy, yystate,'ERROR')}; }
 ;
@@ -390,7 +390,7 @@ FUNCT
   : TIPO ID PAROP PARCLS BLOCK                            { $$ = { val: 0, node: newNode(yy, yystate,$1.node,$2,$3,$4,$5.node)}; }
   | TIPO ID PAROP PARAMETERS PARCLS BLOCK                 { $$ = { val: 0, node: newNode(yy, yystate,$1.node,$2,$3,$4.node,$5,$6.node)}; }
   | TIPO COROP CORCLS ID PAROP PARAMETERS PARCLS BLOCK    { $$ = { val: 0, node: newNode(yy, yystate,$1.node,$2,$3,$4,$5,$6.node,$7,$8.node)}; }
-  | TIPO COROP CORCLS ID PAROP PARCLS BLOCK               { $$ = { val: 0, node: newNode(yy, yystate,$1.node,$2,$3,$4,$5,$6.node)}; }
+  | TIPO COROP CORCLS ID PAROP PARCLS BLOCK               { $$ = { val: 0, node: newNode(yy, yystate,$1.node,$2,$3,$4,$5,$6,$7.node)}; }
   | ID ID PAROP PARCLS BLOCK                              { $$ = { val: 0, node: newNode(yy, yystate,$1,$2,$3,$4,$5.node)}; }
   | ID ID PAROP PARAMETERS PARCLS BLOCK                   { $$ = { val: 0, node: newNode(yy, yystate,$1,$2,$3,$4.node,$5,$6.node)}; }
 ;

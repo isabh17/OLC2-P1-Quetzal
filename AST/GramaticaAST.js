@@ -95,11 +95,14 @@ break;
 case 4: case 5: case 6: case 8: case 10: case 11: case 12: case 13: case 14: case 15: case 16: case 17: case 20: case 21: case 62: case 63: case 71: case 72: case 73: case 75: case 96: case 118: case 119: case 121: case 123: case 124: case 125: case 126: case 127: case 128: case 129: case 132: case 133:
  this.$ = { val: 0, node: newNode(yy, yystate, $$[$0].node)}; 
 break;
-case 7: case 9: case 22: case 120: case 122: case 134:
+case 7: case 9: case 120: case 122:
  this.$ = { val: 0, node: newNode(yy, yystate, $$[$0-1].node)}; 
 break;
 case 18: case 19: case 130: case 131:
  this.$ = { val: 0, node: newNode(yy, yystate, $$[$0-1].node, $$[$0])}; 
+break;
+case 22: case 134:
+ this.$ = { val: 0, node: newNode(yy, yystate, $$[$0-1].node,$$[$0])}; 
 break;
 case 23: case 24: case 135: case 136:
  this.$ = { val: 0, node: newNode(yy, yystate,'ERROR')}; 
@@ -123,7 +126,7 @@ case 30: case 42: case 69: case 82: case 86: case 87: case 88: case 89: case 90:
  this.$ = { val: 0, node: newNode(yy, yystate, $$[$0])}; 
 break;
 case 31:
- this.$ = { val: 0, node: newNode(yy, yystate,Type.NULL)};
+ this.$ = { val: 0, node: newNode(yy, yystate, 'NULL')};
 break;
 case 32:
  this.$ = { val: 0, node: newNode(yy, yystate, $$[$0-5],$$[$0-4],$$[$0-3],$$[$0-2].node,$$[$0-1],$$[$0])}; 
@@ -141,7 +144,7 @@ case 39:
  this.$ = { val: 0, node: newNode(yy, yystate, $$[$0-5],$$[$0-4],$$[$0-3],$$[$0-2],$$[$0-1],$$[$0].node)}; 
 break;
 case 40:
- this.$ = { val: 0, node: newNode(yy, yystate, $$[$0-3], $$[$0-2],$$[$0-1],$$[$0].node)}; 
+ this.$ = { val: 0, node: newNode(yy, yystate, $$[$0-3],$$[$0-2],$$[$0-1],$$[$0].node)}; 
 break;
 case 41:
  this.$ = { val: 0, node: newNode(yy, yystate, $$[$0-2].node,$$[$0-1],$$[$0])}; 
@@ -255,7 +258,7 @@ case 157:
  this.$ = { val: 0, node: newNode(yy, yystate,$$[$0-7].node,$$[$0-6],$$[$0-5],$$[$0-4],$$[$0-3],$$[$0-2].node,$$[$0-1],$$[$0].node)}; 
 break;
 case 158:
- this.$ = { val: 0, node: newNode(yy, yystate,$$[$0-6].node,$$[$0-5],$$[$0-4],$$[$0-3],$$[$0-2],$$[$0-1].node)}; 
+ this.$ = { val: 0, node: newNode(yy, yystate,$$[$0-6].node,$$[$0-5],$$[$0-4],$$[$0-3],$$[$0-2],$$[$0-1],$$[$0].node)}; 
 break;
 case 159:
  this.$ = { val: 0, node: newNode(yy, yystate,$$[$0-4],$$[$0-3],$$[$0-2],$$[$0-1],$$[$0].node)}; 
