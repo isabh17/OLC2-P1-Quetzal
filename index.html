@@ -287,7 +287,7 @@
             Salida.setValue("");
             ErrorList.cleanErrorList();
             TableReport.cleanTableReport();
-            texto = deleteKeys(texto);
+            texto = deletePharentesis(texto);
             var instructions = gramatica.parse(texto);
             var tree = new Tree(instructions);
             var tsGlobal = new TableSymbols(null);
@@ -335,31 +335,47 @@
             return pass;
         }
 
-        function deleteKeys(text){
+        function deletePharentesis(text){
             var out = "";
-            var state = 0;
+            var state = 0; var stack = 0;
             for(var i = 0; i<text.length; i++){
+                var aux = text[i];
                 if(state === 0){
-                    if(text[i]==='$'){
-                        out += text[i];
+                    if(aux==='$'){
                         state = 1;
                     }else{
-                        out += text[i];
+                        out += aux;
                     }
                 }else if(state === 1){
-                    if(text[i]==='('){
+                    if(aux==='('){
+                        stack = stack+1;
                         out += "\"&"
+                        state = 2;
+                    }else if(aux!=='('){
+                        out+="\"&"+aux;
                         state = 3;
-                    }else if(text[i]!=='('){
-                        out+=text[i];
-                        state = 0;
                     }
-                }else if(state == 3){
-                    if(text[i]===')'){
-                        out += "&\""
+                }else if(state === 2){
+                    if(aux===')'){
+                        stack = stack-1;
+                        if(stack===0){
+                            out += "&\""
+                            state = 0;   
+                        }else{
+                            out+=aux;
+                        }
+                    }else if(aux==='('){
+                        out += "("
+                        stack = stack + 1;
+                    }else{
+                        out+=aux;
+                    }
+                }else if(state === 3 ){
+                    if(aux === " " || aux === "\""){
+                        out += "&"+aux+"\"";
                         state = 0;
                     }else{
-                        out+=text[i];
+                        out += aux;
                     }
                 }
             }
