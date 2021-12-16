@@ -24,4 +24,8 @@ class DeclarationArray extends Instruction {
       return null;
     }
   }
+
+  compile(generator){
+    return null;
+  }
 }

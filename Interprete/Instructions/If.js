@@ -98,4 +98,8 @@ class If extends Instruction {
     tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
     return null;
   }
+
+  compile(generator){
+    return null;
+  }
 }

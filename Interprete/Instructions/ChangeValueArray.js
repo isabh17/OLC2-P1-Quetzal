@@ -48,4 +48,8 @@ class ChangeValueArray extends Instruction{
     actualValue[positions[positions.length-1]] = newVal;
     return null;
   }
+
+  compile(generator){
+    return null;
+  }
 }

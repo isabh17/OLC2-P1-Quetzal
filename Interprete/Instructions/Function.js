@@ -73,4 +73,11 @@ class Function extends Instruction{
     tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
     return null;
   }
+
+  compile(generator){
+    for (var instruction of this.instructions){
+      instruction.compile(generator);
+    }
+    return null;
+  }
 }

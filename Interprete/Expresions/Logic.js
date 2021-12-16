@@ -50,4 +50,8 @@ class Logic extends Instruction{
     }
     return String(value);
   }
+
+  compile(generator){
+
+  }
 }

@@ -25,4 +25,8 @@ class Identifier extends Instruction{
       return symbol.getValue();
     }
   }
+
+  compile(generator){
+
+  }
 }

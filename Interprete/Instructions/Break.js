@@ -6,4 +6,8 @@ class Break extends Instruction{
   execute(tree, table){
     return this;
   }
+
+  compile(generator){
+    return null;
+  }
 }

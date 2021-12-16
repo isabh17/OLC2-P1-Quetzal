@@ -204,4 +204,8 @@ class Natives extends Instruction {
       }
     }
   }
+
+  compile(generator){
+    return null;
+  }
 }

@@ -50,4 +50,8 @@ class ChangeValueStruct extends Instruction{
     actualValue.setValue(value);
     return null;
   }
+  
+  compile(generator){
+    return null;
+  }
 }

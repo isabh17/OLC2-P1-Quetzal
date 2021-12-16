@@ -39,4 +39,8 @@ class AccessArray extends Instruction{
     }
     return actualValue;
   }
+
+  compile(generator){
+    return null;
+  }
 }

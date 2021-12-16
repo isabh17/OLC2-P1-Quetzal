@@ -39,4 +39,8 @@ class AccessAtributeStruct extends Instruction{
     }
     return actualValue.getValue();
   }
+  
+  compile(generator){
+    return null;
+  }
 }

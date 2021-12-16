@@ -35,4 +35,8 @@ class Strings extends Instruction{
     }
     return String(value);
   }
+
+  compile(generator){
+
+  }
 }

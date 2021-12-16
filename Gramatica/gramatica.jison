@@ -1,4 +1,3 @@
-
 %lex
 
 %options case-sensitive
@@ -227,7 +226,7 @@ EXP
   | PAROP EXP PARCLS                          { $$ = $2; }
   | ID COROP EXP DOSPTOS EXP CORCLS           { $$ = new RangeArray($1, $3, $5, @1.first_line, @1.first_column); }
   | COROP L_E CORCLS                          { $$ = new ListObjects($2, @1.first_line, @1.first_column); }
-  | COROP CORCLS                              { $$ = new ListObjects([], @1.first_line, @1.first_column);; }
+  | COROP CORCLS                              { $$ = new ListObjects([], @1.first_line, @1.first_column); }
   | ID ACCESS_ARRAY                           { $$ = new AccessArray($1, $2, @1.first_line, @1.first_column); }
   | ID                                        { $$ = new Identifier($1, @1.first_line, @1.first_column, ENVIRONMENT.NULL); }
   | '#' ID                                    { $$ = new CopyArray($2, @1.first_line, @1.first_column); }
@@ -251,7 +250,7 @@ ACCESS_ARRAY
 
 ACCESS
   : ID PTO ACCESS                           { $$=$3; $$.push($1); }
-  | ID                                      { $$=[]; $$.push($1) }
+  | ID                                      { $$=[]; $$.push($1); }
 ;
 
 METHODS

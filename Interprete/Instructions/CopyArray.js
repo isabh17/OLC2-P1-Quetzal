@@ -21,4 +21,8 @@ class CopyArray extends Instruction{
     var copy = [...symbol.getValue()];
     return copy;
   }
+
+  compile(generator){
+    return null;
+  }
 }

@@ -42,4 +42,8 @@ class Assignation extends Instruction{
     if (res instanceof Exception) return res;
     return null;
   }
+
+  compile(generator){
+    return null;
+  }
 }

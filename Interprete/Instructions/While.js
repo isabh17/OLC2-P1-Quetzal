@@ -45,4 +45,8 @@ class While extends Instruction{
     tree.removeEnvironment();//DUDA
     return null;
   }
+
+  compile(generator){
+    return null;
+  }
 }

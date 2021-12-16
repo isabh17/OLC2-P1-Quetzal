@@ -311,4 +311,22 @@ class Aritmetica extends Instruction{
     }
     return String(value);
   }
+
+  compile(generator){
+    var leftValue = this.operLeft.compile(generator);
+    var rightValue = this.operRight.compile(generator);
+    var temp = generator.addTemp();
+    var op = '';
+    if(this.operator == ARITMETIC_OPERATOR.SUM){
+      op = '+';
+    }else if(this.operator == ARITMETIC_OPERATOR.REST){
+      op = '-';
+    }else if(this.operator == ARITMETIC_OPERATOR.MULT){
+      op = '*';
+    }else if(this.operator == ARITMETIC_OPERATOR.DIV){
+      op = '/';
+    }
+    generator.addExp(temp, leftValue.value, rightValue.value, op);
+    return new C3DReturn(temp, Type.INT, true);
+  }
 }

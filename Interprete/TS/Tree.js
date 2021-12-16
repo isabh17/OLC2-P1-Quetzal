@@ -7,6 +7,7 @@ class Tree{
     this.environment = ["Global"];
     this.variables = [];
     this.globalTable = null;
+    this.generator = null;
   }
 
   getInstructions(){ 
@@ -93,5 +94,13 @@ class Tree{
 
   removeEnvironment(){
     this.environment.pop();
+  }
+
+  setGenerator(generator){
+    this.generator = generator;
+  }
+
+  getGenerator(){
+    return this.generator;
   }
 }

@@ -85,12 +85,8 @@ class For extends Instruction {
     }
 
     verifyExistId(tree, table){
-        //console.log(this.variable);
         let val = !this.variable instanceof Declaration;
         let val1 =  !this.variable instanceof Assignation
-        //console.log(val);
-        //console.log(val1);
-        //console.log(val||val1);
         if(val||val1){
             var symbol = table.getSymbol(String(this.variable));
             console.log(symbol);
@@ -99,5 +95,9 @@ class For extends Instruction {
             }
         }
         return true;        
+    }
+
+    compile(generator){
+        return null;
     }
 }

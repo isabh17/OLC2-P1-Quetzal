@@ -20,4 +20,8 @@ class Dot extends Instruction{
     this.objectType = symbol.objectType;
     return symbol.getValue();
   }
+
+  compile(generator){
+    return null;
+  }
 }

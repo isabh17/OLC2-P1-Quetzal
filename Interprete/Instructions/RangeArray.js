@@ -36,4 +36,8 @@ class RangeArray extends Instruction{
     this.objectType = symbol.objectType;
     return range;
   }
+
+  compile(generator){
+    return null;
+  }
 }

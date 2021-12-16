@@ -48,4 +48,8 @@ class Declaration extends Instruction{
       return null;
     }
   }
+
+  compile(generator){
+    return null;
+  }
 }

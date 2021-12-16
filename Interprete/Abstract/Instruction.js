@@ -10,4 +10,8 @@ class Instruction{
   execute(tree, table){
     throw new Error( 'Error' );
   }
+
+  compile(generator){
+    throw new Error( 'Error' );
+  }
 }

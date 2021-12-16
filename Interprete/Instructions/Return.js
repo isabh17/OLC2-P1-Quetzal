@@ -16,4 +16,8 @@ class Return extends Instruction{
     this.result = result;
     return this;
   }
+
+  compile(generator){
+    return null;
+  }
 }

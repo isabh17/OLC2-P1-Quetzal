@@ -27,4 +27,8 @@ class ListObjects extends Instruction{
     }
     return this.parameters;
   }
+
+  compile(generator){
+    return null;
+  }
 }

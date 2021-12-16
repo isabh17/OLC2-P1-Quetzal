@@ -151,4 +151,8 @@ class CallFunction extends Instruction{
     this.type = funct.type;
     return result;
   }
+
+  compile(generator){
+    return null;
+  }
 }

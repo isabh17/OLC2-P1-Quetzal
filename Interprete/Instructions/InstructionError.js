@@ -8,4 +8,8 @@ class InstructionError extends Instruction {
         return null;
     }
 
+    compile(generator){
+        return null;
+    }
+
 }

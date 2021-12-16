@@ -6,4 +6,8 @@ class Continue extends Instruction{
   execute(tree, table){
     return this;
   }
+
+  compile(generator){
+    return null;
+  }
 }

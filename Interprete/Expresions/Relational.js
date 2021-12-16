@@ -183,4 +183,8 @@ class Relational extends Instruction{
     }
     return String(value);
   }
+
+  compile(generator){
+
+  }
 }

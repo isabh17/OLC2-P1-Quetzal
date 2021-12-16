@@ -32,4 +32,8 @@ class Post_fixed extends Instruction{
     this.type = Type.INT;
     return previousValue;
   }
+
+  compile(generator){
+    return null;
+  }
 }
