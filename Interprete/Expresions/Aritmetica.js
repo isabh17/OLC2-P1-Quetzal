@@ -6,6 +6,9 @@ class Aritmetica extends Instruction{
     this.operRight = operRight;
     this.type = null;
     this.objectType = null;
+    this.trueLbl = '';
+    this.falseLbl = '';
+    this.structType = '';
   }
   
   execute(tree, table){
@@ -314,7 +317,13 @@ class Aritmetica extends Instruction{
 
   compile(generator){
     var leftValue = this.operLeft.compile(generator);
-    var rightValue = this.operRight.compile(generator);
+    var rightValue;
+    if(this.operRight!==null){
+      rightValue = this.operRight.compile(generator);
+    }else{
+      rightValue = {"value":leftValue.value};
+      leftValue.value = 0;
+    }
     var temp = generator.addTemp();
     var op = '';
     if(this.operator == ARITMETIC_OPERATOR.SUM){
@@ -325,6 +334,10 @@ class Aritmetica extends Instruction{
       op = '*';
     }else if(this.operator == ARITMETIC_OPERATOR.DIV){
       op = '/';
+    }else if(this.operator == ARITMETIC_OPERATOR.UMENOS){
+      op = '-';
+    }else if(this.operator == ARITMETIC_OPERATOR.MOD){
+      op = '%';
     }
     generator.addExp(temp, leftValue.value, rightValue.value, op);
     return new C3DReturn(temp, Type.INT, true);

@@ -40,7 +40,7 @@ class AccessAtributeStruct extends Instruction{
     return actualValue.getValue();
   }
   
-  compile(generator){
+  compile(generator, env){
     return null;
   }
 }

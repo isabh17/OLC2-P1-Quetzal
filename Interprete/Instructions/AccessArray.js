@@ -40,7 +40,7 @@ class AccessArray extends Instruction{
     return actualValue;
   }
 
-  compile(generator){
+  compile(generator, env){
     return null;
   }
 }

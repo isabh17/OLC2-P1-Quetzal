@@ -47,4 +47,8 @@ class Do extends Instruction {
       }
     } while (true);
   }
+
+  compile(generator, env){
+    return null;
+  }
 }

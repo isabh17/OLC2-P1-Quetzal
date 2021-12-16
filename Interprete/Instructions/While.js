@@ -46,7 +46,7 @@ class While extends Instruction{
     return null;
   }
 
-  compile(generator){
+  compile(generator, env){
     return null;
   }
 }

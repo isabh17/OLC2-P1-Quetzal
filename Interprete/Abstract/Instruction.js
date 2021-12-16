@@ -11,7 +11,7 @@ class Instruction{
     throw new Error( 'Error' );
   }
 
-  compile(generator){
+  compile(generator, env){
     throw new Error( 'Error' );
   }
 }

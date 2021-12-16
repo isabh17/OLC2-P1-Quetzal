@@ -97,7 +97,7 @@ class For extends Instruction {
         return true;        
     }
 
-    compile(generator){
+    compile(generator, env){
         return null;
     }
 }

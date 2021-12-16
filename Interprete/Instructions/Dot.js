@@ -21,7 +21,7 @@ class Dot extends Instruction{
     return symbol.getValue();
   }
 
-  compile(generator){
+  compile(generator, env){
     return null;
   }
 }

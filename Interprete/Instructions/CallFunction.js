@@ -152,7 +152,7 @@ class CallFunction extends Instruction{
     return result;
   }
 
-  compile(generator){
+  compile(generator, env){
     return null;
   }
 }

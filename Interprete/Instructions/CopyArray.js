@@ -22,7 +22,7 @@ class CopyArray extends Instruction{
     return copy;
   }
 
-  compile(generator){
+  compile(generator, env){
     return null;
   }
 }

@@ -74,9 +74,13 @@ class Function extends Instruction{
     return null;
   }
 
-  compile(generator){
+  compile(generator, env){
     for (var instruction of this.instructions){
-      instruction.compile(generator);
+      if(instruction instanceof Print){
+        instruction.compile(generator, env);
+      }else{
+        instruction.compile(generator, env);
+      }
     }
     return null;
   }

@@ -7,7 +7,7 @@ class ExpresionAmperson extends Instruction {
 
   }
 
-  compile(generator){
+  compile(generator, env){
     return null;
   }
 }

@@ -28,7 +28,7 @@ class ListObjects extends Instruction{
     return this.parameters;
   }
 
-  compile(generator){
+  compile(generator, env){
     return null;
   }
 }

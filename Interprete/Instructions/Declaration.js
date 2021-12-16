@@ -49,7 +49,7 @@ class Declaration extends Instruction{
     }
   }
 
-  compile(generator){
+  compile(generator, env){
     return null;
   }
 }

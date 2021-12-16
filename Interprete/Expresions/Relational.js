@@ -5,6 +5,9 @@ class Relational extends Instruction{
     this.operLeft = operLeft;
     this.operRight = operRight;
     this.type = Type.BOOLEAN;
+    this.trueLbl = '';
+    this.falseLbl = '';
+    this.structType = '';
   }
 
   execute(tree, table){
@@ -185,6 +188,84 @@ class Relational extends Instruction{
   }
 
   compile(generator){
+    generator.addComment("INICIO EXPRESION RELACIONAL");
+    var left = this.operLeft.compile(generator);
+    var right = null;
+    var result = new C3DReturn(null, Type.BOOLEAN, false);
+    if (left.type != Type.BOOLEAN){
+      right = this.operRight.compile(generator);
+      if ( (left.type === Type.INT || left.type === Type.DOUBLE) && (right.type === Type.INT || right.type === Type.DOUBLE) ){
+        this.checkLabels(generator);
+        generator.addIf(left.value, right.value, this.getOp(), this.trueLbl);
+        generator.addGoto(this.falseLbl);
+      }else if (left.type === Type.STRING && right.type === Type.STRING){
+        console.log("Comparacion de cadenas");     // Únicamente se puede con igualdad o desigualdad
+      }
+    }else{
+        gotoRight = generator.newLabel();
+        leftTemp = generator.addTemp();
 
+        generator.putLabel(left.trueLbl);
+        generator.addExp(leftTemp, '1', '', '');
+        generator.addGoto(gotoRight);
+
+        generator.putLabel(left.falseLbl);
+        generator.addExp(leftTemp, '0', '', '');
+
+        generator.putLabel(gotoRight);
+
+        right = this.right.compile(generator);
+        if (right.type != Type.BOOLEAN){
+          console.log("Error, no se pueden comparar");
+          return;
+        }
+        gotoEnd = generator.newLabel();
+        rightTemp = generator.addTemp();
+
+        generator.putLabel(right.trueLbl);
+        
+        generator.addExp(rightTemp, '1', '', '');
+        generator.addGoto(gotoEnd);
+
+        generator.putLabel(right.falseLbl);
+        generator.addExp(rightTemp, '0', '', '');
+
+        generator.putLabel(gotoEnd);
+
+        this.checkLabels();
+        generator.addIf(leftTemp, rightTemp, this.getOp(), this.trueLbl);
+        generator.addGoto(this.falseLbl);
+    }
+    generator.addComment("FIN DE EXPRESION RELACIONAL");
+    generator.addSpace();
+    result.trueLbl = this.trueLbl;
+    result.falseLbl = this.falseLbl;
+
+    return result;
+  }
+
+  checkLabels(generator){
+    if (this.trueLbl === ''){
+      this.trueLbl = generator.newLabel();
+    }
+    if (this.falseLbl === ''){
+      this.falseLbl = generator.newLabel();
+    }
+  }
+
+  getOp(){
+    if (this.operator === RELATIONAL_OPERATOR.MAYQ){
+        return '>';
+    }else if( this.operator === RELATIONAL_OPERATOR.MENQ){
+        return '<';
+    }else if( this.operator === RELATIONAL_OPERATOR.MAYEQ){
+        return '>=';
+    }else if( this.operator === RELATIONAL_OPERATOR.MENEQ){
+        return '<=';
+    }else if( this.operator === RELATIONAL_OPERATOR.IDENT){
+        return '==';
+    }else if( this.operator === RELATIONAL_OPERATOR.DIFFERENT){
+        return '!=';
+    }
   }
 }

@@ -37,7 +37,7 @@ class RangeArray extends Instruction{
     return range;
   }
 
-  compile(generator){
+  compile(generator, env){
     return null;
   }
 }

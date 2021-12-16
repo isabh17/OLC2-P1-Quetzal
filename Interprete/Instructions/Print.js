@@ -31,36 +31,36 @@ class Print extends Instruction{
     return value;
   }
 
-  compile(generator){
+  compile(generator, env){
     var val = this.expression.compile(generator);
     if(this.expression.type == Type.INT){
         generator.addPrint("double", val.value);
     }else if(this.expression.type == Type.DOUBLE){
       generator.addPrint("double", val.value);
     }else if (val.type == Type.BOOLEAN){
-        /*tempLbl = generator.newLabel()
-        generator.putLabel(val.trueLbl)
-        generator.printTrue()
-        generator.addGoto(tempLbl)
-        generator.putLabel(val.falseLbl)
-        generator.printFalse()
-        generator.putLabel(tempLbl)*/
+        var tempLbl = generator.newLabel();
+        generator.putLabel(val.trueLbl);
+        generator.printTrue();
+        generator.addGoto(tempLbl);
+        generator.putLabel(val.falseLbl);
+        generator.printFalse();
+        generator.putLabel(tempLbl);
     }else if(val.type == Type.STRING){
-        /*generator.fPrintString();
-        paramTemp = generator.addTemp();
+        generator.fPrintString();
+        var paramTemp = generator.addTemp();
         generator.addExp(paramTemp, 'P', env.size, '+');
         generator.addExp(paramTemp, paramTemp, '1', '+');
         generator.setStack(paramTemp, val.value);
         generator.newEnv(env.size);
         generator.callFun('printString');
-        temp = generator.addTemp();
+        var temp = generator.addTemp();
         generator.getStack(temp, 'P');
-        generator.retEnv(env.size);*/
+        generator.retEnv(env.size);
     }else{
       console.log("POR HACER");
     }
-    if (this.jump){
-      generator.addPrint("c", 10);
+    if (this.jump===true){
+      generator.addPrint("char", 10);
     }
     return null;
   }

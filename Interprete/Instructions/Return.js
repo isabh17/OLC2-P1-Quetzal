@@ -17,7 +17,7 @@ class Return extends Instruction{
     return this;
   }
 
-  compile(generator){
+  compile(generator, env){
     return null;
   }
 }

@@ -182,6 +182,7 @@
     <script src="./Interprete/Abstract/Instruction.js"></script>
     <script src="./Interprete/Abstract/Generator.js"></script>
     <script src="./Interprete/Abstract/C3DReturn.js"></script>
+    <script src="./Interprete/Abstract/Environment.js"></script>
     <script src="./Interprete/Expresions/Primitive.js"></script>
     <script src="./Interprete/Expresions/Aritmetica.js"></script>
     <script src="./Interprete/Expresions/Strings.js"></script>
@@ -295,6 +296,7 @@
             var tree = new Tree(instructions);
             var tsGlobal = new TableSymbols(null);
             var generator = new Generator();
+            var environment = new Environment(null);
             tree.setGlobalTable(tsGlobal);
             tree.setGenerator(generator);
             tree.getInstructions().forEach(instruction=>{
@@ -317,7 +319,7 @@
             if(exists){
                 var newTable = new TableSymbols(tsGlobal);
                 var result = tree.getFunction("main").execute(tree, newTable);
-                tree.getFunction("main").compile(generator);
+                tree.getFunction("main").compile(generator, environment);
                 if(result instanceof Exception) console.log(result);
             }else{
                 console.log("Error, posibles causas: Hay más de un metodo main, no hay metodo main o el metodo main no es de tipo void ");

@@ -5,6 +5,9 @@ class Logic extends Instruction{
     this.operLeft = operLeft;
     this.operRight = operRight;
     this.type = Type.BOOLEAN;
+    this.trueLbl = '';
+    this.falseLbl = '';
+    this.structType = '';
   }
 
   execute(tree, table){
@@ -52,6 +55,47 @@ class Logic extends Instruction{
   }
 
   compile(generator){
+    generator.addComment("INICIO EXPRESION LOGICA");
 
+    this.checkLabels(generator);
+    var lblAndOr = '';
+
+    if (this.operator === LOGIC_OPERATOR.AND){
+      lblAndOr = this.operLeft.trueLbl = generator.newLabel();
+      this.operRight.trueLbl = this.trueLbl;
+      this.operLeft.falseLbl = this.operRight.falseLbl = this.falseLbl;
+    }else if( this.operator === LOGIC_OPERATOR.OR ){
+      this.operLeft.trueLbl = this.operRight.trueLbl = this.trueLbl;
+      lblAndOr = this.operLeft.falseLbl = generator.newLabel();
+      this.operRight.falseLbl = this.falseLbl;
+    }else{
+      console.log("NOT");
+    }
+    var left = this.operLeft.compile(generator);
+    if (left.type !== Type.BOOLEAN){
+      console.log("No se puede utilizar en expresion booleana");
+      return null;
+    }
+    generator.putLabel(lblAndOr)
+    var right = this.operRight.compile(generator);
+    if (right.type !== Type.BOOLEAN){
+      console.log("No se puede utilizar en expresion booleana");
+      return null;
+    }
+    generator.addComment("FINALIZO EXPRESION LOGICA");
+    generator.addSpace();
+    var ret = new C3DReturn(null, Type.BOOLEAN, false);
+    ret.trueLbl = this.trueLbl;
+    ret.falseLbl = this.falseLbl;
+    return ret;
+  }
+
+  checkLabels(generator){
+    if (this.trueLbl === ''){
+      this.trueLbl = generator.newLabel();
+    }
+    if (this.falseLbl === ''){
+      this.falseLbl = generator.newLabel();
+    }
   }
 }

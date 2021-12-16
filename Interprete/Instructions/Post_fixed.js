@@ -33,7 +33,7 @@ class Post_fixed extends Instruction{
     return previousValue;
   }
 
-  compile(generator){
+  compile(generator, env){
     return null;
   }
 }

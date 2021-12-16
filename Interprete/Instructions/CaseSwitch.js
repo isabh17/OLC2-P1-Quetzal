@@ -28,7 +28,7 @@ class CaseSwitch extends Instruction {
         return this.condition;
     }
 
-    compile(generator){
+    compile(generator, env){
         return null;
     }
 }
