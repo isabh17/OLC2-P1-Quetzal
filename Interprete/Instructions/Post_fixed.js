@@ -34,6 +34,11 @@ class Post_fixed extends Instruction{
   }
 
   compile(generator, env){
-    return null;
+    var ident = new Identifier(this.identifier, this.row, this.column, ENVIRONMENT.NULL);
+    var primitive = new Primitive(Type.INT, 1, this.row, this.column);
+    var operation = this.action === "++" ? ARITMETIC_OPERATOR.SUM : ARITMETIC_OPERATOR.REST;
+    var arm = new Aritmetica(ident, operation, primitive, this.row, this.column);
+    var assign = new Assignation(this.identifier, arm, this.row, this.column);
+    assign.compile(generator, env);
   }
 }

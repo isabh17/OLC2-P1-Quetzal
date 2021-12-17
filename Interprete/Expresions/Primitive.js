@@ -5,7 +5,7 @@ class Primitive extends Instruction {
     this.value = value;
     this.trueLbl = '';
     this.falseLbl = '';
-    this.structType = '';
+    this.objectType = '';
   }
 
   execute(tree, table) {

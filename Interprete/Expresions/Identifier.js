@@ -5,6 +5,9 @@ class Identifier extends Instruction{
     this.type = null;
     this.objectType = null;
     this.env = env;
+    this.trueLbl = '';
+    this.falseLbl = '';
+    this.objectType = '';
   }
 
   execute(tree, table){

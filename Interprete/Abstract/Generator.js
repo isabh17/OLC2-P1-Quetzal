@@ -3,16 +3,16 @@ class Generator {
     // Contadores
     this.countTemp = 0;
     this.countLabel = 0;
-    // Code;
+    // Code
     this.code = '';
     this.funcs = '';
     this.natives = '';
     this.inFunc = false;
     this.inNatives = false;
-    // Lista de Temporales;
+    // Lista de Temporales
     this.temps = [];
     this.tempsRecover = {};
-    // Lista de Nativas;
+    // Lista de Nativas
     this.printString = false;
     this.concatString = false;
     this.potencia = false;
@@ -233,82 +233,105 @@ class Generator {
     this.freeTemp(tempC);
   }
 
-  getConcatStrings(){
-    if (this.concatString) {
+  fConcatString() {
+    if (this.concatString){
       return null;
     }
     this.concatString = true;
     this.inNatives = true;
+    this.addBeginFunc("concatString");
+    //temp new String
+    var tempNewString = this.addTemp();
 
-    this.addBeginFunc('concatStrings');
-    let code = "";
-    let t1 = this.addTemp();
-    let t2 = this.addTemp();
-    let t3 = this.addTemp();
-    let t4 = this.addTemp();
-    let t5 = this.addTemp();
-    let t6 = this.addTemp();
-    let t7 = this.addTemp();
-    let t8 = this.addTemp();
-    let t9 = this.addTemp();
-    let t10 = this.addTemp();
+    var tempP = this.addTemp();
+    this.freeTemp(tempP);
+    var tempP2 = this.addTemp();
+    this.freeTemp(tempP2);
+    var tempH = this.addTemp();
+    this.freeTemp(tempH);
 
-    let l1 = Singleton.getLabel();
-    let l2 = Singleton.getLabel();
-    let l3 = Singleton.getLabel();
-    let l4 = Singleton.getLabel();
+    // label de salida
+    var returnLbl = this.newLabel();
+    // label de inicio
+    var initLbl = this.newLabel();
 
-    code += `${t1} = P + 1;//posicion de inicio de primera cadena en heap\n`;
-    code += `${t2} = Stack[(int)${t1}];//referncia de inicio de cadena en heap\n`;
-    code += `${t3} = P + 2;//posicion de inicio de segunda cadena en heap\n`;
-    code += `${t4} = Stack[(int)${t3}];//referencia de segunda cadena en heap\n`;
-    code += `${t5} = H;\n`;
-    code += `${t6} = 0;//recorrer la cadena en heap\n`;
-    code += `${t7} = 0;//recorrer el heap en posiciones vacias\n`;
-    code += `${l1}:\n`;
-    code += `${t8} = ${t2} + ${t6};\n`;
-    code += `${t9} = Heap[(int)${t8}];\n`;
-    code += `if(${t9} == -1) goto ${l2};//verifico si llegue al final de la cadena 1 para saltar a la segunda\n`;
-    code += `${t10} = ${t5} + ${t7};//valor vacio en heap\n`;
-    code += `Heap[(int)${t10}] = ${t9};//guardo el caracter en heap\n`;
-    code += `${t6} = ${t6} + 1;\n`;
-    code += `${t7} = ${t7} + 1;\n`;
-    code += `goto ${l1};\n`;
-    code += `${l2}:\n`;
-    code += `${t6} = 0;//recorrer la cadena 2\n`;
-    code += `${l3}:\n`;
-    code += `${t8} = ${t4} + ${t6};\n`;
-    code += `${t9} = Heap[(int)${t8}];\n`;
-    code += `if(${t9} == -1) goto ${l4};\n`;
-    code += `${t10} = ${t5} + ${t7};//valor vacio en heap\n`;
-    code += `Heap[(int)${t10}] = ${t9};\n`;
-    code += `${t6} = ${t6} + 1;\n`;
-    code += `${t7} = ${t7} + 1;\n`;
-    code += `goto ${l3};\n`;
-    code += `${l4}:\n`;
-    code += `${t10} = ${t5} + ${t7};\n`;
-    code += `Heap[(int)${t10}] = -1;\n`;
-    code += `H = ${t10} + 1;\n`;
-    code += `${t1} = P + 0;//\n`;
-    code += `Stack[(int)${t1}] = ${t5};//\n`;
+    // Guardando el inicio de mi concatenacion
+    this.addExp(tempNewString, 'H', '', '');
 
-    code += `return;\n}\n\n`;
-    return code;
+    //extrayendo parametros
+    //Parametro1
+    this.addExp(tempP, 'P', '1', '+');
+    this.getStack(tempP, tempP);
+    //Parametro1
+    this.addExp(tempP2, 'P', '2', '+');
+    this.getStack(tempP2, tempP2);
+
+    //# Inicio de recorrido
+    this.addGoto(initLbl);
+    this.putLabel(initLbl);
+
+    //extrayendo valor del heap
+    this.getHeap(tempH, tempP);
+
+    // labels para primer parámetro
+    var lblTrue1 = this.newLabel();
+    var lblFalse1 = this.newLabel();
+
+    this.addIf(tempH, '-1', '==', lblFalse1);
+    this.addGoto(lblTrue1);
+    this.putLabel(lblTrue1);
+    // concatenando....
+    this.setHeap('H', tempH);
+    this.nextHeap();
+    this.addExp(tempP, tempP, '1', '+');
+    this.addGoto(initLbl);
+
+    //continua con el segundo parametro
+    this.putLabel(lblFalse1);
+
+    //extrayendo valor del heap
+    this.getHeap(tempH, tempP2);
+
+    // labels para segundo parámetro
+    var lblTrue1 = this.newLabel();
+    // lblFalse1 = this.newLabel() 
+
+    this.addIf(tempH, '-1', '==', returnLbl);
+    this.addGoto(lblTrue1);
+    this.putLabel(lblTrue1);
+    // concatenando....
+    this.setHeap('H', tempH);
+    this.nextHeap();
+    this.addExp(tempP2, tempP2, '1', '+');
+    this.addGoto(lblFalse1); //regresamos al lbl falso del primer parámetro
+
+    // salida function
+    this.putLabel(returnLbl);
+
+    // Ingresando el simbolo de terminación de la cadena
+    this.setHeap('H', '-1');
+    this.nextHeap()
+
+    // valor de retorno
+    this.setStack('P', tempNewString);
+
+    this.addEndFunc();
+    this.inNatives = false;
   }
 
   //##################
   // FUNCS
   //##################
-  addBeginFunc(id){
-    if(!this.inNatives){
+  addBeginFunc(id) {
+    if (!this.inNatives) {
       this.inFunc = true;
     }
     this.codeIn(`void ${id}(){\n`, '');
   }
-  
-  addEndFunc(){
+
+  addEndFunc() {
     this.codeIn('return;\n}\n');
-    if(!this.inNatives){
+    if (!this.inNatives) {
       this.inFunc = False
     }
   }
@@ -316,30 +339,30 @@ class Generator {
   //############
   // ENVS
   //############
-  newEnv(size){
+  newEnv(size) {
     this.codeIn(`P=P+${size};\n`);
   }
 
-  callFun(id){
+  callFun(id) {
     this.codeIn(`${id}();\n`);
   }
 
-  retEnv(size){
+  retEnv(size) {
     this.codeIn(`P=P-${size};\n`);
   }
 
   //##############
   // STACK
   //##############
-  setStack(pos, value, FreeValue = true){
-      this.freeTemp(pos);
-      if (FreeValue){
-        this.freeTemp(value);
-      }
-      this.codeIn(`stack[(int)${pos}]=${value};\n`);
+  setStack(pos, value, FreeValue = true) {
+    this.freeTemp(pos);
+    if (FreeValue) {
+      this.freeTemp(value);
+    }
+    this.codeIn(`stack[(int)${pos}]=${value};\n`);
   }
-  
-  getStack(place, pos){
+
+  getStack(place, pos) {
     this.freeTemp(pos);
     this.codeIn(`${place}=stack[(int)${pos}];\n`);
   }
@@ -347,18 +370,18 @@ class Generator {
   //##############
   // HEAP
   //##############
-  setHeap(pos, value){
-      this.freeTemp(pos);
-      this.freeTemp(value);
-      this.codeIn(`heap[(int)${pos}]=${value};\n`);
+  setHeap(pos, value) {
+    this.freeTemp(pos);
+    this.freeTemp(value);
+    this.codeIn(`heap[(int)${pos}]=${value};\n`);
   }
 
-  getHeap(place, pos){
-      this.freeTemp(pos);
-      this.codeIn(`${place}=heap[(int)${pos}];\n`);
+  getHeap(place, pos) {
+    this.freeTemp(pos);
+    this.codeIn(`${place}=heap[(int)${pos}];\n`);
   }
 
-  nextHeap(){
-      this.codeIn('H=H+1;\n');
+  nextHeap() {
+    this.codeIn('H=H+1;\n');
   }
 }
