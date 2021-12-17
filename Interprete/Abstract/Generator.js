@@ -32,7 +32,26 @@ class Generator {
     }
     return ret;
   }
-
+  generator = null; // par afunciones
+  Limpiar(){
+    // Contadores
+    this.countTemp = 0;
+    this.countLabel = 0;
+    // Code;
+    this.code = '';
+    this.funcs = '';
+    this.natives = '';
+    this.inFunc = false;
+    this.inNatives = false;
+    // Lista de Temporales;
+    this.temps = [];
+    this.tempsRecover = {};
+    // Lista de Nativas;
+    this.printString = false;
+    this.concatString = false;
+    this.potencia = false;
+    Generator.generator = new Generator();
+  }
   getCode() {
     //return `${this.getHeader()}${/*this.natives*/}\n${this.funcs}\nvoid main(){\n${this.code}\n}`;
     return `${this.getHeader()}${this.natives}\n${this.funcs}\nvoid main(){\nP = 0; H = 0;\n${this.code}\n\treturn;\n}`;

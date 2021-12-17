@@ -18,6 +18,20 @@ class Return extends Instruction{
   }
 
   compile(generator, env){
-    return null;
+    if(env.returnLbl === ''){
+      return;
+    }
+    let value =  this.expression.compile(generator,env);
+    if(this.value === TypeError.BOOLEAN){
+      let tmpLbl = generator.newLabel();
+      generator.putLabel(value.trueLbl);
+      generator.setStack('p','1');
+      generator.addGoto(tmpLbl);
+      generator.putLabel('p','0');
+      generator.putLabel(tmpLbl);
+    }else{
+      generator.setStack('p',value.value);
+    }
+    generator.addGoto(env.returnLbl);
   }
 }

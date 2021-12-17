@@ -18,7 +18,6 @@ class Environment {
 
   addVariable(id, type, heap, objectType = "") { //saveVar
     if (id in this.variables) {
-      console.log("Variable ya existe");
       return null;
     } else {
       var newSymbol = new C3DSymbol(id, type, this.size, this.prev === null, heap, objectType);
@@ -29,16 +28,17 @@ class Environment {
   }
 
   saveFunc(idFunc, funct) {
-    if (idFunc in this.functions.keys()) {
-      console.log("Función repetida")
+    console.log(this.functions);
+    if (idFunc in this.functions) {
+      //console.log("Función repetida")
     } else {
       this.functions[idFunc] = funct;
     }
   }
 
   saveStruct(idStruct, attr) {
-    if (idStruct in this.structs.keys()) {
-      console.log("Struct repetido");
+    if (idStruct in this.structs) {
+      //console.log("Struct repetido");
     } else {
       this.structs[idStruct] = attr;
     }
@@ -58,7 +58,7 @@ class Environment {
   getFunc(idFunc) {
     env = this
     while (env != None) {
-      if (idFunc in env.functions.keys()) {
+      if (idFunc in env.functions) {
         return env.functions[idFunc];
       }
       env = env.prev;

@@ -10,10 +10,10 @@ class Function extends Instruction{
   
   execute(tree, table){
     if(this.type === Type.NULL){//Si la funcion es de tipo void
-      TableReport.addTableSymbol(new NodeTableSymbols(this.row,this.column,String(this.name),"VOID", tree.getEnvironment(),null));
+      TableReport.addTableSymbol(new NodeTableSymbols(this.row,this.column,String(this.name),"VOID", 'Global',null));
       tree.addEnvironment("MAIN");
     }else{
-      TableReport.addTableSymbol(new NodeTableSymbols(this.row,this.column,String(this.name), this.type, tree.getEnvironment(),null));
+      TableReport.addTableSymbol(new NodeTableSymbols(this.row,this.column,String(this.name), this.type,'Global',null));
       tree.addEnvironment("FUNCION");
     }
     for (var instruction of this.instructions){
@@ -75,13 +75,31 @@ class Function extends Instruction{
   }
 
   compile(generator, env){
-    for (var instruction of this.instructions){
+    /*for (var instruction of this.instructions){
       if(instruction instanceof Print){
         instruction.compile(generator, env);
       }else{
         instruction.compile(generator, env);
       }
+    }*/
+    //return null;        
+    env.saveFunc(this.name, generator);       
+    var newEnv = new Environment(env)
+    let returnLbl = generator.newLabel()
+    newEnv.returnLbl = returnLbl
+    newEnv.size = 1
+    console.log(this.parameters);
+    console.log(this.name);
+    for (var parameter of this.parameters){
+        newEnv.saveVar(parameter.id, parameter.type, (parameter.type == Type.STRING || parameter.type == Type.STRUCT))
     }
-    return null;
+    generator.Limpiar();
+    generator.addBeginFunc(this.name);
+    for(var instruction of this.instructions){
+      instruction.compile(generator,env);
+    }
+    generator.putLabel(returnLbl)
+    generator.addEndFunc()
+    generator.Limpiar()
   }
 }
