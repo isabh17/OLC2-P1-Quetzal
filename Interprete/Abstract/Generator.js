@@ -35,7 +35,7 @@ class Generator {
 
   getCode() {
     //return `${this.getHeader()}${/*this.natives*/}\n${this.funcs}\nvoid main(){\n${this.code}\n}`;
-    return `${this.getHeader()}${this.natives}\n${this.funcs}\nvoid main(){\nP = 0; H = 0;\n${this.code}\n}`;
+    return `${this.getHeader()}${this.natives}\n${this.funcs}\nvoid main(){\nP = 0; H = 0;\n${this.code}\n\treturn;\n}`;
   }
 
   codeIn(code, tab = "\t") {
@@ -161,7 +161,7 @@ class Generator {
   }
 
   putLabel(label) {
-    this.codeIn(`${label}:\n`);
+    this.codeIn(`${label}:\n`); //L0:
   }
 
   //##################

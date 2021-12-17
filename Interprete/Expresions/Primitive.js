@@ -72,22 +72,21 @@ class Primitive extends Instruction {
       if (this.falseLbl === '') {
         this.falseLbl = generator.newLabel();
       }
-
-      if (this.value) {
+      if (this.value==="true") {
         generator.addGoto(this.trueLbl);
-        generator.addComment("GOTO PARA EVITAR ERROR DE GO");
-        generator.addGoto(this.falseLbl);
+        //generator.addComment("GOTO PARA EVITAR ERROR DE GO");
+        //generator.addGoto(this.falseLbl);
       } else {
         generator.addGoto(this.falseLbl);
-        generator.addComment("GOTO PARA EVITAR ERROR DE GO");
-        generator.addGoto(this.trueLbl);
+        //generator.addComment("GOTO PARA EVITAR ERROR DE GO");
+        //generator.addGoto(this.trueLbl);
       }
 
-      var ret = new C3DReturn(this.value, this.type, False);
+      var ret = new C3DReturn(this.value, this.type, false);
       ret.trueLbl = this.trueLbl;
       ret.falseLbl = this.falseLbl;
+      return ret;
 
-      return ret
     } else if (this.type === Type.STRING) {
       var retTemp = generator.addTemp();
       generator.addExp(retTemp, 'H', '', '');

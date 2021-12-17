@@ -100,6 +100,27 @@ class If extends Instruction {
   }
 
   compile(generator, env){
-    return null;
+    generator.addComment("Compilacion de If");
+    var condition = this.condition.compile(generator, env);
+    if (condition.type != Type.BOOLEAN){
+        console.log('Error, condicion no booleana');
+        return null;
+    }
+    generator.putLabel(condition.trueLbl);
+    for(var instruction of this.instructionsIf){
+      instruction.compile(generator, env);
+    }
+    if (this.instructionsElse != null){
+      var exitIf = generator.newLabel();
+      generator.addGoto(exitIf);
+    }
+    generator.putLabel(condition.falseLbl);
+    if (this.instructionsElse != null){
+      for(var instruction of this.instructionsElse){
+        instruction.compile(generator, env);
+      }
+      generator.putLabel(exitIf);
+    }
+    
   }
 }
