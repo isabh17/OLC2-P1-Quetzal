@@ -8,6 +8,12 @@ class Break extends Instruction{
   }
 
   compile(generator, env){
-    return null;
+    //def compile(self, environment):
+    if (env.breakLbl == ''){
+        print("Break fuera de ciclo")
+        return
+    }
+    generator.addGoto(env.breakLbl)
+    //return null;
   }
 }
