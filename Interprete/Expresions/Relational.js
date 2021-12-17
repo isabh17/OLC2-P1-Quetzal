@@ -187,12 +187,12 @@ class Relational extends Instruction{
     return String(value);
   }
 
-  compile(generator){
+  compile(generator, env){
     generator.addComment("INICIO EXPRESION RELACIONAL");
-    var left = this.operLeft.compile(generator);
+    var left = this.operLeft.compile(generator, env);
     var right = null;
     var result = new C3DReturn(null, Type.BOOLEAN, false);
-    if (left.type != Type.BOOLEAN){
+    if (left.type !== Type.BOOLEAN){
       right = this.operRight.compile(generator);
       if ( (left.type === Type.INT || left.type === Type.DOUBLE) && (right.type === Type.INT || right.type === Type.DOUBLE) ){
         this.checkLabels(generator);
@@ -240,7 +240,6 @@ class Relational extends Instruction{
     generator.addSpace();
     result.trueLbl = this.trueLbl;
     result.falseLbl = this.falseLbl;
-
     return result;
   }
 

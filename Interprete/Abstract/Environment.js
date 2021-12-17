@@ -1,7 +1,6 @@
 class Environment {
   constructor(prev) {
     this.prev = prev;
-    // NUEVO
     this.size = 0;
     this.breakLbl = '';
     this.continueLbl = '';
@@ -17,15 +16,16 @@ class Environment {
     this.structs = {};
   }
 
-  saveVar(idVar, symType, inHeap, structType = "") {
-    if (idVar in this.variables.keys()) {
-      console.log("Variable ya existe")
+  addVariable(id, type, heap, objectType = "") { //saveVar
+    if (id in this.variables) {
+      console.log("Variable ya existe");
+      return null;
     } else {
-      newSymbol = Symbol(idVar, symType, this.size, this.prev == None, inHeap, structType)
-      this.size += 1
-      this.variables[idVar] = newSymbol;
+      var newSymbol = new C3DSymbol(id, type, this.size, this.prev === null, heap, objectType);
+      this.size += 1;
+      this.variables[id] = newSymbol;
     }
-    return this.variables[idVar];
+    return this.variables[id];
   }
 
   saveFunc(idFunc, funct) {
@@ -44,11 +44,11 @@ class Environment {
     }
   }
 
-  getVar(idVar) {
-    env = this;
-    while (env != null) {
-      if (idVar in env.variables.keys()) {
-        return env.variables[idVar];
+  getVariable(id) {//getVar
+    var env = this;
+    while (env !== null) {
+      if (id in env.variables) {
+        return env.variables[id];
       }
       env = env.prev;
     }

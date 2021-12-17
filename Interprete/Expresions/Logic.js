@@ -54,7 +54,7 @@ class Logic extends Instruction{
     return String(value);
   }
 
-  compile(generator){
+  compile(generator, env){
     generator.addComment("INICIO EXPRESION LOGICA");
 
     this.checkLabels(generator);

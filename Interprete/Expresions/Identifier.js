@@ -26,7 +26,47 @@ class Identifier extends Instruction{
     }
   }
 
-  compile(generator){
+  compile(generator, env){
+    generator.addComment("Compilacion de Acceso");
+    
+    var symbol = env.getVariable(this.identifier);
+    if(symbol === null){
+        console.log("Error, no existe la variable");
+        return null;
+    }
 
+    // Temporal para guardar variable
+    var temp = generator.addTemp();
+
+    // Obtencion de posicion de la variable
+    var tempPos = symbol.position;
+    if(!symbol.isGlobal){
+      tempPos = generator.addTemp();
+      generator.addExp(tempPos, 'P', symbol.position, "+");
+    }
+    generator.getStack(temp, tempPos);
+
+    if(symbol.type !== Type.BOOLEAN){
+        generator.addComment("Fin compilacion acceso");
+        generator.addSpace();
+        return new C3DReturn(temp, symbol.type, true);
+    }
+    if(this.trueLbl === ''){
+      this.trueLbl = generator.newLabel();
+    }
+    if(this.falseLbl === ''){
+      this.falseLbl = generator.newLabel();
+    }
+    
+    generator.addIf(temp, '1', '==', this.trueLbl);
+    generator.addGoto(this.falseLbl);
+
+    generator.addComment("Fin compilacion acceso");
+    generator.addSpace();
+
+    var ret = new C3DReturn(null, Type.BOOLEAN, false);
+    ret.trueLbl = this.trueLbl;
+    ret.falseLbl = this.falseLbl;
+    return ret;
   }
 }

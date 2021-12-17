@@ -121,6 +121,5 @@ class If extends Instruction {
       }
       generator.putLabel(exitIf);
     }
-    
   }
 }

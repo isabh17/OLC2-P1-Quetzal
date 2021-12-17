@@ -44,6 +44,40 @@ class Assignation extends Instruction{
   }
 
   compile(generator, env){
-    return null;
+    generator.addComment("Compilacion de valor de variable");
+    // Compilacion de valor que estamos asignando
+    var val = this.expression.compile(generator, env);
+
+    generator.addComment("Fin de valor de variable");
+
+    // Guardado y obtencion de variable. Esta tiene la posicion, lo que nos sirve para asignarlo en el heap
+    var newVar = env.getVariable(this.identifier)
+    if(newVar === null){
+        newVar = env.addVariable(this.identifier, val.type, (val.type === Type.STRING || val.type === Type.STRUCT), this.expression.objectType);
+    }
+    newVar.type = val.type;
+
+    // Obtencion de posicion de la variable
+    var tempPos = newVar.position;
+    if(!newVar.isGlobal){
+        tempPos = generator.addTemp();
+        generator.addExp(tempPos, 'P', newVar.position, "+");
+    }
+    if(val.type == Type.BOOLEAN){
+        var tempLbl = generator.newLabel();
+        
+        generator.putLabel(val.trueLbl);
+        generator.setStack(tempPos, "1");
+        
+        generator.addGoto(tempLbl);
+
+        generator.putLabel(val.falseLbl);
+        generator.setStack(tempPos, "0");
+
+        generator.putLabel(tempLbl);
+    }else{
+        generator.setStack(tempPos, val.value);
+    }
+    generator.addSpace();
   }
 }

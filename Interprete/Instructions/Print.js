@@ -32,7 +32,7 @@ class Print extends Instruction{
   }
 
   compile(generator, env){
-    var val = this.expression.compile(generator);
+    var val = this.expression.compile(generator, env);
     if(this.expression.type == Type.INT){
         generator.addPrint("double", val.value);
     }else if(this.expression.type == Type.DOUBLE){

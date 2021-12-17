@@ -315,11 +315,11 @@ class Aritmetica extends Instruction{
     return String(value);
   }
 
-  compile(generator){
-    var leftValue = this.operLeft.compile(generator);
+  compile(generator, env){
+    var leftValue = this.operLeft.compile(generator, env);
     var rightValue;
     if(this.operRight!==null){
-      rightValue = this.operRight.compile(generator);
+      rightValue = this.operRight.compile(generator, env);
     }else{
       rightValue = {"value":leftValue.value};
       leftValue.value = 0;
