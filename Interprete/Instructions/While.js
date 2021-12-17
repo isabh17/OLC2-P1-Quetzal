@@ -47,21 +47,23 @@ class While extends Instruction{
   }
 
   compile(generator, env){
-    var continueLbl = generator.newLabel()
-    generator.putLabel(continueLbl)
+    var continueLbl = generator.newLabel();
+    generator.putLabel(continueLbl);
 
     var condition = this.condition.compile(generator, env);
-    let newEnv = new Environment(env)
+    let newEnv = new Environment(env);
 
-    newEnv.breakLbl = condition.falseLbl
-    newEnv.continueLbl = continueLbl
+    newEnv.breakLbl = condition.falseLbl;
+    newEnv.continueLbl = continueLbl;
 
-    generator.putLabel(condition.trueLbl)
+    generator.putLabel(condition.trueLbl);
 
-    this.instructions.compile(newEnv)
-    generator.addGoto(continueLbl)
+    for(var instruction of this.instructions){
+      instruction.compile(generator, newEnv);
+    }
+    generator.addGoto(continueLbl);
 
-    generator.putLabel(condition.falseLbl)
+    generator.putLabel(condition.falseLbl);
     //return null;
   }
 }

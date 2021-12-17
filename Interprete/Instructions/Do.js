@@ -49,6 +49,23 @@ class Do extends Instruction {
   }
 
   compile(generator, env){
-    return null;
+    var continueLbl = generator.newLabel();
+    generator.putLabel(continueLbl);
+
+    var condition = this.condition.compile(generator, env);
+    let newEnv = new Environment(env);
+
+    newEnv.breakLbl = condition.falseLbl;
+    newEnv.continueLbl = continueLbl;
+
+    generator.putLabel(condition.trueLbl);
+
+    for(var instruction of this.instructions){
+      instruction.compile(generator, newEnv);
+    }
+    generator.addGoto(continueLbl);
+
+    generator.putLabel(condition.falseLbl);
+    //return null;
   }
 }
