@@ -101,7 +101,10 @@ class If extends Instruction {
 
   compile(generator, env){
     generator.addComment("Compilacion de If");
+    //console.log(generator);
+    //console.log(env);
     var condition = this.condition.compile(generator, env);
+    //console.log(condition);
     if (condition.type != Type.BOOLEAN){
         console.log('Error, condicion no booleana');
         return null;
@@ -115,8 +118,10 @@ class If extends Instruction {
       generator.addGoto(exitIf);
     }
     generator.putLabel(condition.falseLbl);
+    console.log("vamos aqui");
     if (this.instructionsElse != null){
       for(var instruction of this.instructionsElse){
+        console.log(instruction);
         instruction.compile(generator, env);
       }
       generator.putLabel(exitIf);

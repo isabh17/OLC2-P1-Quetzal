@@ -56,6 +56,11 @@
                         <i class="fas fa-broom"></i> Limpiar<br></a>
                     <!--<span class="input" id="BtnLimpiar"><i class="fas fa-broom"></i> </span>-->
                 </li>
+                <!--<li class="nav-item">
+                    <a class="btn btn-lg btn-outline-warning" id="BtnC3D">
+                        <i class="far fa-file-code"></i>C3D Copy<br></a>
+                    <span class="input" id="BtnLimpiar"><i class="fas fa-broom"></i> </span>--
+                </li>-->
                 <!--
                 <li class="nav-item">
                     <a href="TablaSimbolos.html" class="btn btn-block btn-md btn-outline-info"  id="BtnTablaSimbolos">Tabla de Simbolos</a>  
@@ -94,6 +99,7 @@
                 </div>
             </div>
             <div  class="col-md-6 justify-content-md-center">
+                <span id="copyAnswer"></span>
                 <div class="jumbotron">
                     <textarea id="Salida"></textarea>
                 </div>
@@ -403,9 +409,25 @@
             arbolast(Codigo);
         }
         document.getElementById('BtnLimpiar').onclick = function (){
-            Fuente.setValue("");          
-           
+            Fuente.setValue("");     
         }
+        /*document.getElementById('BtnC3D').onclick = function (){
+            /*var content = Salida.select();//document.getElementById('Salida');    
+            //content.getValue();
+            //document.execCommand(content.getValue());
+
+            alert("Copied!");
+            textarea.select(); 
+            try {
+                // Copiando el texto seleccionado
+                var successful = document.execCommand('copy');
+            
+                if(successful) answer.innerHTML = 'Copiado!';
+                else answer.innerHTML = 'Incapaz de copiar!';
+            } catch (err) {
+                answer.innerHTML = 'Browser no soportado!';
+            }*/
+        //}
 
         function arbolast(content){
             treeData = [];
