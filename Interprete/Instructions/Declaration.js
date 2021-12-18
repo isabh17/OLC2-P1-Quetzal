@@ -50,9 +50,58 @@ class Declaration extends Instruction {
   }
 
   compile(generator, env) {
-    // Compilacion de valor que estamos asignando
-    var value = this.expression.compile(generator, env);
+    if(this.expression!==null){
+      this.normalDeclaration(generator, env);
+    }else{
+      this.multipleDeclaration(generator, env);
+    }
+  }
 
+  multipleDeclaration(generator, env){
+    var possibleValue;
+    if(this.type === Type.INT || this.type === Type.DOUBLE){
+      possibleValue = "0";
+    }else if(this.type === Type.STRING || this.type === Type.CHAR){
+      possibleValue = "";
+    }else if(this.type === Type.BOOLEAN){
+      possibleValue = "false";
+    }
+    for(var identifier of this.identifier){
+      var value = new C3DReturn(possibleValue, this.type, false);
+      // Guardado y obtencion de variable. Esta tiene la posicion, lo que nos sirve para asignarlo en el heap
+      var newVar = env.getVariable(identifier);
+      if (newVar === null) {
+        newVar = env.addVariable(identifier, value.type, (value.type === Type.STRING || value.type === Type.STRUCT), "");
+      }
+      newVar.type = this.type;
+  
+      // Obtencion de posicion de la variable
+      var tempPos = newVar.position;
+      if (!newVar.isGlobal) {
+        tempPos = generator.addTemp();
+        generator.addExp(tempPos, 'P', newVar.position, "+");
+      }
+      if (value.type === Type.BOOLEAN) {
+        var tempLbl = generator.newLabel();
+  
+        generator.putLabel(value.trueLbl);
+        generator.setStack(tempPos, "1");
+  
+        generator.addGoto(tempLbl);
+  
+        generator.putLabel(value.falseLbl);
+        generator.setStack(tempPos, "0");
+  
+        generator.putLabel(tempLbl);
+      } else {
+        generator.setStack(tempPos, value.value);
+      }
+      generator.addSpace();
+    }
+  }
+
+  normalDeclaration(generator, env){
+    var value = this.expression.compile(generator, env);
     // Guardado y obtencion de variable. Esta tiene la posicion, lo que nos sirve para asignarlo en el heap
     var newVar = env.getVariable(this.identifier);
     if (newVar === null) {

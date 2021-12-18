@@ -33,11 +33,11 @@ class Print extends Instruction{
 
   compile(generator, env){
     var val = this.expression.compile(generator, env);
-    if(this.expression.type == Type.INT){
-        generator.addPrint("double", val.value);
-    }else if(this.expression.type == Type.DOUBLE){
+    if(this.expression.type === Type.INT || val.type === Type.INT){
       generator.addPrint("double", val.value);
-    }else if (val.type == Type.BOOLEAN){
+    }else if(this.expression.type === Type.DOUBLE){
+      generator.addPrint("double", val.value);
+    }else if (val.type === Type.BOOLEAN){
         var tempLbl = generator.newLabel();
         generator.putLabel(val.trueLbl);
         generator.printTrue();

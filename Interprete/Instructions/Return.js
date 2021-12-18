@@ -1,13 +1,13 @@
-class Return extends Instruction{
-  constructor(expression, row, column){
+class Return extends Instruction {
+  constructor(expression, row, column) {
     super(row, column);
     this.expression = expression;
     this.type = null;
     this.result = null;
   }
 
-  execute(tree, table){
-    if(this.expression===null){
+  execute(tree, table) {
+    if (this.expression === null) {
       return null;
     }
     var result = this.expression.execute(tree, table);
@@ -17,20 +17,26 @@ class Return extends Instruction{
     return this;
   }
 
-  compile(generator, env){
-    if(env.returnLbl === ''){
-      return;
+  compile(generator, env) {
+    if (env.returnLbl === '') {
+      console.log("Return fuera de funcion");
+      return null;
     }
-    let value =  this.expression.compile(generator,env);
-    if(this.value === TypeError.BOOLEAN){
-      let tmpLbl = generator.newLabel();
+
+    var value = this.expression.compile(generator, env);
+    if (value.type === Type.BOOLEAN) {
+      var tempLbl = generator.newLabel();
+
       generator.putLabel(value.trueLbl);
-      generator.setStack('p','1');
-      generator.addGoto(tmpLbl);
-      generator.putLabel('p','0');
-      generator.putLabel(tmpLbl);
-    }else{
-      generator.setStack('p',value.value);
+      generator.setStack('P', '1');
+      generator.addGoto(tempLbl);
+
+      generator.putLabel(value.falseLbl);
+      generator.setStack('P', '0');
+
+      generator.putLabel(tempLbl);
+    } else {
+      generator.setStack('P', value.value);
     }
     generator.addGoto(env.returnLbl);
   }

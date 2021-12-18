@@ -193,7 +193,7 @@ class Relational extends Instruction{
     var right = null;
     var result = new C3DReturn(null, Type.BOOLEAN, false);
     if (left.type !== Type.BOOLEAN){
-      right = this.operRight.compile(generator);
+      right = this.operRight.compile(generator, env);
       if ( (left.type === Type.INT || left.type === Type.DOUBLE) && (right.type === Type.INT || right.type === Type.DOUBLE) ){
         this.checkLabels(generator);
         generator.addIf(left.value, right.value, this.getOp(), this.trueLbl);
@@ -214,7 +214,7 @@ class Relational extends Instruction{
 
         generator.putLabel(gotoRight);
 
-        right = this.right.compile(generator);
+        right = this.right.compile(generator, env);
         if (right.type != Type.BOOLEAN){
           console.log("Error, no se pueden comparar");
           return;

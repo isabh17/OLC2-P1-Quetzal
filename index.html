@@ -309,6 +309,9 @@
             tree.getInstructions().forEach(instruction=>{
                 if(instruction instanceof Function){
                     tree.addFunction(instruction);
+                    if(instruction.name !== "main"){
+                        instruction.compile(generator, environment);
+                    }
                 }else if(instruction instanceof TemplateStruct){
                     tree.addStruct(instruction);
                 }else{

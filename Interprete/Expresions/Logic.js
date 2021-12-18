@@ -71,13 +71,13 @@ class Logic extends Instruction{
     }else{
       console.log("NOT");
     }
-    var left = this.operLeft.compile(generator);
+    var left = this.operLeft.compile(generator, env);
     if (left.type !== Type.BOOLEAN){
       console.log("No se puede utilizar en expresion booleana");
       return null;
     }
     generator.putLabel(lblAndOr)
-    var right = this.operRight.compile(generator);
+    var right = this.operRight.compile(generator, env);
     if (right.type !== Type.BOOLEAN){
       console.log("No se puede utilizar en expresion booleana");
       return null;

@@ -74,12 +74,8 @@ class Primitive extends Instruction {
       }
       if (this.value==="true") {
         generator.addGoto(this.trueLbl);
-        //generator.addComment("GOTO PARA EVITAR ERROR DE GO");
-        //generator.addGoto(this.falseLbl);
       } else {
         generator.addGoto(this.falseLbl);
-        //generator.addComment("GOTO PARA EVITAR ERROR DE GO");
-        //generator.addGoto(this.trueLbl);
       }
 
       var ret = new C3DReturn(this.value, this.type, false);

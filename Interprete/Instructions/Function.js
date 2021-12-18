@@ -75,31 +75,42 @@ class Function extends Instruction{
   }
 
   compile(generator, env){
-    /*for (var instruction of this.instructions){
-      if(instruction instanceof Print){
-        instruction.compile(generator, env);
-      }else{
-        instruction.compile(generator, env);
-      }
-    }*/
-    //return null;        
-    env.saveFunc(this.name, generator);       
-    var newEnv = new Environment(env)
-    let returnLbl = generator.newLabel()
-    newEnv.returnLbl = returnLbl
-    newEnv.size = 1
-    console.log(this.parameters);
-    console.log(this.name);
-    for (var parameter of this.parameters){
-        newEnv.saveVar(parameter.id, parameter.type, (parameter.type == Type.STRING || parameter.type == Type.STRUCT))
+    if(this.name === "main"){
+      this.execMain(generator, env);
+    }else{
+      this.execOthers(generator, env);
     }
-    generator.Limpiar();
-    generator.addBeginFunc(this.name);
+  }
+
+  execMain(generator, env){
     for(var instruction of this.instructions){
-      instruction.compile(generator,env);
+      instruction.compile(generator, env);
     }
-    generator.putLabel(returnLbl)
-    generator.addEndFunc()
-    generator.Limpiar()
+  }
+
+  execOthers(generator, env){
+    env.saveFunc(this.name, this);
+    
+    var newEnv = new Environment(env);
+
+    var returnLbl = generator.newLabel();
+    newEnv.returnLbl = returnLbl;
+    newEnv.size = 1;
+
+    for (var parameter in this.parameters){
+      newEnv.addVariable(this.parameters[parameter].Identifier, this.parameters[parameter].Type, (parameter.type === Type.STRING || parameter.type === Type.STRUCT));
+    }
+    
+    generator.freeAllTemps();
+
+    generator.addBeginFunc(this.name);
+
+    for(var instruction of this.instructions){
+      instruction.compile(generator, newEnv);
+    }
+    
+    generator.putLabel(returnLbl);
+    generator.addEndFunc();
+    generator.freeAllTemps();
   }
 }

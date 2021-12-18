@@ -5,7 +5,7 @@ class Environment {
     this.breakLbl = '';
     this.continueLbl = '';
     this.returnLbl = '';
-    if (prev != null) {
+    if (prev !== null) {
       this.size = this.prev.size;
       this.breakLbl = this.prev.breakLbl;
       this.continueLbl = this.prev.continueLbl;
@@ -27,13 +27,19 @@ class Environment {
     return this.variables[id];
   }
 
-  saveFunc(idFunc, funct) {
-    console.log(this.functions);
-    if (idFunc in this.functions) {
-      //console.log("Función repetida")
-    } else {
-      this.functions[idFunc] = funct;
+  saveFunc(name, funct) {
+    this.functions[name] = funct;
+  }
+
+  getFunc(name) {
+    var env = this;
+    while (env != null) {
+      if (name in env.functions) {
+        return env.functions[name];
+      }
+      env = env.prev;
     }
+    return null;
   }
 
   saveStruct(idStruct, attr) {
@@ -53,17 +59,6 @@ class Environment {
       env = env.prev;
     }
     return null;
-  }
-
-  getFunc(idFunc) {
-    env = this
-    while (env != None) {
-      if (idFunc in env.functions) {
-        return env.functions[idFunc];
-      }
-      env = env.prev;
-    }
-    return None
   }
 
   getStruct(idStruct) {

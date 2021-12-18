@@ -32,8 +32,9 @@ class Generator {
     }
     return ret;
   }
+
   generator = null; // par afunciones
-  Limpiar(){
+  Limpiar() {
     // Contadores
     this.countTemp = 0;
     this.countLabel = 0;
@@ -52,9 +53,10 @@ class Generator {
     this.potencia = false;
     Generator.generator = new Generator();
   }
+
   getCode() {
     //return `${this.getHeader()}${/*this.natives*/}\n${this.funcs}\nvoid main(){\n${this.code}\n}`;
-    return `${this.getHeader()}${this.natives}\n${this.funcs}\nvoid main(){\nP = 0; H = 0;\n${this.code}\n\treturn;\n}`;
+    return `${this.getHeader()}${this.natives}\n${this.funcs}\nvoid main(){\n\tP = 0; H = 0;\n${this.code}\n\treturn;\n}`;
   }
 
   codeIn(code, tab = "\t") {
@@ -117,6 +119,10 @@ class Generator {
     return temp;
   }
 
+  freeAllTemps() {
+    this.tempsRecover = {};
+  }
+
   saveTemps(env) {
     var size = 0
     if (this.tempsRecover.length > 0) {
@@ -133,7 +139,7 @@ class Generator {
       }
       this.addComment('Fin Guardado de temporales');
     }
-    ptr = env.size;
+    var ptr = env.size;
     env.size = ptr + size;
     return ptr;
   }
@@ -156,7 +162,6 @@ class Generator {
       this.addComment('Fin Recuperacion de temporales')
     }
   }
-
   //###################
   //# EXPRESIONES
   //###################
@@ -169,7 +174,6 @@ class Generator {
       this.codeIn(`${result}=${left}${op}${right};\n`);
     }
   }
-
   //####################
   // Manejo de Labels
   //####################
@@ -182,14 +186,12 @@ class Generator {
   putLabel(label) {
     this.codeIn(`${label}:\n`); //L0:
   }
-
   //##################
   // GOTO
   //##################
   addGoto(label) {
     this.codeIn(`goto ${label};\n`);
   }
-
   //##################
   // IF
   //##################
@@ -202,7 +204,6 @@ class Generator {
   addSpace() {
     this.codeIn("\n");
   }
-
   //#############
   // NATIVES
   //#############
@@ -253,7 +254,7 @@ class Generator {
   }
 
   fConcatString() {
-    if (this.concatString){
+    if (this.concatString) {
       return null;
     }
     this.concatString = true;
@@ -337,7 +338,6 @@ class Generator {
     this.addEndFunc();
     this.inNatives = false;
   }
-
   //##################
   // FUNCS
   //##################
@@ -351,10 +351,9 @@ class Generator {
   addEndFunc() {
     this.codeIn('return;\n}\n');
     if (!this.inNatives) {
-      this.inFunc = False
+      this.inFunc = false;
     }
   }
-
   //############
   // ENVS
   //############
@@ -369,7 +368,6 @@ class Generator {
   retEnv(size) {
     this.codeIn(`P=P-${size};\n`);
   }
-
   //##############
   // STACK
   //##############
@@ -385,7 +383,6 @@ class Generator {
     this.freeTemp(pos);
     this.codeIn(`${place}=stack[(int)${pos}];\n`);
   }
-
   //##############
   // HEAP
   //##############
