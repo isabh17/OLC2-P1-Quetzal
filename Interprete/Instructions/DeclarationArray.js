@@ -13,6 +13,7 @@ class DeclarationArray extends Instruction {
         var res = table.addSymbol(symbol);
         if (res instanceof Exception) return res;
       }
+      TableReport.addTableSymbol(new NodeTableSymbols(this.row, this.column, String(this.identifier), this.type, tree.getEnvironment(), null));
       return null;
     }else{
       this.listObjects.type = this.type;
@@ -21,6 +22,7 @@ class DeclarationArray extends Instruction {
       var symbol = new Symbol(String(this.identifier), Type.ARRAY, result, this.row, this.column, null, this.type);
       var res = table.addSymbol(symbol);
       if (res instanceof Exception) return res;
+      TableReport.addTableSymbol(new NodeTableSymbols(this.row, this.column, String(this.identifier), this.type, tree.getEnvironment(), result));
       return null;
     }
   }

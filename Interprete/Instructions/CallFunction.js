@@ -61,6 +61,7 @@ class CallFunction extends Instruction {
           if (resultTable instanceof Exception) {
             return resultTable;
           }
+          TableReport.addTableSymbol(new NodeTableSymbols(this.row, this.column, String(result.parameters[parameter].Identifier), type, tree.getEnvironment(), value));
         } else {
           if ((this.parameters[count].type === Type.STRUCT || this.parameters[count].type === Type.NULL) && typeof (result.parameters[parameter].Type) === 'string') {//Cambio aqui
             if (this.parameters[count].type === Type.NULL) this.parameters[count].type = Type.STRUCT;

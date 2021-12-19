@@ -11,10 +11,10 @@ class Function extends Instruction{
   execute(tree, table){
     if(this.type === Type.NULL){//Si la funcion es de tipo void
       TableReport.addTableSymbol(new NodeTableSymbols(this.row,this.column,String(this.name),"VOID", 'Global',null));
-      tree.addEnvironment("MAIN");
+      tree.addEnvironment("Funcion "+String(this.name));
     }else{
       TableReport.addTableSymbol(new NodeTableSymbols(this.row,this.column,String(this.name), this.type,'Global',null));
-      tree.addEnvironment("FUNCION");
+      tree.addEnvironment("Funcion "+String(this.name));
     }
     for (var instruction of this.instructions){
       var value = instruction.execute(tree, table);
@@ -70,7 +70,7 @@ class Function extends Instruction{
       ErrorList.addError(new ErrorNode(this.row, this.column,new ErrorType(EnumErrorType.SEMANTIC), "Error en funcion "+ this.name+ ", se esperaba que se retornara un valor.",ENVIRONMENT.FUNCTION));
       return new Exception("Semantico", "Error en funcion "+ this.name+ ", se esperaba que se retornara un valor.", this.row, this.column);
     }
-    tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+    //tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
     return null;
   }
 

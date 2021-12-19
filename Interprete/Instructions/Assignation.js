@@ -32,9 +32,26 @@ class Assignation extends Instruction{
       if(symbol.getType()===2){
         //console.log("es double");
         symbol = new Symbol(symbol.getId(),symbol.getType(), value, symbol.getRow(), symbol.getColumn(), null, null);
+        for(var i = 0; i <  TableReport.SymbolList.length; i++){
+          if(TableReport.SymbolList[i].name === symbol.getId() && TableReport.SymbolList[i].type === symbol.getType() && TableReport.SymbolList[i].line === symbol.getRow() && TableReport.SymbolList[i].column === symbol.getColumn()  ){
+              //console.log("ya esta repetida " + node.name);
+              TableReport.SymbolList[i].value = value;
+          }
+          //item = TableReport.SymbolList[i];
+          //PrintConsole.printLine(`Error tipo: ${item.errorType} Linea: ${item.line} Columna: ${item.column} Descripcion: ${item.description} Entorno: ${item.enviroment}`);
+        }
       }else{
         symbol = new Symbol(symbol.getId(), this.expression.type, value, symbol.getRow(), symbol.getColumn(), null, null);
+        for(var i = 0; i <  TableReport.SymbolList.length; i++){
+          if(TableReport.SymbolList[i].name === symbol.getId() && TableReport.SymbolList[i].type === this.expression.type && TableReport.SymbolList[i].line === symbol.getRow() && TableReport.SymbolList[i].column === symbol.getColumn()  ){
+              //console.log("ya esta repetida " + node.name);
+              TableReport.SymbolList[i].value = value;
+          }
+          //item = TableReport.SymbolList[i];
+          //PrintConsole.printLine(`Error tipo: ${item.errorType} Linea: ${item.line} Columna: ${item.column} Descripcion: ${item.description} Entorno: ${item.enviroment}`);
+        }
       }
+      
     }
     //console.log(symbol);
     //console.log("vamo mal");

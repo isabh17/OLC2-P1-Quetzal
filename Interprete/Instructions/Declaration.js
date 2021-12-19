@@ -45,6 +45,7 @@ class Declaration extends Instruction {
         var res = table.addSymbol(symbol);
         if (res instanceof Exception) return res;
       }
+      TableReport.addTableSymbol(new NodeTableSymbols(this.row, this.column, String(this.identifier), this.type, tree.getEnvironment(), value));
       return null;
     }
   }

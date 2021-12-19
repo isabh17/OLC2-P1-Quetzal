@@ -23,22 +23,22 @@ class Logic extends Instruction{
           return this.getVal(this.operLeft.type, left) || this.getVal(this.operRight.type, right);
         }
         ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`Tipo Erroneo de operacion para ||.`,ENVIRONMENT.NULL));
-        return new Exception("Semantico", "Tipo Erroneo de operacion para ||.", this.row, this.column, datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+        return new Exception("Semantico", "Tipo Erroneo de operacion para ||.", this.row, this.column )
     }else if ( this.operator === LOGIC_OPERATOR.AND){
         if ( this.operLeft.type === Type.BOOLEAN && this.operRight.type === Type.BOOLEAN){
           return this.getVal(this.operLeft.type, left) && this.getVal(this.operRight.type, right);
         }
         ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`Tipo Erroneo de operacion para &&.`,ENVIRONMENT.NULL));
-        return new Exception("Semantico", "Tipo Erroneo de operacion para &&.", this.row, this.column, datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+        return new Exception("Semantico", "Tipo Erroneo de operacion para &&.", this.row, this.column )
     }else if ( this.operator === LOGIC_OPERATOR.NOT){
         if ( this.operLeft.type === Type.BOOLEAN){
           return ! this.getVal(this.operLeft.type, left);
         }
         ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`Tipo Erroneo de operacion para !.`,ENVIRONMENT.NULL));
-        return new Exception("Semantico", "Tipo Erroneo de operacion para !.", this.row, this.column, datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+        return new Exception("Semantico", "Tipo Erroneo de operacion para !.", this.row, this.column )
     }
     ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`Tipo de Operacion no Especificado.`,ENVIRONMENT.NULL));
-    return new Exception("Semantico", "Tipo de Operacion no Especificado.", this.row, this.column, datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    return new Exception("Semantico", "Tipo de Operacion no Especificado.", this.row, this.column )
   }
     
   getVal(type, value){

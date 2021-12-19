@@ -328,6 +328,7 @@
             }
             Consola.setValue(tree.getOut());
             showTableErrorsSymbols();
+            showTableExecuteSymbols(); 
         }
 
         function CompileC3D(texto){
@@ -342,7 +343,7 @@
             var generator = new Generator();
             var environment = new Environment(null);
             tree.setGlobalTable(tsGlobal);
-            tree.setGenerator(generator);
+            //tree.setGenerator(generator);
             tree.getInstructions().forEach(instruction=>{
                 if(instruction instanceof Function){
                     tree.addFunction(instruction);
@@ -351,6 +352,7 @@
                     }
                 }else if(instruction instanceof TemplateStruct){
                     tree.addStruct(instruction);
+                    TableReport.addTableSymbol(new NodeTableSymbols(instruction.row, instruction.column, String(instruction.name),'STRUCT', tree.getEnvironment(), instruction.parameters));
                 }else{
                     if(instruction instanceof Declaration || instruction instanceof DeclarationArray || instruction instanceof CreateStruct){
                         var value = instruction.execute(tree, tsGlobal);
@@ -368,14 +370,15 @@
             if(exists){
                 var newTable = new TableSymbols(tsGlobal);
                 var result = tree.getFunction("main").execute(tree, newTable);
-                tree.getFunction("main").compile(generator, environment);
+                //tree.getFunction("main").compile(generator, environment);
                 if(result instanceof Exception) console.log(result);
             }else{
                 console.log("Error, posibles causas: Hay más de un metodo main, no hay metodo main o el metodo main no es de tipo void ");
             }
             Consola.setValue(tree.getOut());
-            Salida.setValue(generator.getCode());
+            //Salida.setValue(generator.getCode());
             showTableErrorsSymbols();
+            showTableExecuteSymbols();
         }
 
         function verifyMain(tree){
@@ -577,12 +580,13 @@
             html += " </thead>";
             html += "<tbody>";
             var nodes = TableReport.getTableReport();
+            //console.log(nodes);
             for (var i = 0; i < nodes.length; i++) {
                 var item = nodes[i];
                 html += "<tr>";
                 html += `<td>${i + 1}</td>`;
                 html += `<td>${item.name}</td>`;
-                html += `<td>${item.type==1?'INT':item.type==2?'DOUBLE':item.type==3?'STRING':item.type==4?'CHAR':item.type==5?'BOOLEAN':item.type==6?'STRUCT':item.type==7?'ARRAY':item.type=='VOID'?'VOID':'NULL'}</td>`;
+                html += `<td>${item.type==1?'INT':item.type==2?'DOUBLE':item.type==3?'STRING':item.type==4?'CHAR':item.type==5?'BOOLEAN':item.type==6?'STRUCT':item.type==7?'ARRAY':item.type=='VOID'?'VOID':item.type == 'NULL'?'NULL':item.type}</td>`;
                 html += `<td>${item.line}</td>`;
                 html += `<td>${item.column}</td>`;
                 html += `<td>${item.value}</td>`;

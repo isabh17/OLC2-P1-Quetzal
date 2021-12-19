@@ -27,7 +27,19 @@ class NodeTableSymbols {
     }
 
     static addTableSymbol(node){
-        TableReport.SymbolList.push(node);
+        var item;
+        var exist = false;
+        for(var i = 0; i <  TableReport.SymbolList.length; i++){
+            if(TableReport.SymbolList[i].name === node.name && TableReport.SymbolList[i].typeEnviroment === node.typeEnviroment ){
+                //console.log("ya esta repetida " + node.name);
+                exist= true;
+            }
+            //item = TableReport.SymbolList[i];
+            //PrintConsole.printLine(`Error tipo: ${item.errorType} Linea: ${item.line} Columna: ${item.column} Descripcion: ${item.description} Entorno: ${item.enviroment}`);
+        }
+        if(exist!=true){
+            TableReport.SymbolList.push(node);
+        }            
     }
 
     static getTableReport(){

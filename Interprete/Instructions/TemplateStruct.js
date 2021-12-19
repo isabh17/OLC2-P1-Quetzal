@@ -5,7 +5,7 @@ class TemplateStruct extends Instruction {
     this.parameters = parameters;
   }
 
-  execute(tree, table) {
+  execute(tree, table) {    
     return null;
   }
 
