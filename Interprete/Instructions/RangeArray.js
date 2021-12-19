@@ -26,12 +26,13 @@ class RangeArray extends Instruction{
       ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Uno de los parametros enviados en el rango no es de tipo entero", ENVIRONMENT.NULL));
       return new Exception("Semantico", "Uno de los parametros enviados en el rango no es de tipo entero", this.row, this.column);
     }
+    var resta = left === 0 ? 0 : 1;
     var value = symbol.getValue();
-    if((left-1 < 0 || right > value.length) || left > right){
+    if((left - resta< 0 || right > value.length) || left > right){
       ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Valores incorrectos en el rango solicitado del arreglo", ENVIRONMENT.NULL));
       return new Exception("Semantico", "Valores incorrectos en el rango solicitado del arreglo", this.row, this.column);
     }
-    var range = value.slice(left-1, right);
+    var range = value.slice(left-resta, right);
     this.type = symbol.getType();
     this.objectType = symbol.objectType;
     return range;
