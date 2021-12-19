@@ -51,7 +51,7 @@ class Assignation extends Instruction{
     generator.addComment("Fin de valor de variable");
 
     // Guardado y obtencion de variable. Esta tiene la posicion, lo que nos sirve para asignarlo en el heap
-    var newVar = env.getVariable(this.identifier)
+    var newVar = env.getVariable(this.identifier);
     if(newVar === null){
         newVar = env.addVariable(this.identifier, val.type, (val.type === Type.STRING || val.type === Type.STRUCT), this.expression.objectType);
     }

@@ -152,22 +152,25 @@ class CallFunction extends Instruction {
   }
 
   compile(generator, env) {
+    if (this.verifyNative()) {
+      return this.executeCompileNatives(generator, env);
+    }
     var func = env.getFunc(this.name);
     if (func !== null) {
       var paramValues = [];
       var size = generator.saveTemps(env);
 
-      for(var parameter of this.parameters){
+      for (var parameter of this.parameters) {
         paramValues.push(parameter.compile(generator, env));
       }
       var temp = generator.addTemp();
 
       generator.addExp(temp, 'P', env.size + 1, '+');
       var aux = 0;
-      for(var param of paramValues){
+      for (var param of paramValues) {
         aux = aux + 1;
         generator.setStack(temp, param.value);
-        if(aux !== paramValues.length){
+        if (aux !== paramValues.length) {
           generator.addExp(temp, temp, '1', '+');
         }
       }
@@ -182,5 +185,35 @@ class CallFunction extends Instruction {
       //  Verificar tipo de la funcion. Boolean es distinto
       return new C3DReturn(temp, func.type, true);
     }
+  }
+
+  executeCompileNatives(generator, env) {
+    if (this.name === "pow") {
+      var left = this.parameters[0].compile(generator, env);
+      var right = this.parameters[1].compile(generator, env);
+      generator.fPower();
+      return this.callPower(generator, env, left.value, right.value);
+    }
+  }
+
+  callPower(generator, env, param1, param2) {
+    // paso de parámetros
+    // Parametro 1 
+    var paramTemp = generator.addTemp();
+    generator.addExp(paramTemp, 'P', env.size, '+');
+    generator.addExp(paramTemp, paramTemp, '1', '+');
+    generator.setStack(paramTemp, param1);
+    // Parametro 2 
+    var paramTemp1 = generator.addTemp();
+    generator.addExp(paramTemp1, paramTemp, '1', '+');
+    generator.setStack(paramTemp1, param2);
+
+    // Cambio y llamada a entorno
+    generator.newEnv(env.size);
+    generator.callFun('native_power');
+    var temp = generator.addTemp();
+    generator.getStack(temp, 'P');
+    generator.retEnv(env.size);
+    return new C3DReturn(temp, Type.INT, true);
   }
 }

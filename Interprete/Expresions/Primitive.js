@@ -72,7 +72,7 @@ class Primitive extends Instruction {
       if (this.falseLbl === '') {
         this.falseLbl = generator.newLabel();
       }
-      if (this.value==="true") {
+      if (this.value === "true") {
         generator.addGoto(this.trueLbl);
       } else {
         generator.addGoto(this.falseLbl);
@@ -95,6 +95,12 @@ class Primitive extends Instruction {
       generator.nextHeap();
 
       return new C3DReturn(retTemp, Type.STRING, true);
+    } else if (this.type == Type.CHAR) {
+      var retTemp = generator.addTemp();
+      generator.addExp(retTemp, 'H', '', '');
+      generator.setHeap('H', this.value.charCodeAt(0));
+      generator.nextHeap();
+      return new C3DReturn(retTemp, Type.CHAR, true);
     } else {
       console.log('Por hacer');
     }

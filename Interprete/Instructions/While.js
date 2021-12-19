@@ -64,6 +64,6 @@ class While extends Instruction{
     generator.addGoto(continueLbl);
 
     generator.putLabel(condition.falseLbl);
-    //return null;
+    return null;
   }
 }

@@ -59,7 +59,6 @@
                 <li class="nav-item">
                     <a class="btn btn-lg btn-outline-warning" id="BtnC3D">
                         <i class="far fa-file-code"></i>C3D Copy<br></a>
-                    <span class="input" id="BtnLimpiar"><i class="fas fa-broom"></i> </span>--
                 </li>
                 <!--
                 <li class="nav-item">
@@ -302,6 +301,44 @@
             var instructions = gramatica.parse(texto);
             var tree = new Tree(instructions);
             var tsGlobal = new TableSymbols(null);
+            tree.setGlobalTable(tsGlobal);
+            tree.getInstructions().forEach(instruction=>{
+                if(instruction instanceof Function){
+                    tree.addFunction(instruction);
+                }else if(instruction instanceof TemplateStruct){
+                    tree.addStruct(instruction);
+                }else{
+                    if(instruction instanceof Declaration || instruction instanceof DeclarationArray || instruction instanceof CreateStruct){
+                        var value = instruction.execute(tree, tsGlobal);
+                        if (value instanceof Exception){
+                            console.log(value);
+                        }
+                    }else{
+                        ErrorList.addError(new ErrorNode(instruction.row, instruction.column,new ErrorType(EnumErrorType.SEMANTIC), "Instrucción fuera de función o metodo main", ENVIRONMENT.NULL));
+                    }
+                }
+            });
+            var exists = verifyMain(tree);
+            if(exists){
+                var newTable = new TableSymbols(tsGlobal);
+                var result = tree.getFunction("main").execute(tree, newTable);
+                if(result instanceof Exception) console.log(result);
+            }else{
+                console.log("Error, posibles causas: Hay más de un metodo main, no hay metodo main o el metodo main no es de tipo void ");
+            }
+            Consola.setValue(tree.getOut());
+            showTableErrorsSymbols();
+        }
+
+        function CompileC3D(texto){
+            Salida.setValue("");
+            Consola.setValue("");
+            ErrorList.cleanErrorList();
+            TableReport.cleanTableReport();
+            texto = deletePharentesis(texto);
+            var instructions = gramatica.parse(texto);
+            var tree = new Tree(instructions);
+            var tsGlobal = new TableSymbols(null);
             var generator = new Generator();
             var environment = new Environment(null);
             tree.setGlobalTable(tsGlobal);
@@ -319,6 +356,8 @@
                         var value = instruction.execute(tree, tsGlobal);
                         if (value instanceof Exception){
                             console.log(value);
+                        }else{
+                            instruction.compile(generator, environment);
                         }
                     }else{
                         ErrorList.addError(new ErrorNode(instruction.row, instruction.column,new ErrorType(EnumErrorType.SEMANTIC), "Instrucción fuera de función o metodo main", ENVIRONMENT.NULL));
@@ -415,7 +454,9 @@
             Fuente.setValue("");     
         }
         document.getElementById('BtnC3D').onclick = function (){
-          
+            var Codigo = Fuente.getValue();
+            CompileC3D(Codigo);
+            arbolast(Codigo);
         }
 
         function arbolast(content){

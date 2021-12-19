@@ -14,6 +14,9 @@ class Generator {
     this.tempsRecover = {};
     // Lista de Nativas
     this.printString = false;
+    this.compareString = false;
+    this.uppercase = false;
+    this.power = false;
     this.concatString = false;
     this.potencia = false;
   }
@@ -31,27 +34,6 @@ class Generator {
       ret += ";\n";
     }
     return ret;
-  }
-
-  generator = null; // par afunciones
-  Limpiar() {
-    // Contadores
-    this.countTemp = 0;
-    this.countLabel = 0;
-    // Code;
-    this.code = '';
-    this.funcs = '';
-    this.natives = '';
-    this.inFunc = false;
-    this.inNatives = false;
-    // Lista de Temporales;
-    this.temps = [];
-    this.tempsRecover = {};
-    // Lista de Nativas;
-    this.printString = false;
-    this.concatString = false;
-    this.potencia = false;
-    Generator.generator = new Generator();
   }
 
   getCode() {
@@ -334,6 +316,123 @@ class Generator {
 
     // valor de retorno
     this.setStack('P', tempNewString);
+
+    this.addEndFunc();
+    this.inNatives = false;
+  }
+
+  fCompareString() {
+    if (this.compareString) {
+      return;
+    }
+    this.compareString = true;
+    this.inNatives = true;
+    this.addBeginFunc("compareString");
+
+    var tempP = this.addTemp();
+    this.freeTemp(tempP);
+    var tempP1 = this.addTemp();
+    this.freeTemp(tempP1);
+    var tempP2 = this.addTemp();
+    this.freeTemp(tempP2);
+
+    // label de inicio
+    var initLbl = this.newLabel();
+    // label de true
+    var trueLbl = this.newLabel();
+    // label de false
+    var falseLbl = this.newLabel();
+    // label de salida
+    var returnLbl = this.newLabel();
+
+
+    // extrayendo parametros
+    // Parametro1
+    this.addExp(tempP, 'P', '1', '+');
+    this.getStack(tempP1, tempP);
+    // Parametro1
+    this.addExp(tempP, tempP, '1', '+');
+    this.getStack(tempP2, tempP);
+
+    // Inicio
+    var tempValue1 = this.addTemp();
+    var tempValue2 = this.addTemp();
+
+    this.putLabel(initLbl);
+    this.getHeap(tempValue1, tempP1);
+    this.getHeap(tempValue2, tempP2);
+
+    this.addIf(tempValue1, tempValue2, '!=', falseLbl);
+    this.addIf(tempValue1, '-1', '==', trueLbl); // termino
+
+    this.addExp(tempP1, tempP1, '1', '+');
+    this.addExp(tempP2, tempP2, '1', '+');
+    this.addGoto(initLbl);
+
+    // TRUE
+    this.putLabel(trueLbl);
+    this.setStack('P', '1'); // 1 => true
+    this.addGoto(returnLbl);
+
+    // FALSE
+    this.putLabel(falseLbl);
+    this.setStack('P', '0'); // 0 => falso
+
+    // FIN
+    this.putLabel(returnLbl);
+    this.addEndFunc();
+    this.inNatives = false;;
+  }
+
+  fPower() {
+    if (this.power) {
+      return;
+    }
+    this.power = true;
+    this.inNatives = true;
+    this.addBeginFunc("native_power");
+
+    var tempP = this.addTemp();
+    this.freeTemp(tempP);
+    var tempP1 = this.addTemp();
+    this.freeTemp(tempP1);
+    var tempP2 = this.addTemp();
+    this.freeTemp(tempP2);
+
+    //label de inicio
+    var initLbl = this.newLabel();
+    //label de salida
+    var returnLbl = this.newLabel();
+    //Label exponente 0
+    var exponente = this.newLabel();
+
+    //extrayendo parametros
+    //Parametro1
+    this.addExp(tempP, 'P', '1', '+');
+    this.getStack(tempP1, tempP);
+    //Parametro1
+    this.addExp(tempP, tempP, '1', '+');
+    this.getStack(tempP2, tempP);
+
+    this.addExp(tempP, tempP1, '', ''); //guardando base
+
+    //Si el exponente = 0
+    this.addIf(tempP2, '0', '==', exponente);
+
+    //Inicio
+    this.putLabel(initLbl);
+
+    this.addIf(tempP2, '1', '<=', returnLbl);
+    this.addExp(tempP1, tempP1, tempP, '*');
+    this.addExp(tempP2, tempP2, '1', '-');
+    this.addGoto(initLbl);
+    //exponente 0
+    this.putLabel(exponente);
+    this.addExp(tempP1, '1', '', '');
+
+    //FIN
+    this.putLabel(returnLbl);
+    this.setStack('P', tempP1);
 
     this.addEndFunc();
     this.inNatives = false;

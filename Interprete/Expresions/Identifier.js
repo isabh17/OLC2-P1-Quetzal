@@ -34,7 +34,7 @@ class Identifier extends Instruction{
     
     var symbol = env.getVariable(this.identifier);
     if(symbol === null){
-        console.log("Error, no existe la variable");
+        console.log("Error, no existe la variable "+this.identifier);
         return null;
     }
 

@@ -45,7 +45,7 @@ class Print extends Instruction{
         generator.putLabel(val.falseLbl);
         generator.printFalse();
         generator.putLabel(tempLbl);
-    }else if(val.type == Type.STRING){
+    }else if(val.type === Type.STRING){
         generator.fPrintString();
         var paramTemp = generator.addTemp();
         generator.addExp(paramTemp, 'P', env.size, '+');
@@ -56,6 +56,10 @@ class Print extends Instruction{
         var temp = generator.addTemp();
         generator.getStack(temp, 'P');
         generator.retEnv(env.size);
+    }else if (val.type === Type.CHAR){
+      var temp = generator.addTemp();
+      generator.getHeap(temp, val.value);
+      generator.addPrint("char", temp);
     }else{
       console.log("POR HACER");
     }

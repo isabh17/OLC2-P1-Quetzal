@@ -69,7 +69,10 @@ class Logic extends Instruction{
       lblAndOr = this.operLeft.falseLbl = generator.newLabel();
       this.operRight.falseLbl = this.falseLbl;
     }else{
-      console.log("NOT");
+      var ret = new C3DReturn(null, Type.BOOLEAN, false);
+      ret.trueLbl = this.falseLbl;
+      ret.falseLbl = this.trueLbl;
+      return ret;
     }
     var left = this.operLeft.compile(generator, env);
     if (left.type !== Type.BOOLEAN){
