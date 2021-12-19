@@ -12,12 +12,12 @@ class Logic extends Instruction{
 
   execute(tree, table){
     var left = this.operLeft.execute(tree, table);
+    var right;
     if (left instanceof Exception) return left;
     if ( this.operRight != null){
-      var right = this.operRight.execute(tree, table);
+      right = this.operRight.execute(tree, table);
       if ( right instanceof Exception) return right;
     }
-    
     if ( this.operator === LOGIC_OPERATOR.OR){
         if ( this.operLeft.type === Type.BOOLEAN && this.operRight.type === Type.BOOLEAN){
           return this.getVal(this.operLeft.type, left) || this.getVal(this.operRight.type, right);
@@ -47,7 +47,12 @@ class Logic extends Instruction{
     }else if( type === Type.DOUBLE){
       return parseFloat(value);
     }else if(type === Type.BOOLEAN){
-      return (JSON.parse(value)===true);
+      if(value === true){
+        return true;
+      }else{
+        return false;
+      }
+      //return (JSON.parse(value)===true);
     }else if(type === Type.CHAR){
       return parseInt(value.charCodeAt(0));
     }

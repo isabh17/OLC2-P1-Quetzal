@@ -55,7 +55,11 @@ class Primitive extends Instruction {
     } else if (type === Type.DOUBLE) {
       return parseFloat(value);
     } else if (type === Type.BOOLEAN) {
-      return Boolean(value);
+      if(value === "true"){
+        return true;
+      }else{
+        return false;
+      }
     } else if (type === Type.CHAR) {
       return parseInt(value.charCodeAt(0));
     }

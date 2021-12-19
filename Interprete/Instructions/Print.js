@@ -36,7 +36,7 @@ class Print extends Instruction {
     }
     var jump = this.jump === true ? "\n" : "";
     for(var exp of expressions){
-      tree.updateOut(exp);
+      tree.updateOut(exp+" ");
     }
     tree.updateOut(jump);
     return null;

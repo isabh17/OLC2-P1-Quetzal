@@ -306,7 +306,12 @@ class Aritmetica extends Instruction{
     }else if( type === Type.DOUBLE){
       return parseFloat(value);
     }else if( type === Type.BOOLEAN){
-      return (JSON.parse(value)===true);
+      if(value === "true"){
+        return true;
+      }else{
+        return false;
+      }
+      //return (JSON.parse(value)===true);
     }else if( type === Type.CHAR){
       return parseInt(value.charCodeAt(0));
     }else if (type === Type.ARRAY){
