@@ -20,7 +20,7 @@ class AccessAtributeStruct extends Instruction{
     }
     for(var i = 0; i < this.parameters.length; i++){
       if(String(actualValue.getValue())==="null"){
-        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "El struct no contiene el parametro: "+this.parameters[i], ENVIRONMENT.NULL));
+        ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "No se le ha asignado un valor en la propiedad solicitada del struct", ENVIRONMENT.NULL));
         return new Exception("Semantico", "No se le ha asignado un valor en la propiedad solicitada del struct", this.row, this.column);        
       }
       actualValue = actualValue.getValue();

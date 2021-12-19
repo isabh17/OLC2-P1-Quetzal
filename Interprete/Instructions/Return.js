@@ -8,7 +8,8 @@ class Return extends Instruction {
 
   execute(tree, table) {
     if (this.expression === null) {
-      return null;
+      this.type = Type.NULL;
+      return this;
     }
     var result = this.expression.execute(tree, table);
     if (result instanceof Exception) return result;

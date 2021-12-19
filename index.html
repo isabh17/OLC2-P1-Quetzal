@@ -10,6 +10,7 @@
     <script src="css/lib/codemirror.js"></script>
     <script src="css/addon/edit/closetag.js"></script>
     <script src="css/javascript/javascript.js"></script>
+    <script src="css/clike/clike.js"></script>
     
     <!-- CSS only -->
     <link href="css/lib/codemirror.css" rel="stylesheet"/>
@@ -40,41 +41,19 @@
                 <li class="nav-item" href="AST.html">
                     <input type="file" name="" class="btn btn-block btn-md btn-warning" id="open-file" >
                 </li>
-                <!--<li class="nav-item">
-                    <input type="button" value="Guardar Archivo" class="btn btn-block btn-md btn-outline-light" id="BtnGuardarArchivo">
-                </li>-->
-
                 <li class="nav-item">
                     <a class="btn btn-lg btn-outline-success" id="BtnCompilar">
                         <i class="fas fa-cogs"></i> Compilar<br></a>
-                    <!--<span class="input-group-text" id="inputGroupPrepend"><i class="ti-search"></i> </span>
-                    <input type="button" value="Compilar" class="btn btn-block btn-md btn-success" id="BtnCompilar">-->
                     <br>
                 </li>
                 <li class="nav-item">
                     <a class="btn btn-lg btn-outline-info" id="BtnLimpiar">
                         <i class="fas fa-broom"></i> Limpiar<br></a>
-                    <!--<span class="input" id="BtnLimpiar"><i class="fas fa-broom"></i> </span>-->
                 </li>
                 <li class="nav-item">
                     <a class="btn btn-lg btn-outline-warning" id="BtnC3D">
                         <i class="far fa-file-code"></i>C3D Copy<br></a>
                 </li>
-                <!--
-                <li class="nav-item">
-                    <a href="TablaSimbolos.html" class="btn btn-block btn-md btn-outline-info"  id="BtnTablaSimbolos">Tabla de Simbolos</a>  
-                </li>
-
-                <li class="nav-item">
-                    <a href="Errores.html" class="btn btn-block btn-md btn-outline-danger" id="BtnReporteErrores">Reporte de Errores</a>  
-                </li>-->
-
-                <!--<li class="nav-item">
-                    <a href="AST.html" class="btn btn-block btn-md btn-outline-warning">Arbol AST</a>                    
-                </li>-->
-                <!--<li class="nav-item">
-                    <a href="#" class="btn btn-block btn-md btn-outline-primary">Reporte Gramatical</a>                    
-                </li>-->
             </ul>
         </nav>
        
@@ -83,11 +62,9 @@
         <div class="row justify-content-md-center">
             <div class="col-md-6 ">
                 <h5 align="center">Editor</h5>
-                <!--<input type="button" value="Editor" class="btn btn-block btn-md btn-primary" >-->
             </div>
             <div class="col-md-6">
                 <h5 align="center">Salida</h5>
-                <!--<input type="button" value="Ejecucion" class="btn btn-block btn-md btn-success" > -->               
             </div>
         </div>
         <p></p>
@@ -106,7 +83,6 @@
         </div>
         <div class="row justify-content-md-center">
             <div class="col-md-6 justify-content-md-center">
-                <!--<h5 align="center">Consola</h5> -->
                 <input type="button" value="Consola" class="btn btn-block btn-md btn-dark" id="BtnConsola" >               
             </div>            
             <div class="col-md-6">
@@ -122,7 +98,6 @@
             </div>
             <div  class="col-md-6 justify-content-md-center">
                 <div class="jumbotron">
-                    <!--<div class="col col-sm-12 col-md-10 col-lg-10 col-xl-10" style="width:820px; height:450px; overflow: scroll;" id="ReportErrors">-->
 
                     <div class="col col-sm-12 col-md-10 col-lg-10 col-xl-10" style="height:400px; overflow: scroll;" id="ReportErrors">
                     
@@ -130,17 +105,6 @@
                 </div>
             </div>
         </div>
-        <!--<div class="row justify-content-md-center">
-            <div class="col-md-6">
-                <h5 align="center">Consola</h5>
-            </div>
-            <div class="col-md-8">
-                <div  class="jumbotron">
-                    <textarea id="Consola"></textarea>
-                </div>
-            </div>
-           
-        </div>-->
         <p>  </p>
         <hr>
         <div class="row justify-content-md-center">
@@ -155,7 +119,6 @@
         <div class="row justify-content-md-center">
             <div class="col-md-6 justify-content-md-center">
                 <div  class="jumbotron">
-                    <!--<div class="col col-sm-12 col-md-10 col-lg-10 col-xl-10" style="width:820px; height:450px; overflow: scroll;" id="TableSimbol">-->                    
                     <div class="col col-sm-12 col-md-10 col-lg-10 col-xl-10" style="height:450px; overflow: scroll;" id="TableSimbol">
                     
                     </div>
@@ -251,7 +214,6 @@
         var openFile = document.getElementById("open-file");
         openFile.addEventListener("change", (event) => {
         const fileUpload = event.target.files;
-        //console.log(fileUpload);
 
         if (fileUpload.lenght == 0) {
             alert("Error: Seleccione un archivo");
@@ -261,21 +223,22 @@
         var reader = new FileReader();
         reader.addEventListener("load", function (e) {
             var text = e.target.result;
-            //var editor = getEditor();
             Fuente.setValue(text);
         });
         reader.readAsText(fileUpload[0]);
         });
-
+        var valueStd = "Pruebas";
         var Fuente = CodeMirror.fromTextArea(document.getElementById('Fuente'),{
-            mode: "javascript",
+            mode: "text/x-java",
             theme: "dracula",
             lineNumbers: true,
             autoCloseTags: true,
         });
         Fuente.setSize("770","400");
+        Fuente.setValue("void main(){\n\t\n}");
+
         var Salida = CodeMirror.fromTextArea(document.getElementById('Salida'),{
-            mode: null,
+            mode: "text/x-c++src",
             theme: "dracula",
             lineNumbers: true,
             autoCloseTags: true,
@@ -343,7 +306,7 @@
             var generator = new Generator();
             var environment = new Environment(null);
             tree.setGlobalTable(tsGlobal);
-            //tree.setGenerator(generator);
+            tree.setGenerator(generator);
             tree.getInstructions().forEach(instruction=>{
                 if(instruction instanceof Function){
                     tree.addFunction(instruction);
@@ -370,13 +333,13 @@
             if(exists){
                 var newTable = new TableSymbols(tsGlobal);
                 var result = tree.getFunction("main").execute(tree, newTable);
-                //tree.getFunction("main").compile(generator, environment);
+                tree.getFunction("main").compile(generator, environment);
                 if(result instanceof Exception) console.log(result);
             }else{
                 console.log("Error, posibles causas: Hay más de un metodo main, no hay metodo main o el metodo main no es de tipo void ");
             }
             Consola.setValue(tree.getOut());
-            //Salida.setValue(generator.getCode());
+            Salida.setValue(generator.getCode());
             showTableErrorsSymbols();
             showTableExecuteSymbols();
         }
@@ -468,14 +431,12 @@
                 document.getElementById("grafo").remove();
             }
             var result = GramaticaAST.parse(content);
-            //document.getElementById("salida").value = result.val;
             generateTree([result.node]);
         }
 
         function newNode(yy, state, ...nodes) {
             const parent = getNonTerminal(yy, state);
             const children = [];
-            //console.log(nodes);
             for (let node of nodes) {
                 node.parent = node.parent ? node.parent : parent;
                 if (node.parent == parent) {
@@ -556,13 +517,9 @@
         
             html += "</tbody>";
             html += "</table>";
-            //console.log(html);
             document.getElementById("ReportErrors").innerHTML = html;
         }
         function showTableExecuteSymbols() {
-            //var doc = new jspdf.jsPDF()
-            
-            //console.log(TableReport.SymbolList);
             document.getElementById("TableSimbol").innerHTML = "";
             var lineas = "[";
             var html = "<h2>Tabla de Simbolos Ejecucion</h2>\n";
@@ -580,7 +537,6 @@
             html += " </thead>";
             html += "<tbody>";
             var nodes = TableReport.getTableReport();
-            //console.log(nodes);
             for (var i = 0; i < nodes.length; i++) {
                 var item = nodes[i];
                 html += "<tr>";
@@ -592,23 +548,11 @@
                 html += `<td>${item.value}</td>`;
                 html += `<td>${item.typeEnviroment}</td>`;
                 html += "</tr>";
-                //lineas += ` ${i + 1}`,`${item.line}`,`${item.column}`,`${item.errorType.toString()}`,`${item.description}` ,`${item.environmentType.toString()}`;
-                //lineas += "],";
-                //console.log(lineas);
             }
 
             html += "</tbody>";
             html += "</table>";
             document.getElementById("TableSimbol").innerHTML = html;
-            /*var body = [  
-                [lineas],
-                ];
-                doc.autoTable({ head: head, body: body });
-
-                // Simple html example
-                doc.autoTable({ html: '#TableSimbol' });
-
-                doc.save('TablaSimbolos.pdf');*/
         }
         function showTableExecuteSymbols1() {
             console.log("Entramos");
@@ -620,27 +564,10 @@
                 var item = nodes[i];   
                 
                 SymbolList.push([i + 1,item.name,item.type==1?'INT':item.type==2?'DOUBLE':item.type==3?'STRING':item.type==4?'CHAR':item.type==5?'BOOLEAN':item.type==6?'STRUCT':item.type==7?'ARRAY':item.type=='VOID'?'VOID':'NULL',item.line,item.column,item.value,item.typeEnviroment]);          
-                //lineas += "[ "+i + 1+","+item.name+","+item.type+","+item.line+","+item.column+","+item.value+","+item.environmentType;
-                //lineas += "],";
             }
-            //lineas += "}";
-            //console.log(lineas);
-            //var doc = new jspdf.jsPDF()
-            //console.log(SymbolList);
-            // Simple data example
             
-            var head = [['#', 'Identificador', 'Tipo','Linea', 'Columna','Valor','Entorno']]
-            /*var body = [
-            [1, 'Denmark', 7.526, 'Copenhagen'],
-            [2, 'Switzerland', 7.509, 'Bern'],
-            [3, 'Iceland', 7.501, 'Reykjavík'],
-            ]
-            //console.log(body);
-            console.log(lineas);*/
-            
+            var head = [['#', 'Identificador', 'Tipo','Linea', 'Columna','Valor','Entorno']]            
             doc.autoTable({ head: head, body: SymbolList })
-
-            // Simple html example
             doc.autoTable({ html: '#table' })
 
             doc.save('TablaSimbolos.pdf')

@@ -18,8 +18,6 @@ class If extends Instruction {
             var result = instrIF.execute(tree, newTable);
             if (result instanceof Exception) {
               tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
-              //tree.get_excepcion().append(result)
-              //tree.update_consola(result.__str__())
             }
             if (result instanceof Break) {
               tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
@@ -37,8 +35,6 @@ class If extends Instruction {
           var result = this.instructionsIf.execute(tree, newTable);
           if (result instanceof Exception) {
             tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
-            //tree.get_excepcion().append(result)
-            //tree.update_consola(result.__str__())
           }
           if (result instanceof Break) {
             tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion

@@ -17,28 +17,29 @@ class Function extends Instruction{
       tree.addEnvironment("Funcion "+String(this.name));
     }
     for (var instruction of this.instructions){
-      var value = instruction.execute(tree, table);
-      if (value instanceof Exception){
+      var value = instruction.execute(tree, table); //Cambio aqui
+      if (value instanceof Exception){ // Se cambio, estaba value instanceof pasa a ser instruction
         tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
         return value;
       }
-      if (value instanceof Break){
+      if (value instanceof Break){// Se cambio, estaba value instanceof pasa a ser instruction
         tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
         ErrorList.addError(new ErrorNode(instruction.row, instruction.column,new ErrorType(EnumErrorType.SEMANTIC), "Sentencia Break fuera de ciclo",ENVIRONMENT.FUNCTION));
         err = new Exception("Semantico", "Sentencia Break fuera de ciclo", instruction.row, instruction.column);
       }
-      if (value instanceof Continue){
+      if (value instanceof Continue){// Se cambio, estaba value instanceof pasa a ser instruction
         ErrorList.addError(new ErrorNode(instruction.row, instruction.column,new ErrorType(EnumErrorType.SEMANTIC), "Sentencia Continue fuera de ciclo",ENVIRONMENT.FUNCTION));
         err = new Exception("Semantico", "Sentencia Continue fuera de ciclo", instruction.row, instruction.column);
       }
       if (value instanceof Return){
         if(this.type === Type.NULL){//Si la funcion es de tipo void
-          if(value!==null){// Si la funcion recibe un return con expresion y aun así devuelve algo
+          if(value.result!==null){// Si la funcion recibe un return con expresion y aun así devuelve algo
             tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
             ErrorList.addError(new ErrorNode(this.row, this.column,new ErrorType(EnumErrorType.SEMANTIC), "Error en funcion "+ this.name+ ", se retorna una expresion y se esperaba vacio.",ENVIRONMENT.FUNCTION));
             return new Exception("Semantico", "Error en funcion "+ this.name+ ", se retorna una expresion y se esperaba vacio.", this.row, this.column);
+          }else{
+            return value.result;
           }
-          
         }else{
           if(this.type === value.type){//Si la funcion retorna un valor se verifica que sean del tipo que debe retornar
             if(this.type === Type.STRUCT){
@@ -70,7 +71,6 @@ class Function extends Instruction{
       ErrorList.addError(new ErrorNode(this.row, this.column,new ErrorType(EnumErrorType.SEMANTIC), "Error en funcion "+ this.name+ ", se esperaba que se retornara un valor.",ENVIRONMENT.FUNCTION));
       return new Exception("Semantico", "Error en funcion "+ this.name+ ", se esperaba que se retornara un valor.", this.row, this.column);
     }
-    //tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
     return null;
   }
 
