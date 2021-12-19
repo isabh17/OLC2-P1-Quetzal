@@ -23,7 +23,6 @@ class Post_fixed extends Instruction{
       }     
       for(var i = 0; i <  TableReport.SymbolList.length; i++){
           if(TableReport.SymbolList[i].name === symbol.getId() && TableReport.SymbolList[i].line === symbol.getRow() && TableReport.SymbolList[i].column === symbol.getColumn()  ){
-            console.log("value");
             TableReport.SymbolList[i].value = value;
           }
       //item = TableReport.SymbolList[i];

@@ -32,6 +32,9 @@ class CallFunction extends Instruction {
         if (result.parameters[parameter].Type === Type.INT && this.parameters[count].type === Type.DOUBLE) {
           this.parameters[count].type = Type.INT;
         }
+        if(result.parameters[parameter].Type === Type.DOUBLE && this.parameters[count].type === Type.INT){
+          this.parameters[count].type = Type.DOUBLE;
+        }
         if (result.parameters[parameter].Type === this.parameters[count].type) {  // VERIFICACION DE TIPO 
           var type = "";
           var objectType = null;
@@ -76,6 +79,7 @@ class CallFunction extends Instruction {
               return new Exception("Semantico", "Tipo de dato diferente en parametros de la llamada.", this.row, this.column);
             }
           } else {
+            console.log("Error aqui 2");
             ErrorList.addError(new ErrorNode(this.row, this.column, new ErrorType(EnumErrorType.SEMANTIC), "Tipo de dato diferente en parametros de la llamada.", ENVIRONMENT.FUNCTION));
             return new Exception("Semantico", "Tipo de dato diferente en parametros de la llamada.", this.row, this.column);
           }

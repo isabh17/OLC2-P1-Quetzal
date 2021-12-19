@@ -14,6 +14,8 @@ class Declaration extends Instruction {
         if (Number.isInteger(value)) {
           this.expression.type = Type.INT;
         }
+      }else if(this.type === Type.DOUBLE && this.expression.type === Type.INT){
+        this.expression.type = Type.DOUBLE;
       }
       if (this.type != this.expression.type) {
         ErrorList.addError(new ErrorNode(this.row, this.column, new ErrorType(EnumErrorType.SEMANTIC), "Los types de variables no concuerdan: " + String(this.type) + "!=" + String(this.expression.type), ENVIRONMENT.NULL));
