@@ -8,6 +8,7 @@ class For extends Instruction {
     }
 
     execute(tree, table) {
+        var newTable1 = new TableSymbols(table);
         tree.addEnvironment("FOR");
         if(!this.verifyExistId(tree, table)){
             tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
@@ -19,14 +20,14 @@ class For extends Instruction {
             ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC), "Los iteradores no son los mismos",ENVIRONMENT.FOR));
             return new Exception("Semantico", "Los iteradores no son los mismos", this.row, this.column);
         }
-        var variable = typeof(this.variable)==='string' ? null : this.variable.execute(tree, table);
+        var variable = typeof(this.variable)==='string' ? null : this.variable.execute(tree, newTable1);
         if(variable instanceof Exception){
             tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
             return variable;
         }
         while(true){
-            var newTable = new TableSymbols(table);
-            var resultCondition = this.condition.execute(tree, newTable);
+            var newTable2 = new TableSymbols(newTable1);
+            var resultCondition = this.condition.execute(tree, newTable2);
             if(resultCondition instanceof Exception){
                 tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
                 return variable;
@@ -41,14 +42,11 @@ class For extends Instruction {
                 break;
             };
             for (var instrFor of this.instructions_for) {
-                var result = instrFor.execute(tree, newTable);
+                var result = instrFor.execute(tree, newTable2);
                 if (result instanceof Exception) {
-                    //tree.get_excepcion().append(result)
-                    //tree.update_consola(result._str_())
                     tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
                     return result;
                 }
-                //console.log(result);
                 if (result instanceof Break){
                     tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
                     return null;
@@ -59,7 +57,7 @@ class For extends Instruction {
                 }
                 if (result instanceof Continue) return result; //DUDA
             }
-            var resIncr_decr = this.inc_decre.execute(tree, newTable);
+            var resIncr_decr = this.inc_decre.execute(tree, newTable2);
             if(resIncr_decr instanceof Exception){
                 tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
                 return resIncr_decr;

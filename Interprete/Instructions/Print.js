@@ -19,10 +19,21 @@ class Print extends Instruction {
     if (this.expression.type === Type.STRUCT) {
       value = this.getValueStruct(value);
     }
+    var cors = this.expression.type === Type.ARRAY ? true : false;
+    if(cors){
+      tree.updateOut("[");
+    }
     if (this.jump) {
-      tree.updateOut(value + "\n");
+      tree.updateOut(value);
+      if(cors){
+        tree.updateOut("]");
+      }
+      tree.updateOut("\n");
     } else {
       tree.updateOut(value);
+      if(cors){
+        tree.updateOut("]");
+      }
     }
     return null;
   }
@@ -31,6 +42,9 @@ class Print extends Instruction {
     var expressions = [];
     for (var exp of this.expression) {
       var result = exp.execute(tree, table);
+      if(exp.type === Type.ARRAY){
+        result = "["+String(result)+"]";
+      }
       if (result instanceof Exception) return result;
       expressions.push(result);
     }
@@ -43,7 +57,7 @@ class Print extends Instruction {
   }
 
   getValueStruct(variables) {
-    var value = String(this.expression.typeObject) + "(";
+    var value = String(this.expression.objectType) + "(";
     for (var parameter in variables) {
       value += String(parameter) + ":" + variables[parameter].getValue() + ","
     }
