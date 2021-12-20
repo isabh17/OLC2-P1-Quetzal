@@ -21,6 +21,7 @@ class NodeTableSymbols {
   class TableReport {
     
     static SymbolList = [];
+    static GramaticalList = [];
 
     static cleanTableReport(){
         TableReport.SymbolList = [];

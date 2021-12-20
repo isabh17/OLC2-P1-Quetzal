@@ -30,10 +30,10 @@ _Adicional Quetzal tendrá 2 flujos, se podrá interpretar el código fuente ing
 
 
 ### 📋 Detalle del Flujo de Quetzal
-- 1 Seleccionar un Archivo de Entrada para subirlo.
+- 1 Seleccionar un Archivo este boton nos abrira un navegador de windows en el cual podemos buscar el archivo de entrada que deseamos cargar.
 - 2 Compilar el Archivo de Entrada previamente cargado para su ejecucion.
 - 3 Limpiar nos sirve para limpiar la caja del Editor.
-- 4 C3D Compiler hace la traduccion para codigo C3D del archivo de entrada previamente Cagado.
+- 4 C3D Compiler hace la traduccion para codigo C3D del archivo de entrada previamente cargado.
 - 5 Editor en esta caja de Texto se cargara los archivos de entrada que desea cargar o para modificarlos desde Quetzal.
 - 6 Salida en esta caja podremos observar la traduccion del archivo de entrada a C3D.
 

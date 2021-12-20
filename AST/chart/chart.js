@@ -145,11 +145,26 @@ function getTreeLength(tree) {
     /*if(tree.children.length==='undefined'){
         console.log(tree.children.name);
     }*/
+    let prod = " ";
+    //var hijos = chol
+    //console.log(children);
+    /*for (var i = 0; i < children.length; i++) {
+        var hijo =  children[i];            
+        console.log(hijo);
+        prod += hijo.name + " ";
+    }
+    /*TableReport.GramaticalList.push({
+                _prod: prod
+            });*/
     if (tree.children.length > 0) {
         let size = tree.children.length;
         for (let node of tree.children) {
             size += getTreeLength(node);
+            prod += node.name + " ";
         }
+        TableReport.GramaticalList.push({
+            _prod: prod
+        });
         return size;
     }
     return 0;

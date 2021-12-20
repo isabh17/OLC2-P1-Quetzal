@@ -126,7 +126,7 @@
             </div>
             <div  class="col-md-6 justify-content-md-center">
                 <div class="jumbotron">
-                    <div class="col col-sm-12 col-md-10 col-lg-10 col-xl-10" id="ReportGramatical">
+                    <div class="col col-sm-12 col-md-10 col-lg-10 col-xl-10" style="height:450px; overflow: scroll;" id="ReportGramatical">
                     
                     </div>                    
                 </div>
@@ -288,6 +288,7 @@
                 if(result instanceof Exception) console.log(result);
             }else{
                 console.log("Error, posibles causas: Hay más de un metodo main, no hay metodo main o el metodo main no es de tipo void ");
+                ErrorList.addError(new ErrorNode('', '',new ErrorType(EnumErrorType.SEMANTIC), "posibles causas: Hay más de un metodo main, no hay metodo main o el metodo main no es de tipo void ", ENVIRONMENT.NULL));
             }
             Consola.setValue(tree.getOut());
             showTableErrorsSymbols();
@@ -337,8 +338,10 @@
                 if(result instanceof Exception) console.log(result);
             }else{
                 console.log("Error, posibles causas: Hay más de un metodo main, no hay metodo main o el metodo main no es de tipo void ");
+                ErrorList.addError(new ErrorNode('', '',new ErrorType(EnumErrorType.SEMANTIC), "posibles causas: Hay más de un metodo main, no hay metodo main o el metodo main no es de tipo void ", ENVIRONMENT.NULL));
+
             }
-            Consola.setValue(tree.getOut());
+            //Consola.setValue(tree.getOut());
             Salida.setValue(generator.getCode());
             showTableErrorsSymbols();
             showTableExecuteSymbols();
@@ -414,7 +417,7 @@
         document.getElementById('BtnCompilar').onclick = function (){
             var Codigo = Fuente.getValue();
             Compile(Codigo);
-            arbolast(Codigo);
+            arbolast(Codigo);            
         }
         document.getElementById('BtnLimpiar').onclick = function (){
             Fuente.setValue("");     
@@ -432,11 +435,14 @@
             }
             var result = GramaticaAST.parse(content);
             generateTree([result.node]);
+            showTableGramatical();
         }
 
         function newNode(yy, state, ...nodes) {
             const parent = getNonTerminal(yy, state);
             const children = [];
+            //console.log(children);          
+            
             for (let node of nodes) {
                 node.parent = node.parent ? node.parent : parent;
                 if (node.parent == parent) {
@@ -454,7 +460,7 @@
                         children: [node]
                     });
                 }
-            }
+            }               
 
             return {
                 name: parent,
@@ -554,6 +560,7 @@
             html += "</table>";
             document.getElementById("TableSimbol").innerHTML = html;
         }
+        
         function showTableExecuteSymbols1() {
             console.log("Entramos");
             var doc = new jspdf.jsPDF();
@@ -571,6 +578,38 @@
             doc.autoTable({ html: '#table' })
 
             doc.save('TablaSimbolos.pdf')
+        }
+        function showTableGramatical(){
+            /*---------------Reporte Gramatical--------------*/
+            document.getElementById("ReportGramatical").innerHTML = "";
+            
+            var html = "<h2>Reporte de Gramatical</h2>\n";
+            html += '<table class="table table-light" id="ReportGramatical">';
+            html += '<thead class="thead-light">';
+            html += "<tr>";
+            html += '<th scope="col">#</th>';
+            html += '<th scope="col">Produccion</th>';
+            /*html += '<th scope="col">Columna</th>';
+            html += '<th scope="col">Tipo de Error</th>';
+            html += '<th scope="col">Descripcion</th>';
+            html += '<th scope="col">Entorno</th>';*/
+            html += "</tr>";
+            html += " </thead>";
+            html += "<tbody>";
+            var nodes = TableReport.GramaticalList;
+            for (var i = 0; i < nodes.length; i++) {
+                var item = nodes[i];
+                html += "<tr>";
+                html += `<td>${i + 1}</td>`;
+                html += `<td>${item._prod}</td>`;
+                html += "</tr>";
+            }
+            html += "</tbody>";
+            html += "</tbody>";
+            html += "</table>";
+            document.getElementById("ReportGramatical").innerHTML = html;
+
+            /*------------------------------------------------*/
         }
     </script>
     

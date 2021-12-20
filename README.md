@@ -21,7 +21,7 @@ Adicional Quetzal tendrá 2 flujos, se podrá interpretar el código fuente ingr
     <ul>
        <li><a href="https://github.com/JorgeEspina/OLC2-P1-Quetzal/blob/master/Documentacion/ReporteGramatical.md" target="_blank">:point_right:Reporte Gramatical</a></li>
        <li><a href="https://github.com/JorgeEspina/OLC2-P1-Quetzal/blob/master/Documentacion/ManualUsuario.md" target="_blank">:point_right:Manual de Usuario</a></li>
-       <li><a href="https://github.com/JorgeEspina/OLC2-P1-Quetzal/blob/master/Documentacion/ManualTenico.md">:point_right:Manual de Tecnico</a></li>
+       <li><a href="https://github.com/JorgeEspina/OLC2-P1-Quetzal/blob/master/Documentacion/ManualTecnico.md">:point_right:Manual de Tecnico</a></li>
     </ul>
   </li>
 </ul>
