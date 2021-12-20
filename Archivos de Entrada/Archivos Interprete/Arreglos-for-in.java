@@ -19,7 +19,7 @@ void main(){
   println(copiaArreglo); // [32, 21, 7, 89, 56, 909, 109, 2, 9, 1, 44, 3, 8200, 11, 8, 10]
   println("===============PUNTO===============");
   println(arreglo[begin:4]#+3); //[4,5,6,10]
-  println(arreglo[5:8]#*5); //[45,50,55]
+  println(arreglo[5:8]#*5); //[40,45,50,55]
   println(sin#(arreglo[begin:end])); //[0.01745240643728351,0.03489949670250097]
   println(cos#(arreglo[begin:end])); //[0.9998476951563913,0.9993908270190958]
   println(tan#(arreglo[begin:end])); //[0.017455064928217585,0.03492076949174773]
