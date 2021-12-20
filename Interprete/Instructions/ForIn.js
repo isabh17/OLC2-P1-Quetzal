@@ -8,17 +8,17 @@ class ForIn extends Instruction {
 
     execute(tree, table) {
         tree.addEnvironment("FOR-IN");
-        if(this.expression instanceof ListObjects || this.expression instanceof RangeArray){
+        if (this.expression instanceof ListObjects || this.expression instanceof RangeArray) {
             return this.execForArray(tree, table);
-        }else{
+        } else {
             return this.normalExec(tree, table);
         }
     }
-    
-    execForArray(tree, table){
+
+    execForArray(tree, table) {
         var newTable = new TableSymbols(table);
         var listValues = this.expression.execute(tree, table);
-        if(listValues instanceof Exception) return listValues;
+        if (listValues instanceof Exception) return listValues;
         var symbol = new Symbol(String(this.identifier), this.expression.type, listValues[0], this.row, this.column, null, null);
         var value = newTable.addSymbol(symbol);
         for (let index of listValues) {
@@ -89,7 +89,38 @@ class ForIn extends Instruction {
         return null;
     }
 
-    compile(generator, env){
-        return null;
+    compile(generator, env) {
+        var newEnv = new Environment(env);
+        generator.addComment("BEGIN FOR");
+        var value = this.expression.compile(generator, env);
+        
+        var temp = generator.addTemp();
+        generator.freeTemp(temp);
+        var variable = newEnv.addVariable(this.identifier, Type.CHAR, true);
+        generator.addExp(temp, 'P', variable.position, '+');
+        generator.setStack(temp, value.value);
+
+        var continueLbl = generator.newLabel(); // regresa a ka condición
+        var breakLbl = generator.newLabel(); // regresa a ka condición
+
+        newEnv.continueLbl = continueLbl;
+        newEnv.breakLbl = breakLbl;
+
+        var tempI = generator.addTemp();
+        generator.addExp(temp, 'P', variable.position, '+');
+        generator.getStack(tempI, temp);
+
+        generator.putLabel(continueLbl);// inicio for
+        var tempH = generator.addTemp();
+        generator.getHeap(tempH,tempI); // si es -1 termina la cadena 
+        generator.setStack(temp, tempI); // guardando nuevo valor
+        generator.addExp(tempI, tempI, '1', '+'); // aumentando el index
+        generator.addIf(tempH, '-1', '==', breakLbl);
+
+        for (var instruction of this.instructions){
+            instruction.compile(generator, newEnv);
+        }
+        generator.addGoto(continueLbl);
+        generator.putLabel(breakLbl);
     }
 }

@@ -386,6 +386,88 @@ class Generator {
     this.addEndFunc();
     this.inNatives = false;
   }
+
+  fRepeatString() {
+    if (this.repeatString){
+      return ;
+    }
+    this.repeatString = true;
+    this.inNatives = true;
+    this.addBeginFunc("repeatString");
+    // temp new String
+    var tempNewString = this.addTemp();
+    this.freeTemp(tempNewString);
+
+    // temp counter iteraciones
+    var tempCounter = this.addTemp();
+    this.freeTemp(tempCounter);
+
+    // Guardando pos del string a repetir
+    var tempR = this.addTemp();
+    this.freeTemp(tempR);
+    var tempP = this.addTemp();
+    this.freeTemp(tempP);
+    var tempP2 = this.addTemp();
+    this.freeTemp(tempP2);
+    var tempH = this.addTemp();
+    this.freeTemp(tempH);
+
+    // label de salida
+    var returnLbl = this.newLabel();
+    // label de inicio
+    var initLbl = this.newLabel();
+
+    // Guardando el inicio de mi concatenacion
+    this.addExp(tempNewString, 'H', '', '');
+    this.addExp(tempCounter, '1', '', '');
+
+    //extrayendo parametros
+    //Parametro1
+    this.addExp(tempP, 'P', '1', '+');
+    this.getStack(tempP, tempP);
+    //Parametro1
+    this.addExp(tempP2, 'P', '2', '+');
+    this.getStack(tempP2, tempP2);
+
+    //// Inicio de recorrido
+    this.addExp(tempR, tempP, '', '');
+    this.putLabel(initLbl);
+
+    //extrayendo valor del heap
+    this.getHeap(tempH, tempP);
+
+    // labels para primer parámetro
+    var lblTrue1 = this.newLabel();
+
+    this.addIf(tempH, '-1', '==', lblTrue1);
+
+    // Guardando nuevo string
+    this.setHeap('H', tempH);
+    this.addExp(tempP, tempP, '1', '+');
+    this.nextHeap();
+    // regresando al inicio
+    this.addGoto(initLbl);
+    // termino la cadena 
+    this.putLabel(lblTrue1);
+    this.addIf(tempP2, tempCounter, '==', returnLbl);
+    this.addExp(tempCounter, tempCounter, '1', '+');
+    // regresandoe el puntero para recorrer nuevamente el string 
+    this.addExp(tempP, tempR, '', '');
+    this.addGoto(initLbl);
+
+    // salida
+    this.putLabel(returnLbl);
+
+    // colocando simbolo de finalizacion
+    this.setHeap('H', '-1');
+    this.nextHeap();
+
+    // valor de retorno
+    this.setStack('P', tempNewString);
+
+    this.addEndFunc();
+    this.inNatives = false;
+  }
   //---------------------------------- FUNCTIONS -----------------------------------------
   addBeginFunc(id) {
     if (!this.inNatives) {
