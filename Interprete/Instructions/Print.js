@@ -95,7 +95,7 @@ class Print extends Instruction {
       generator.getHeap(temp, val.value);
       generator.addPrint("char", temp);
     } else {
-      console.log("POR HACER");
+      console.log("Falta ejecutar");
     }
     if (this.jump === true) {
       generator.addPrint("char", 10);

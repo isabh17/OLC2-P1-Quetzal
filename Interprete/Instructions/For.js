@@ -70,12 +70,10 @@ class For extends Instruction {
     verifyId(){
         if(this.variable instanceof Declaration || this.variable instanceof Assignation){
             if(String(this.variable.identifier) !== this.inc_decre.identifier){
-                console.log("f1");
                 return false;
             }
         }else{
             if(String(this.variable) !== String(this.inc_decre.identifier)){
-                console.log("f");
                 return false;
             }
         }
@@ -87,7 +85,6 @@ class For extends Instruction {
         let val1 =  !this.variable instanceof Assignation
         if(val||val1){
             var symbol = table.getSymbol(String(this.variable));
-            console.log(symbol);
             if(symbol===null){
                 return false;
             }

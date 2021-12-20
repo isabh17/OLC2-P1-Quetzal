@@ -79,7 +79,6 @@ class CallFunction extends Instruction {
               return new Exception("Semantico", "Tipo de dato diferente en parametros de la llamada.", this.row, this.column);
             }
           } else {
-            console.log("Error aqui 2");
             ErrorList.addError(new ErrorNode(this.row, this.column, new ErrorType(EnumErrorType.SEMANTIC), "Tipo de dato diferente en parametros de la llamada.", ENVIRONMENT.FUNCTION));
             return new Exception("Semantico", "Tipo de dato diferente en parametros de la llamada.", this.row, this.column);
           }
@@ -186,8 +185,6 @@ class CallFunction extends Instruction {
       generator.retEnv(env.size);
 
       generator.recoverTemps(env, size);
-
-      //  Verificar tipo de la funcion. Boolean es distinto
       return new C3DReturn(temp, func.type, true);
     }
   }
@@ -202,18 +199,15 @@ class CallFunction extends Instruction {
   }
 
   callPower(generator, env, param1, param2) {
-    // paso de parámetros
-    // Parametro 1 
     var paramTemp = generator.addTemp();
     generator.addExp(paramTemp, 'P', env.size, '+');
     generator.addExp(paramTemp, paramTemp, '1', '+');
     generator.setStack(paramTemp, param1);
-    // Parametro 2 
+
     var paramTemp1 = generator.addTemp();
     generator.addExp(paramTemp1, paramTemp, '1', '+');
     generator.setStack(paramTemp1, param2);
 
-    // Cambio y llamada a entorno
     generator.newEnv(env.size);
     generator.callFun('native_power');
     var temp = generator.addTemp();

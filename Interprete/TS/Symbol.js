@@ -25,7 +25,7 @@ class Symbol{
     this.type = type;
   }
 
-  getRow(){
+  /*getRow(){
     return this.row;
   }
     
@@ -47,5 +47,5 @@ class Symbol{
 
   setValue(value){
     this.value = value;
-  }
+  }*/
 }

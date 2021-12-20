@@ -13,6 +13,5 @@ class Break extends Instruction {
       return;
     }
     generator.addGoto(env.breakLbl);
-    //return null;
   }
 }

@@ -1,18 +1,14 @@
 class Generator {
   constructor() {
-    // Contadores
     this.countTemp = 0;
     this.countLabel = 0;
-    // Code
     this.code = '';
     this.funcs = '';
     this.natives = '';
     this.inFunc = false;
     this.inNatives = false;
-    // Lista de Temporales
     this.temps = [];
     this.tempsRecover = {};
-    // Lista de Nativas
     this.printString = false;
     this.compareString = false;
     this.uppercase = false;
@@ -37,7 +33,6 @@ class Generator {
   }
 
   getCode() {
-    //return `${this.getHeader()}${/*this.natives*/}\n${this.funcs}\nvoid main(){\n${this.code}\n}`;
     return `${this.getHeader()}${this.natives}\n${this.funcs}\nvoid main(){\n\tP = 0; H = 0;\n${this.code}\n\treturn;\n}`;
   }
 
@@ -49,7 +44,7 @@ class Generator {
       this.natives = this.natives + tab + code;
     } else if (this.inFunc) {
       if (this.funcs == '') {
-        this.funcs = this.funcs + '/*-----FUNCS-----*/\n';
+        this.funcs = this.funcs + '/*----FUNCTIONS----*/\n';
       }
       this.funcs = this.funcs + tab + code;
     } else {
@@ -60,9 +55,7 @@ class Generator {
   addComment(comment) {
     this.codeIn(`/* ${comment} */\n`);
   }
-  //###############
-  // Instrucciones
-  //##############
+  //----------------------------- INSTRUCTIONS ----------------------------------------
   addPrint(type, value) {
     this.freeTemp(value);
     if (type === "char") {
@@ -144,9 +137,7 @@ class Generator {
       this.addComment('Fin Recuperacion de temporales')
     }
   }
-  //###################
-  //# EXPRESIONES
-  //###################
+  //---------------------------------- EXPRESSIONS --------------------------------------
   addExp(result, left, right, op) {
     this.freeTemp(left);
     this.freeTemp(right);
@@ -156,9 +147,7 @@ class Generator {
       this.codeIn(`${result}=${left}${op}${right};\n`);
     }
   }
-  //####################
-  // Manejo de Labels
-  //####################
+  //-------------------------------- USING OF LABELS -----------------------------------
   newLabel() {
     var label = `L${this.countLabel}`;
     this.countLabel += 1;
@@ -168,15 +157,11 @@ class Generator {
   putLabel(label) {
     this.codeIn(`${label}:\n`); //L0:
   }
-  //##################
-  // GOTO
-  //##################
+  //--------------------------------- USING OF GOTO ------------------------------------
   addGoto(label) {
     this.codeIn(`goto ${label};\n`);
   }
-  //##################
-  // IF
-  //##################
+  //--------------------------------- USING OF IF --------------------------------------
   addIf(left, right, op, label) {
     this.freeTemp(left);
     this.freeTemp(right);
@@ -186,9 +171,7 @@ class Generator {
   addSpace() {
     this.codeIn("\n");
   }
-  //#############
-  // NATIVES
-  //#############
+  //------------------------------- NATIVE FUNCTIONS -----------------------------------
   fPrintString() {
     if (this.printString) {
       return null;
@@ -197,22 +180,17 @@ class Generator {
     this.inNatives = true;
 
     this.addBeginFunc('printString');
-    // Label para salir de la funcion
     var returnLbl = this.newLabel();
-    // Label para la comparacion para buscar fin de cadena
     var compareLbl = this.newLabel();
 
-    // Temporal puntero a Stack
     var tempP = this.addTemp();
 
-    // Temporal puntero a Heap
     var tempH = this.addTemp();
 
     this.addExp(tempP, 'P', '1', '+');
 
     this.getStack(tempH, tempP);
 
-    // Temporal para comparar
     var tempC = this.addTemp();
 
     this.putLabel(compareLbl);
@@ -242,7 +220,6 @@ class Generator {
     this.concatString = true;
     this.inNatives = true;
     this.addBeginFunc("concatString");
-    //temp new String
     var tempNewString = this.addTemp();
 
     var tempP = this.addTemp();
@@ -252,69 +229,51 @@ class Generator {
     var tempH = this.addTemp();
     this.freeTemp(tempH);
 
-    // label de salida
     var returnLbl = this.newLabel();
-    // label de inicio
     var initLbl = this.newLabel();
 
-    // Guardando el inicio de mi concatenacion
     this.addExp(tempNewString, 'H', '', '');
 
-    //extrayendo parametros
-    //Parametro1
     this.addExp(tempP, 'P', '1', '+');
     this.getStack(tempP, tempP);
-    //Parametro1
     this.addExp(tempP2, 'P', '2', '+');
     this.getStack(tempP2, tempP2);
 
-    //# Inicio de recorrido
     this.addGoto(initLbl);
     this.putLabel(initLbl);
 
-    //extrayendo valor del heap
     this.getHeap(tempH, tempP);
 
-    // labels para primer parámetro
     var lblTrue1 = this.newLabel();
     var lblFalse1 = this.newLabel();
 
     this.addIf(tempH, '-1', '==', lblFalse1);
     this.addGoto(lblTrue1);
     this.putLabel(lblTrue1);
-    // concatenando....
     this.setHeap('H', tempH);
     this.nextHeap();
     this.addExp(tempP, tempP, '1', '+');
     this.addGoto(initLbl);
 
-    //continua con el segundo parametro
     this.putLabel(lblFalse1);
 
-    //extrayendo valor del heap
     this.getHeap(tempH, tempP2);
 
-    // labels para segundo parámetro
     var lblTrue1 = this.newLabel();
-    // lblFalse1 = this.newLabel() 
 
     this.addIf(tempH, '-1', '==', returnLbl);
     this.addGoto(lblTrue1);
     this.putLabel(lblTrue1);
-    // concatenando....
     this.setHeap('H', tempH);
     this.nextHeap();
     this.addExp(tempP2, tempP2, '1', '+');
-    this.addGoto(lblFalse1); //regresamos al lbl falso del primer parámetro
+    this.addGoto(lblFalse1);
 
-    // salida function
     this.putLabel(returnLbl);
 
-    // Ingresando el simbolo de terminación de la cadena
     this.setHeap('H', '-1');
     this.nextHeap()
 
-    // valor de retorno
     this.setStack('P', tempNewString);
 
     this.addEndFunc();
@@ -399,47 +358,35 @@ class Generator {
     var tempP2 = this.addTemp();
     this.freeTemp(tempP2);
 
-    //label de inicio
     var initLbl = this.newLabel();
-    //label de salida
     var returnLbl = this.newLabel();
-    //Label exponente 0
     var exponente = this.newLabel();
 
-    //extrayendo parametros
-    //Parametro1
     this.addExp(tempP, 'P', '1', '+');
     this.getStack(tempP1, tempP);
-    //Parametro1
     this.addExp(tempP, tempP, '1', '+');
     this.getStack(tempP2, tempP);
 
-    this.addExp(tempP, tempP1, '', ''); //guardando base
+    this.addExp(tempP, tempP1, '', '');
 
-    //Si el exponente = 0
     this.addIf(tempP2, '0', '==', exponente);
 
-    //Inicio
     this.putLabel(initLbl);
 
     this.addIf(tempP2, '1', '<=', returnLbl);
     this.addExp(tempP1, tempP1, tempP, '*');
     this.addExp(tempP2, tempP2, '1', '-');
     this.addGoto(initLbl);
-    //exponente 0
     this.putLabel(exponente);
     this.addExp(tempP1, '1', '', '');
 
-    //FIN
     this.putLabel(returnLbl);
     this.setStack('P', tempP1);
 
     this.addEndFunc();
     this.inNatives = false;
   }
-  //##################
-  // FUNCS
-  //##################
+  //---------------------------------- FUNCTIONS -----------------------------------------
   addBeginFunc(id) {
     if (!this.inNatives) {
       this.inFunc = true;
@@ -453,9 +400,7 @@ class Generator {
       this.inFunc = false;
     }
   }
-  //############
-  // ENVS
-  //############
+  //------------------------------ ENVIRONMENT METHODS -----------------------------------
   newEnv(size) {
     this.codeIn(`P=P+${size};\n`);
   }
@@ -467,9 +412,7 @@ class Generator {
   retEnv(size) {
     this.codeIn(`P=P-${size};\n`);
   }
-  //##############
-  // STACK
-  //##############
+  //--------------------------------- STACK METHODS -------------------------------------
   setStack(pos, value, FreeValue = true) {
     this.freeTemp(pos);
     if (FreeValue) {
@@ -482,9 +425,7 @@ class Generator {
     this.freeTemp(pos);
     this.codeIn(`${place}=stack[(int)${pos}];\n`);
   }
-  //##############
-  // HEAP
-  //##############
+  //--------------------------------- HEAP METHODS -------------------------------------
   setHeap(pos, value) {
     this.freeTemp(pos);
     this.freeTemp(value);

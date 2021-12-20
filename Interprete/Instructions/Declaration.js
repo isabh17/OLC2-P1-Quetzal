@@ -71,14 +71,12 @@ class Declaration extends Instruction {
     }
     for(var identifier of this.identifier){
       var value = new C3DReturn(possibleValue, this.type, false);
-      // Guardado y obtencion de variable. Esta tiene la posicion, lo que nos sirve para asignarlo en el heap
       var newVar = env.getVariable(identifier);
       if (newVar === null) {
         newVar = env.addVariable(identifier, value.type, (value.type === Type.STRING || value.type === Type.STRUCT), "");
       }
       newVar.type = this.type;
   
-      // Obtencion de posicion de la variable
       var tempPos = newVar.position;
       if (!newVar.isGlobal) {
         tempPos = generator.addTemp();
@@ -105,14 +103,12 @@ class Declaration extends Instruction {
 
   normalDeclaration(generator, env){
     var value = this.expression.compile(generator, env);
-    // Guardado y obtencion de variable. Esta tiene la posicion, lo que nos sirve para asignarlo en el heap
     var newVar = env.getVariable(this.identifier);
     if (newVar === null) {
       newVar = env.addVariable(this.identifier, value.type, (value.type === Type.STRING || value.type === Type.STRUCT), this.expression.objectType);
     }
     newVar.type = this.type;
 
-    // Obtencion de posicion de la variable
     var tempPos = newVar.position;
     if (!newVar.isGlobal) {
       tempPos = generator.addTemp();

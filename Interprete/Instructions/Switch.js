@@ -20,8 +20,6 @@ class Switch extends Instruction {
                 if(cond === condition || cond === null || step){
                     var result = instrCase.execute(tree, newTable);
                     if (result instanceof Exception) {
-                        //tree.get_excepcion().append(result)
-                        //tree.update_consola(result._str_())
                     }
                     
                     if (result instanceof Break) {

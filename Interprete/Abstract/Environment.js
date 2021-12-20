@@ -42,14 +42,6 @@ class Environment {
     return null;
   }
 
-  saveStruct(idStruct, attr) {
-    if (idStruct in this.structs) {
-      //console.log("Struct repetido");
-    } else {
-      this.structs[idStruct] = attr;
-    }
-  }
-
   getVariable(id) {//getVar
     var env = this;
     while (env !== null) {
@@ -59,17 +51,6 @@ class Environment {
       env = env.prev;
     }
     return null;
-  }
-
-  getStruct(idStruct) {
-    env = this;
-    while (env != null) {
-      if (idStruct in env.structs.keys()) {
-        return env.structs[idStruct];
-      }
-      end = end.prev;
-    }
-    return None;
   }
 
   getGlobal() {

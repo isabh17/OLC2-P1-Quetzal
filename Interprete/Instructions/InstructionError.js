@@ -1,5 +1,4 @@
 class InstructionError extends Instruction {
-
     constructor(){
         super(0,0);
     }
@@ -11,5 +10,4 @@ class InstructionError extends Instruction {
     compile(generator, env){
         return null;
     }
-
 }

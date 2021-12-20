@@ -20,7 +20,6 @@ class Return extends Instruction {
 
   compile(generator, env) {
     if (env.returnLbl === '') {
-      console.log("Return fuera de funcion");
       return null;
     }
 

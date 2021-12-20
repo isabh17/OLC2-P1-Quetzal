@@ -25,11 +25,8 @@ class Post_fixed extends Instruction{
           if(TableReport.SymbolList[i].name === symbol.getId() && TableReport.SymbolList[i].line === symbol.getRow() && TableReport.SymbolList[i].column === symbol.getColumn()  ){
             TableReport.SymbolList[i].value = value;
           }
-      //item = TableReport.SymbolList[i];
-      //PrintConsole.printLine(`Error tipo: ${item.errorType} Linea: ${item.line} Columna: ${item.column} Descripcion: ${item.description} Entorno: ${item.enviroment}`);
       }
     }else{
-      //ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),`Los tipos de variables no concuerdan:` +String(symbol.getType())+"!=",table.getEnvironment()));
       ErrorList.addError(new ErrorNode(this.row,this.column,new ErrorType(EnumErrorType.SEMANTIC),"Solo se puede incrementar o decrementar variables de tipo INT",ENVIRONMENT.FOR));
       return new Exception("Semantico", "Solo se puede incrementar o decrementar variables de tipo INT", this.row, this.column);
     }
