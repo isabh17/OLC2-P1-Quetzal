@@ -687,19 +687,20 @@ Aqui se crea un Nodo tipo NodeTableSymbols el cual nos servira para guardar de f
     - isSymbols: Validar si tiene simbolos.
     - showSymbol: Para imprimir en consola los simbolos que vengan.
 
+
 ## 📋 Aritmetica
-  class Aritmetica extends Instruction {
-    constructor(operLeft, operator, operRight, row, column) {
-      super(row, column);
-      this.operator = operator;
-      this.operLeft = operLeft;
-      this.operRight = operRight;
-      this.type = null;
-      this.objectType = null;
-      this.trueLbl = '';
-      this.falseLbl = '';
-      this.structType = '';
-    }
+    class Aritmetica extends Instruction {
+      constructor(operLeft, operator, operRight, row, column) {
+        super(row, column);
+        this.operator = operator;
+        this.operLeft = operLeft;
+        this.operRight = operRight;
+        this.type = null;
+        this.objectType = null;
+        this.trueLbl = '';
+        this.falseLbl = '';
+        this.structType = '';
+      }
 - ### Descripción: 
   Clase que se encargará de realizar todas las operaciones relacionadas a interactuar con números, sumas, restas, multiplicaciones, divisiones, modulo, etc.
   
