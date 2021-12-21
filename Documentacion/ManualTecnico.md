@@ -63,11 +63,56 @@ Este método es el que se llamara para ejecutar una instrucción If que venga en
   Es un entorno que guarda la tabla de simbolos que se utilizará en la ejecución de la traducción del codigo de 3 direcciones, a diferencia de la tabla de simbolos utilizada en la interpretación, en esta cada simbolo guardá información de la posición en el stack por cada variable.
 
 ## 📋 Declaracion
+    class Declaration extends Instruction {
+        constructor(type, identifier, expression, row, column) {
+            super(row, column);
+            this.identifier = identifier;
+            this.expression = expression;
+            this.type = type;
+        }
+    }
 
+- ### Descripcion: 
+  En la clase Declaracion esta extendida a Instruction esto es porque le definimos que Instruccion sera padre de la clase Declaracion.
+  
+  Se utiliza para guardar la informacion para declarar variables y asignarles valores .
+- ### Constructor: 
+  Este constructor nos ayudara para mayor facilidad a la hora de mandar los datos desde jison la gramatica.
+  
+    #### Parametros
+    - identifier: variable que vamos a declarar.
+    - expression: la expresion que se le va a asignar a la variable si en un caso tiene una asignacion, si no solo se declara.
+    - type: tipo de variable sera int,double entre otras.
+    - row:  para llevar control de la linea.
+    - column:  para llevar control de la columna.
+- ### normalDeclaration: 
+  Metodo para solo declarar una variable normal en C3D.
+
+- ### multipleDeclaration: 
+  Metodo que sera para declaracion multiple en C3D.
 
 ## 📋 Asignacion
+    class Assignation extends Instruction{
+        constructor(identifier, expression, row, column){
+            super(row, column);
+            this.identifier = identifier;
+            this.expression = expression;
+            this.type = null;
+        }
+    }
 
-
+- ### Descripcion: 
+  En la clase Asignacion esta extendida a Instruction esto es porque le definimos que Instruccion sera padre de la clase Asignacion.
+  Se utiliza para reasignar el valor de una variable ya declarada.
+- ### Constructor: 
+  Este constructor nos ayudara para mayor facilidad a la hora de mandar los datos desde jison la gramatica.
+  
+    #### Parametros
+    - identifier: variable que vamos a asignarle nuevo valor.
+    - expression: la expresion que se le va a asignar a la variable.
+    - type: se le asigna null ya que es una asignacion y la validacion de tipos se hace en execute.
+    - row:  para llevar control de la linea.
+    - column:  para llevar control de la columna.
 
 ## 📋 If
     class If extends Instruction {
@@ -77,11 +122,18 @@ Este método es el que se llamara para ejecutar una instrucción If que venga en
         this.instructionsIf = instructionsIf;
         this.instructionsElse = instructionsElse;
     }
-- En la clase If esta extendida a Instruction esto es porque le definimos que Instruccion sera padre de la clase If.
+
+- ### Descripcion: 
+  En la clase If esta extendida a Instruction esto es porque le definimos que Instruccion sera padre de la clase If.
+
+  Ejecucion de instrucciones if que adentro pueden venir mas instrucciones desde un print hasta llamadas de funciones.
 - ### Constructor: 
   Este constructor nos ayudara para mayor facilidad a la hora de mandar los datos desde jison la gramatica.
   
-    #### Parámetros
+    #### Parametros
+    - condition: la condicional que viene a evaluar en el if.
+    - instructionIf: Instrucciones si solo viene un if.
+    - InstruccionsElse: Instrucciones si en un caso viene else if o  else.
     - row:  para llevar control de la linea.
     - column:  para llevar control de la columna.
 ## 📋 Switch
@@ -92,13 +144,16 @@ Este método es el que se llamara para ejecutar una instrucción If que venga en
             this.instructionsCase = instructionsCase;
         }
     }
-- En la clase Switch esta extendida a Instruction esto es porque le definimos que Instruccion sera padre de la clase Switch.
+- ### Descripcion: 
+  En la clase Switch esta extendida a Instruction esto es porque le definimos que Instruccion sera padre de la clase Switch.
+  
+  Ejecucion de instrucciones Switch que adentro pueden venir mas instrucciones desde un print hasta llamadas de funciones, tambien se hace el llamado de break cada vez que la condicional sea correcta para poder salir del switch.
 - ### Constructor: 
   Este constructor nos ayudara para mayor facilidad a la hora de mandar los datos desde jison la gramatica.
   
-    #### Parámetross
-    - condition:  
-    - instructionCase:  
+    #### Parametros
+    - condition: la condicional que viene a evaluar en el switch.
+    - instructionCase:  Instrucciones de cada case.
     - row:  para llevar control de la linea.
     - column:  para llevar control de la columna.
 
@@ -123,16 +178,192 @@ Este método es el que se llamara para ejecutar una instrucción If que venga en
 
 
 ## 📋 For
+    class For extends Instruction {
+        constructor(variable, condition, inc_decre, instructions_for, row, column) {
+            super(row, column);
+            this.variable = variable;
+            this.condition = condition;
+            this.inc_decre = inc_decre;
+            this.instructions_for = instructions_for;
+        }
+    }
+- ### Descripcion: 
+  En la clase For esta extendida a Instruction esto es porque le definimos que Instruccion sera padre de la clase For.
+- ### Constructor: 
+  Este constructor nos ayudara para mayor facilidad a la hora de mandar los datos desde jison la gramatica.
+  
+    #### Parametros
+    - variable: variable que puede ir decrementando o incrementable que se puede declarar ahi mismo o puede que ya exista en un entorno anterior.
+    - condition: la condicional que viene a evaluar en el for.
+    - instructions_for:  Instrucciones del for.
+    - inc_decre: mandamos si es incrementable o decrementable que venga asi se ejecuta.
+    - row:  para llevar control de la linea.
+    - column:  para llevar control de la columna.
 
+- ### verifyId:
+  Verificamos si la varible que viene sea la misma que venga en inc_decre, si no lo tomamos como error semantico.
+- ### verifyExistId: 
+  Este nos ayuda a verificar si la variable que viene ya existe si en un caso no venga una declaracion, si no viene el tipo para declarar y existe entonces se retorna la informacion de dicha variable.
 
 ## 📋 For In
+    class ForIn extends Instruction {
+        constructor(identifier, expression, instructions, row, column) {
+            super(row, column);
+            this.identifier = identifier;
+            this.expression = expression;
+            this.instructions = instructions; 
+        }
+    }
+    
+- ### Descripcion: 
+En la clase For in  esta extendida a Instruction esto es porque le definimos que Instruccion sera padre de la clase For in.
 
-
+Para recorrer una cadena de string o un array de valores desde un rango de posiciones del array.
+- ### Constructor: 
+  Este constructor nos ayudara para mayor facilidad a la hora de mandar los datos desde jison la gramatica.
+  
+    #### Parametros
+    - identifier: variable que recorrera el for in.
+    - expression: la expresion que viene a evaluar en el for puede ser una operacion o un array o string que recorrerlo entre otros.
+    - instructions:  Instrucciones del for in.    
+    - row:  para llevar control de la linea.
+    - column:  para llevar control de la columna.
 ## 📋 While
+    class While extends Instruction{
+        constructor(condition, instructions, row, column){
+            super(row, column);
+            this.condition = condition;
+            this.instructions = instructions; 
+        }
+    }
+- ### Descripcion: 
+  En la clase While esta extendida a Instruction esto es porque le definimos que Instruccion sera padre de la clase While.
 
-
+  Validamos las condicionales llamandola desde otra clase que se llama condicion en la cual evaluamos si es falso o verdadero, si es falso seguimos ejecutando las instrucciones del while, si no nos salimos.
+- ### Constructor: 
+  Este constructor nos ayudara para mayor facilidad a la hora de mandar los datos desde jison la gramatica.
+  
+    #### Parametros
+    - condition: la condicional que viene a evaluar.
+    - instructions:  Instrucciones del while.    
+    - row:  para llevar control de la linea.
+    - column:  para llevar control de la columna.
+  
 ## 📋 Do While
+    class Do extends Instruction {
+        constructor(condition, instructions, row, column) {
+            super(row, column);
+            this.condition = condition;
+            this.instructions = instructions; 
+        }
+    }
+- ### Descripcion: 
+ En la clase Do esta extendida a Instruction esto es porque le definimos que Instruccion sera padre de la clase Do.
 
+ ejecutamos y despues Validamos las condicionales llamandola desde otra clase que se llama condicion en la cual evaluamos si es falso o verdadero, si es falso seguimos ejecutando las instrucciones del while, si no nos salimos.
+- ### Constructor: 
+  Este constructor nos ayudara para mayor facilidad a la hora de mandar los datos desde jison la gramatica.
+  
+    #### Parametros
+    - condition: la condicional que viene a evaluar.
+    - instructions:  Instrucciones del do while.    
+    - row:  para llevar control de la linea.
+    - column:  para llevar control de la columna.
+
+
+## 📋 Post Fixes
+    class Post_fixed extends Instruction{
+        constructor(identifier, action, row, column){
+            super(row, column);
+            this.identifier = identifier;
+            this.action = action;
+            this.type = null;
+        }
+    }
+
+- ### Descripcion: 
+ En la clase Post Fixes esta extendida a Instruction esto es porque le definimos que Instruccion sera padre de la clase Post Fixes.
+
+ Aqui hacemos las validaciones para incrementar o decrementar una variable la podemos hacer llamar desde otra clase cuando la necesitamos.
+- ### Constructor: 
+  Este constructor nos ayudara para mayor facilidad a la hora de mandar los datos desde jison la gramatica.
+  
+    #### Parametros
+    - identifier: variable que vamos a asignarle nuevo valor.
+    - action: la accion si se le incrementa el valor a la variable o decrementa.   
+    - row:  para llevar control de la linea.
+    - column:  para llevar control de la columna.
+
+## 📋 Print
+    class Print extends Instruction {
+        constructor(row, column, expression, jump) {
+            super(row, column);
+            this.expression = expression;
+            this.jump = jump;
+        }
+    }
+- ### Descripcion: 
+  En la clase Print esta extendida a Instruction esto es porque le definimos que Instruccion sera padre de la clase Print.
+  Aqui podemos mandar a imprimir en consola las ejecuciones desde una funcion que me trae un valor o de un nodo hasta operaciones y condiciones.
+- ### Constructor: 
+  Este constructor nos ayudara para mayor facilidad a la hora de mandar los datos desde jison la gramatica.
+  
+    #### Parametros
+    - expression: lo que deseamos imprimir en la ejecucion.
+    - jump: si es con salto de linea o sin salto.   
+    - row:  para llevar control de la linea.
+    - column:  para llevar control de la columna.
+  
+## 📋 Break
+    class Break extends Instruction {
+        constructor(row, column) {
+            super(row, column);
+        }
+    }
+- ### Descripcion: 
+  En la clase Break esta extendida a Instruction esto es porque le definimos que Instruccion sera padre de la clase Break.
+  Llamada de funcion cuando venga un break en una instruccion hace que salga de dicha instruccion.
+- ### Constructor: 
+  Este constructor nos ayudara para mayor facilidad a la hora de mandar los datos desde jison la gramatica.
+  
+    #### Parametros
+    - row:  para llevar control de la linea.
+    - column:  para llevar control de la columna.
+
+## 📋 Return
+    class Return extends Instruction {
+        constructor(expression, row, column) {
+            super(row, column);
+            this.expression = expression;
+            this.type = null;
+            this.result = null;
+        }
+    }
+- ### Descripcion: 
+  En la clase Break esta extendida a Instruction esto es porque le definimos que Instruccion sera padre de la clase Break.
+  Llamada de funcion cuando venga un break en una instruccion hace que salga de dicha instruccion.
+- ### Constructor: 
+  Este constructor nos ayudara para mayor facilidad a la hora de mandar los datos desde jison la gramatica.
+  
+    #### Parametros
+    - row:  para llevar control de la linea.
+    - column:  para llevar control de la columna.
+
+## 📋 Continue
+    class Continue extends Instruction{
+        constructor(row, column){
+            super(row, column);
+        }
+    }
+- ### Descripcion: 
+  En la clase Break esta extendida a Instruction esto es porque le definimos que Instruccion sera padre de la clase Break.
+  Llamada de funcion cuando venga un break en una instruccion hace que salga de dicha instruccion.
+- ### Constructor: 
+  Este constructor nos ayudara para mayor facilidad a la hora de mandar los datos desde jison la gramatica.
+  
+    #### Parametros
+    - row:  para llevar control de la linea.
+    - column:  para llevar control de la columna.
 ## 📋 TemplateStruct
     class TemplateStruct extends Instruction {
       constructor(name, parameters, row, column) {
@@ -375,3 +606,52 @@ Este método es el que se llamara para ejecutar una instrucción If que venga en
     - parameters: Lista de parámetros que recibe el método.
     - row: Para llevar control de la línea.
     - column: Para llevar control de la columna.
+## 📋 ErrorList
+    static errorList = [];
+- ### Descripcion: 
+  Esta clase nos ayudara para llevar el control de todos los tipos de error desde lexicos, sintacticos y semanticos.
+- ### Metodos:  
+    - cleanErrorList: Limpio toda la lista de errores.
+    - addError:  Agrego un error a la lista de errores.
+    - getErrorList: Obtengo todos los datos de la lista.
+    - isErrors: Validar si tiene errores.
+    - showErrors: Para imprimir en consola los errores que vengan.
+
+
+## 📋 ErrorNode
+  
+    constructor(line, column, errorType, description, environmentType) {
+        this.line = line;
+        this.column = column;
+        this.errorType = errorType;
+        this.description = description;
+        this.environmentType = environmentType;
+    }
+- ### Descripcion: 
+- ### Constructor: 
+  Este constructor nos ayudara para mayor facilidad a la hora de mandar los datos desde jison la gramatica.
+  
+    #### Parametros
+    - row:  para llevar control de la linea.
+    - column:  para llevar control de la columna.
+## 📋 moveDivs
+- ### Descripcion: 
+
+- ### Metodos:  
+    - row:  para llevar control de la linea.
+    - column:  para llevar control de la columna.
+## 📋 Node
+    static errorList = [];
+- ### Descripcion: 
+
+- ### Metodos:  
+    - row:  para llevar control de la linea.
+    - column:  para llevar control de la columna.
+
+## 📋 Table Report
+    static errorList = [];
+- ### Descripcion: 
+
+- ### Metodos:  
+    - row:  para llevar control de la linea.
+    - column:  para llevar control de la columna.
