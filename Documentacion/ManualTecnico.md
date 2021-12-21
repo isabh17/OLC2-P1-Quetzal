@@ -340,12 +340,16 @@ Para recorrer una cadena de string o un array de valores desde un rango de posic
         }
     }
 - ### Descripcion: 
-  En la clase Break esta extendida a Instruction esto es porque le definimos que Instruccion sera padre de la clase Break.
-  Llamada de funcion cuando venga un break en una instruccion hace que salga de dicha instruccion.
+  En la clase return esta extendida a Instruction esto es porque le definimos que Instruccion sera padre de la clase return.
+  
+  Returna un valor en una funcion en una instruccion, el return puede venir vacio como retornar un valor como tal.
 - ### Constructor: 
   Este constructor nos ayudara para mayor facilidad a la hora de mandar los datos desde jison la gramatica.
   
     #### Parametros
+    - expresion: que se va a retornar.
+    - type: que se le manda bandera null para poder validar en el execute.
+    - result: igual es para validar en execute.
     - row:  para llevar control de la linea.
     - column:  para llevar control de la columna.
 
@@ -356,8 +360,9 @@ Para recorrer una cadena de string o un array de valores desde un rango de posic
         }
     }
 - ### Descripcion: 
-  En la clase Break esta extendida a Instruction esto es porque le definimos que Instruccion sera padre de la clase Break.
-  Llamada de funcion cuando venga un break en una instruccion hace que salga de dicha instruccion.
+  En la clase Continue esta extendida a Instruction esto es porque le definimos que Instruccion sera padre de la clase Continue.
+  
+  
 - ### Constructor: 
   Este constructor nos ayudara para mayor facilidad a la hora de mandar los datos desde jison la gramatica.
   
@@ -629,33 +634,58 @@ Para recorrer una cadena de string o un array de valores desde un rango de posic
         this.environmentType = environmentType;
     }
 - ### Descripcion: 
+  Esta clase se utiliza para hacer un nodo el cual nos servira para ingresarlo en la lista en la clase ErrorList.
 - ### Constructor: 
   Este constructor nos ayudara para mayor facilidad a la hora de mandar los datos desde jison la gramatica.
   
     #### Parametros
-    - row:  para llevar control de la linea.
+    - errorType: el tipo de error si es lexico, sintactico, semantico.
+    - descripcion: una peque;a descripcion del error.
+    - environmentType: en que entorno fue el error.
+    - line:  para llevar control de la linea.
     - column:  para llevar control de la columna.
 ## 📋 moveDivs
-- ### Descripcion: 
 
-- ### Metodos:  
-    - row:  para llevar control de la linea.
-    - column:  para llevar control de la columna.
-## 📋 Node
-    static errorList = [];
+    function addChild(div_id) {
+        const node = document.getElementById('gist-div');
+        while (node.hasChildNodes()) {
+            node.removeChild(node.lastChild);
+        }
+        document.getElementById('gist-div').appendChild(document.getElementById(div_id).cloneNode(true))
+    }
 - ### Descripcion: 
-
-- ### Metodos:  
-    - row:  para llevar control de la linea.
-    - column:  para llevar control de la columna.
+    Esta clase lleva un metodo que nos ayuda a hacer el arbol interactico en ir encogiendo los padres de las producciones.
+- ### Function:  
+    - addChild: esta funcion nos ayuda para ir creando hijos o nodos en el arbol que se mostrara en la parte inferior de la pagina.
+## 📋 ErrorType
+        var EnumErrorType;
+    (function (EnumErrorType) {
+        EnumErrorType["LEXICO"] = "LEXICO";
+        EnumErrorType["SYNTACTIC"] = "SINTACTICO";
+        EnumErrorType["SEMANTIC"] = "SEMANTICO";
+    })(EnumErrorType || (EnumErrorType = {}));
+- ### Descripcion: 
+    Para llamar el tipo de error que viene y me retorna el tipo de error.
 
 ## 📋 Table Report
-    static errorList = [];
+    constructor(line, column, name, type, typeEnviroment, value) {
+      this.line = line;
+      this.column = column;
+      this.name = name;
+      this.type = type;
+      this.typeEnviroment = typeEnviroment;
+      this.value = value;
+    }
+    
+    static SymbolList = [];
 - ### Descripcion: 
-
+Aqui se crea un Nodo tipo NodeTableSymbols el cual nos servira para guardar de forma ordenada en la lista para la tabla de simbolos.
 - ### Metodos:  
-    - row:  para llevar control de la linea.
-    - column:  para llevar control de la columna.
+    - cleanTableReport: Limpio toda la tabla de simbolos.
+    - addTableSymbol:  Agrego un simbolo a la tabla de simbolos.
+    - getTableReport: Obtengo todos los datos de la lista.
+    - isSymbols: Validar si tiene simbolos.
+    - showSymbol: Para imprimir en consola los simbolos que vengan.
 
 ## 📋 Aritmetica
   class Aritmetica extends Instruction {

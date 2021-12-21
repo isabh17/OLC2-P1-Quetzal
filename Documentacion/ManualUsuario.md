@@ -63,5 +63,7 @@ _Adicional Quetzal tendrá 2 flujos, se podrá interpretar el código fuente ing
 #### Reporte Gramatical 
 ![This is a alt text.](../Documentacion/img/9.PNG "Pagina Web- Funcionamiento.")
 
-
+#### AST 
+El arbol siempre se generara despues de la ejecucion haya salido exitosamente.
+![This is a alt text.](../Documentacion/img/10.PNG "Pagina Web- Funcionamiento.")
 

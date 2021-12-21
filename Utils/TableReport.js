@@ -47,7 +47,7 @@ class NodeTableSymbols {
         return TableReport.SymbolList;
     }
 
-    static isErrors(){
+    static isSymbols(){
         if(TableReport.SymbolList.length === 0){
             return true;
         }else{
