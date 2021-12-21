@@ -18,12 +18,17 @@ _Adicional Quetzal tendrá 2 flujos, se podrá interpretar el código fuente ing
 ### Herramientas Utilizadas 📋
 
 - CodeMirror Archivos js.
-- HTML.
-- Jisson.
-- GitHub - GithubPage.
-- Chart.js
-- jsPDF
+- HTML: estructura del contenido web
+- Java Script: es un lenguaje de programación interpretado, Se define como orientado a objetos, basado en prototipos, imperativo, débilmente tipado y dinámico.
+- Windows 10 Home: Sistema operativo
+- Jison: Generador de analizadores léxicos y sintácticos.
+- GitHub - GithubPage: Para el control de versiones y para publicar la pagina estatica con GithubPage. 
+- Chart.js: Libreria para la generacion del arbol interactivo.
+- jsPDF: Generacion de tabla de simbolos si se dispara con graficar_ts 
+- 
   
+### 📋Generación de Archivos de Analizadores
+    jison gramatica.jison
 
 ## Quetzal 🚀
 ![This is a alt text.](../Documentacion/img/1.PNG "Pagina Web- Funcionamiento.")
