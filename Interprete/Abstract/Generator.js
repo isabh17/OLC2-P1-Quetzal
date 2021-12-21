@@ -11,10 +11,11 @@ class Generator {
     this.tempsRecover = {};
     this.printString = false;
     this.compareString = false;
+    this.repeatString = false;
+    this.length = false;
     this.uppercase = false;
     this.power = false;
     this.concatString = false;
-    this.potencia = false;
   }
 
   getHeader() {
@@ -143,7 +144,11 @@ class Generator {
     this.freeTemp(right);
     if (op === "%") {
       this.codeIn(`${result}=fmod(${left},${right});\n`);
-    } else {
+    } else if(op === "sin" || op === "cos"|| op === "tan"){
+      this.codeIn(`${result}=${op}(${left}*3.1415926536/180);\n`);
+    }else if(op === "log10" || op === "sqrt"){
+      this.codeIn(`${result}=${op}(${left});\n`);
+    }else {
       this.codeIn(`${result}=${left}${op}${right};\n`);
     }
   }
@@ -388,8 +393,8 @@ class Generator {
   }
 
   fRepeatString() {
-    if (this.repeatString){
-      return ;
+    if (this.repeatString) {
+      return;
     }
     this.repeatString = true;
     this.inNatives = true;
@@ -467,6 +472,36 @@ class Generator {
 
     this.addEndFunc();
     this.inNatives = false;
+  }
+
+  fLength() {
+    if (this.length){
+      return;
+    }
+    this.length = true;
+    this.inNatives = true;
+
+    this.addBeginFunc("native_length");
+
+    var temp = this.addTemp();
+
+    var returnLbl = this.newLabel();
+
+    // extrayendo parametros
+    // Parametro1
+    this.addExp(temp, 'P', '1', '+');
+    this.getStack(temp, temp);
+
+    this.getHeap(temp, temp);
+
+    this.addGoto(returnLbl);
+    this.putLabel(returnLbl);
+    //Guardamos el retono
+    this.setStack('P', temp);
+
+    this.addEndFunc();
+    this.inNatives = false;
+    this.freeTemp(temp)
   }
   //---------------------------------- FUNCTIONS -----------------------------------------
   addBeginFunc(id) {

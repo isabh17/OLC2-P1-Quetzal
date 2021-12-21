@@ -182,6 +182,27 @@ class NativeMethods extends Instruction {
   }
 
   compile(generator, env){
-    return null;
+    if (this.method === "length") {
+      var par = new Identifier(String(this.name), this.row, this.column, null);
+      var param1 = par.compile(generator, env);
+      console.log(param1);
+      return new C3DReturn(this.callLength(generator, env, param1.value), Type.INT, false);
+    }
+  }
+
+  callLength(generator, env, value) {
+    generator.fLength();
+    var paramTemp = generator.addTemp();
+    generator.addExp(paramTemp, 'P', env.size, '+');
+    generator.addExp(paramTemp, paramTemp, '1', '+');
+    generator.setStack(paramTemp, value);
+
+    generator.newEnv(env.size);
+    generator.callFun('native_length');
+
+    var temp = generator.addTemp();
+    generator.getStack(temp, 'P');
+    generator.retEnv(env.size);
+    return temp;
   }
 }

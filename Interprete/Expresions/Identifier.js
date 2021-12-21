@@ -1,5 +1,5 @@
 class Identifier extends Instruction{
-  constructor(identifier, row, column,env){
+  constructor(identifier, row, column, env){
     super(row, column);    
     this.identifier = identifier;
     this.type = null;

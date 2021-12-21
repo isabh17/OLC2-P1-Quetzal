@@ -32,7 +32,7 @@ class CallFunction extends Instruction {
         if (result.parameters[parameter].Type === Type.INT && this.parameters[count].type === Type.DOUBLE) {
           this.parameters[count].type = Type.INT;
         }
-        if(result.parameters[parameter].Type === Type.DOUBLE && this.parameters[count].type === Type.INT){
+        if (result.parameters[parameter].Type === Type.DOUBLE && this.parameters[count].type === Type.INT) {
           this.parameters[count].type = Type.DOUBLE;
         }
         if (result.parameters[parameter].Type === this.parameters[count].type) {  // VERIFICACION DE TIPO 
@@ -195,7 +195,16 @@ class CallFunction extends Instruction {
       var right = this.parameters[1].compile(generator, env);
       generator.fPower();
       return this.callPower(generator, env, left.value, right.value);
+    }else if(this.name === "sin" || this.name === "cos" || this.name === "tan" || this.name === "log10" || this.name === "sqrt"){
+      var left = this.parameters[0].compile(generator, env);
+      return this.callNatives(generator, env, left.value, String(this.name));
     }
+  }
+
+  callNatives(generator, env, param1, type) {
+    var temp = generator.addTemp();
+    generator.addExp(temp, param1, null, type);
+    return new C3DReturn(temp, Type.DOUBLE, true);
   }
 
   callPower(generator, env, param1, param2) {
