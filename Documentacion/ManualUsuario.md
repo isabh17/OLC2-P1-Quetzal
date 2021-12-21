@@ -67,3 +67,95 @@ _Adicional Quetzal tendrá 2 flujos, se podrá interpretar el código fuente ing
 El arbol siempre se generara despues de la ejecucion haya salido exitosamente.
 ![This is a alt text.](../Documentacion/img/10.PNG "Pagina Web- Funcionamiento.")
 
+# Descripcion basica del lenguaje Quetzal
+#### Tipos de datos primitivos
+
+| Tipo:                     | token     | Ejemplo |
+| --------------------------- | --------- | ------ |
+| Cadena   | String | "Hola mundo" |
+| Caracter     | Char | 'a' |
+| Entero     | int | 5 |
+| Decimal     | double | 1.5 |
+| Booleano     | boolean | true |
+
+#### Sintaxis del lenguaje
+
+## 📋 Comentarios
+    //Este es un  comentario de una linea
+    /*Este es
+    un comentario
+    multilinea*/
+### Descripción:
+Estos son tramos de código que son obviados por el compilador y que por ende no influyen en la ejecución final del programa.
+
+## 📋 Print y Println
+    println("Hola mundo");
+    print("OLC2");
+### Descripción:
+Esta función nativa de Quetzal permite escribir en consola el resultado de ejecutar una expresion, si se usa println se escribirá un salto de linea al final de la instrucción
+
+## 📋 Declaraciones y asignaciones
+    int variable = 10;
+    variable = 15;
+    String variable2, variable3, variable4;
+    variable4 = "Hola";
+### Descripción:
+Creación y asignación de variables, se les asigna un tipo de dato el cual no cambia durante la ejecución.
+
+## 📋 Condicional if
+    if ( a==b ) {
+        println("Instrucciones");
+    }
+    if ( false )
+        println("Instrucciones");
+    if ( a==b && 5<4 ) {
+        println("Instrucciones");
+    } else if ( !true ) {
+        println("Instrucciones");
+    } else {
+        println("Instrucciones");
+    }
+
+### Descripción:
+Sentencia de control que ejecuta ciertas instrucciones deppendiendo la resolución de una condición en específico.
+  
+  
+  ## 📋 Condicional switch
+    int day = 4;
+    switch (day) {
+    case 1:
+        println("Monday");
+      break;
+    case 2:
+        println("Tuesday");
+        break;
+    case 3:
+        println("Wednesday");
+        break;
+    }
+- ### Descripción:
+  Sentencia de control que ejecuta ciertas instrucciones deppendiendo el valor que se le envie.
+  
+## 📋 Operador ternario
+    respuesta = edad >= 50 ? "Puede vacunarse" : "No puede vacunarse";
+    println(animal == "Perro" ? 15 : 10);
+### Descripción:
+Sentencia de control que ejecuta ciertas instrucciones deppendiendo la ejecucióno de una condición.
+
+## 📋 Bucle while
+    int i = 0;
+    while (i < 5) {
+        println(i);
+        i++;
+    }
+### Descripción:
+Bucle que ejecuta las instrucciones si una condición específica se cumple.
+
+## 📋 Bucle do-while
+    int i = 0;
+    do {
+        println(i);
+        i++;
+    }while (i < 5);
+### Descripción:
+Bucle que ejecuta las instrucciones, evalua si la condición se cumple, si la condición se cumple repite las instrucciones.

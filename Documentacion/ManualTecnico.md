@@ -35,9 +35,9 @@ _Proyecto de Organización de lenguajes y Compiladores 2_
   Este constructor nos ayudará para mayor facilidad a la hora de mandar los datos desde jison la gramatica.
   
     #### Parámetros
-    - row:  Para llevar control de la línea.
-    - column:  Para llevar control de la columna.
-## 📋 Metodos Generales Clases hijas de Instruccion
+    - row: Para llevar control de la línea.
+    - column: Para llevar control de la columna.
+## 📋 Métodos Generales Clases hijas de Instruction
 
 
 ### Execute:
