@@ -53,12 +53,14 @@ void main(){
 
     val1 = 7 - (5 + 10 * (20 / 5 - 2 + 4 * (5 + 2 * 3)) - 8 * 3 % 2) + 50 * (6 * 2); //142.0
     val2 = pow(2,4) - 9 * (8 - 6 * (pow(3,2) - 6 * 5 - 7 * (9 + pow(7,3)) + 10) - 5 ) + 8 * (36 / 6 - 5 * ( 2 * 3)); //-133853.0
-    //val3 = (pow(8,3) * pow(8,2) - sqrt(4) + tan(12) + sin(60) + 2) / 3; //10922.353109816746 es 10923.02619
+    val3 = (pow(8,3) * pow(8,2) - sqrt(4) + tan(12) + sin(60) + 2) / 3; //10922.353109816746 es 10923.02619
     println(val1);
     println(val2);
-    double val4 = val1 - val2; //+ val3; //El resultado es 144917.35310981676
-    int resultado = val4;  //144917
-    if(resultado != 144918){ // como esta malo arriba la operacion cambia a 144918.0262 --> 144918
+    println(val3);
+    double val4 = val1 - val2 + val3; //El resultado es 144917.35310981676
+    double resultado = val4;  //144917
+    println(resultado);
+    if(resultado == 144918.02619398848){ // como esta malo arriba la operacion cambia a 144918.02619398848 --> 144918 pero no tenemos toint en C3D por eso lo puse double
         println("Aritmeticas 100");
         aritmeticas = 1;
     }
@@ -78,7 +80,7 @@ void main(){
   	 
     String pruebasNativas = "ComPiLaDoReS2 TesT";
 
-    println("Lógica 5=");
+    print("Cadena 5=");
     println(String_5); //Calificacion Calificacion Calificacion 
 	boolean relacionaes = (a == 0) != (44.3 < 44.4) == (pow(2,5) == 31 + 2 % 1);
     relacionaes = relacionaes == (b == a) != ((532 > 532)) == (String_3 == "false,true,false,true") == (String_4 == "true,false");
