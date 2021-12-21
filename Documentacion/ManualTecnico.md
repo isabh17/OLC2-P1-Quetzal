@@ -606,6 +606,7 @@ Para recorrer una cadena de string o un array de valores desde un rango de posic
     - parameters: Lista de parámetros que recibe el método.
     - row: Para llevar control de la línea.
     - column: Para llevar control de la columna.
+
 ## 📋 ErrorList
     static errorList = [];
 - ### Descripcion: 
@@ -655,3 +656,129 @@ Para recorrer una cadena de string o un array de valores desde un rango de posic
 - ### Metodos:  
     - row:  para llevar control de la linea.
     - column:  para llevar control de la columna.
+
+## 📋 Aritmetica
+  class Aritmetica extends Instruction {
+    constructor(operLeft, operator, operRight, row, column) {
+      super(row, column);
+      this.operator = operator;
+      this.operLeft = operLeft;
+      this.operRight = operRight;
+      this.type = null;
+      this.objectType = null;
+      this.trueLbl = '';
+      this.falseLbl = '';
+      this.structType = '';
+    }
+- ### Descripción: 
+  Clase que se encargará de realizar todas las operaciones relacionadas a interactuar con números, sumas, restas, multiplicaciones, divisiones, modulo, etc.
+  
+    #### Parámetros del constructor
+    - operLeft: Expresión del operador izquierdo a ejecutar.
+    - operator: Tipo de operación a ejecutar.
+    - operRight: Expresión del operador izquierdo a ejecutar.
+    - row: Para llevar control de la línea.
+    - column: Para llevar control de la columna.
+
+## 📋 Logic
+    class Logic extends Instruction{
+      constructor( operLeft, operator, operRight, row, column){
+        super(row, column);  
+        this.operator = operator;
+        this.operLeft = operLeft;
+        this.operRight = operRight;
+        this.type = Type.BOOLEAN;
+        this.trueLbl = '';
+        this.falseLbl = '';
+        this.structType = '';
+      }
+- ### Descripción: 
+  Clase que se encargará de realizar todas las operaciones lógicas.
+  
+    #### Parámetros del constructor
+    - operLeft: Expresión del operador izquierdo a ejecutar.
+    - operator: Tipo de operación a ejecutar.
+    - operRight: Expresión del operador izquierdo a ejecutar.
+    - row: Para llevar control de la línea.
+    - column: Para llevar control de la columna.
+
+## 📋 Relational
+    class Relational extends Instruction {
+      constructor(operLeft, operator, operRight, row, column) {
+        super(row, column);
+        this.operator = operator;
+        this.operLeft = operLeft;
+        this.operRight = operRight;
+        this.type = Type.BOOLEAN;
+        this.trueLbl = '';
+        this.falseLbl = '';
+        this.structType = '';
+      }
+- ### Descripción: 
+  Clase que se encargará de realizar todas las operaciones relacionales.
+  
+    #### Parámetros del constructor
+    - operLeft: Expresión del operador izquierdo a ejecutar.
+    - operator: Tipo de operación a ejecutar.
+    - operRight: Expresión del operador izquierdo a ejecutar.
+    - row: Para llevar control de la línea.
+    - column: Para llevar control de la columna.
+
+## 📋 Identifier
+    class Identifier extends Instruction{
+      constructor(identifier, row, column, env){
+        super(row, column);    
+        this.identifier = identifier;
+        this.type = null;
+        this.objectType = null;
+        this.env = env;
+        this.trueLbl = '';
+        this.falseLbl = '';
+        this.objectType = '';
+      }
+- ### Descripción: 
+  Clase que se encargará de almacenar el identificador de una variable u objeto a buscar para luego obtener su valor.
+  
+    #### Parámetros del constructor
+    - identifier: Valor que identifica a la variable creada.
+    - row: Para llevar control de la línea.
+    - column: Para llevar control de la columna.
+    - env: Entorno en el que se creó la variable.
+
+## 📋 Primitive
+    class Primitive extends Instruction {
+      constructor(type, value, row, column) {
+        super(row, column);
+        this.type = type;
+        this.value = value;
+        this.trueLbl = '';
+        this.falseLbl = '';
+        this.objectType = '';
+      }
+- ### Descripción: 
+  Valor de tipo primitivo del lenguaje Quetzal, ya sea entero, cadena, caracter, booleano o double.
+  
+    #### Parámetros del constructor
+    - type: Valor que identifica a la variable creada.
+    - value: Para llevar control de la línea.
+    - row: Para llevar control de la línea.
+    - column: Para llevar control de la columna.
+
+## 📋 Strings
+    class Strings extends Instruction {
+      constructor(operLeft, operator, operRight, row, column) {
+        super(row, column);
+        this.operator = operator;
+        this.operLeft = operLeft;
+        this.operRight = operRight;
+        this.type = null;
+      }
+- ### Descripción: 
+  Clase utilizada para realizar las operaciones necesarias en variables o datos primitivos que sean de tipo String.
+  
+    #### Parámetros del constructor
+    - operLeft: Expresión del operador izquierdo a ejecutar.
+    - operator: Tipo de operación a ejecutar.
+    - operRight: Expresión del operador izquierdo a ejecutar.
+    - row: Para llevar control de la línea.
+    - column: Para llevar control de la columna.
