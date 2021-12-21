@@ -237,7 +237,7 @@ class Relational extends Instruction {
 
       generator.putLabel(gotoEnd);
 
-      this.checkLabels();
+      this.checkLabels(generator);
       generator.addIf(leftTemp, rightTemp, this.getOp(), this.trueLbl);
       generator.addGoto(this.falseLbl);
     }
@@ -250,6 +250,7 @@ class Relational extends Instruction {
 
   checkLabels(generator) {
     if (this.trueLbl === '') {
+      //console.log(generator);
       this.trueLbl = generator.newLabel();
     }
     if (this.falseLbl === '') {

@@ -39,7 +39,7 @@ void main()
     println("==============FACTORIAL==============================");
     println(recursiva_sencilla(15));
     println("===============ACKERMAN==============================");
-    println(recusiva1(3, 7));  //2045 con 3,8 nos falla con 3,7 funciona 1024
+    println(recusiva1(3, 7));  //2045 con 3,8 
     println("===============HANOI=================================");
     juego(4, 1, 2, 3);
 }

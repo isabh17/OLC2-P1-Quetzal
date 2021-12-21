@@ -27,6 +27,8 @@ _Adicional Quetzal tendrá 2 flujos, se podrá interpretar el código fuente ing
 
 ## Quetzal 🚀
 ![This is a alt text.](../Documentacion/img/1.PNG "Pagina Web- Funcionamiento.")
+![This is a alt text.](../Documentacion/img/2.PNG "Pagina Web- Funcionamiento.")
+![This is a alt text.](../Documentacion/img/8.PNG "Pagina Web- Funcionamiento.")
 
 
 ### 📋 Detalle del Flujo de Quetzal
@@ -36,6 +38,12 @@ _Adicional Quetzal tendrá 2 flujos, se podrá interpretar el código fuente ing
 - 4 C3D Compiler hace la traduccion para codigo C3D del archivo de entrada previamente cargado.
 - 5 Editor en esta caja de Texto se cargara los archivos de entrada que desea cargar o para modificarlos desde Quetzal.
 - 6 Salida en esta caja podremos observar la traduccion del archivo de entrada a C3D.
+- 7 Consola de los resultados de la ejecucion.
+- 8 Reporte de errores genera una tabla con todos los errores sintacticos,lexicos,semanticos.
+- 9 Reporte de Tabla de simbolos.
+- 10 Reporte Gramatical se genera un reporte donde se muestra todas las producciones que se van generando.
+
+# 📋 Detalle de cada Seccion
 
 #### Editor al cargar un archivo de Entrada
 ![This is a alt text.](../Documentacion/img/3.PNG "Pagina Web- Funcionamiento.")
@@ -46,8 +54,10 @@ _Adicional Quetzal tendrá 2 flujos, se podrá interpretar el código fuente ing
 
 #### Reporte de Errores 
 ![This is a alt text.](../Documentacion/img/5.PNG "Pagina Web- Funcionamiento.")
-#### Tabla de Simbolos de la Ejecucion
+#### Tabla de Simbolos 
 ![This is a alt text.](../Documentacion/img/7.PNG "Pagina Web- Funcionamiento.")
+#### Reporte Gramatical 
+![This is a alt text.](../Documentacion/img/9.PNG "Pagina Web- Funcionamiento.")
 
 
 

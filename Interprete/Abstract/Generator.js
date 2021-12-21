@@ -154,6 +154,7 @@ class Generator {
   }
   //-------------------------------- USING OF LABELS -----------------------------------
   newLabel() {
+    //console.log(this.countLabel);
     var label = `L${this.countLabel}`;
     this.countLabel += 1;
     return label;
