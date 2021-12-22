@@ -435,7 +435,7 @@ class Generator {
     this.addExp(tempP2, 'P', '2', '+');
     this.getStack(tempP2, tempP2);
 
-    //// Inicio de recorrido
+    // Inicio de recorrido
     this.addExp(tempR, tempP, '', '');
     this.putLabel(initLbl);
 
@@ -457,7 +457,7 @@ class Generator {
     this.putLabel(lblTrue1);
     this.addIf(tempP2, tempCounter, '==', returnLbl);
     this.addExp(tempCounter, tempCounter, '1', '+');
-    // regresandoe el puntero para recorrer nuevamente el string 
+    // regresando el puntero para recorrer nuevamente el string 
     this.addExp(tempP, tempR, '', '');
     this.addGoto(initLbl);
 

@@ -16,7 +16,7 @@ class Environment {
     this.structs = {};
   }
 
-  addVariable(id, type, heap, objectType = "") { //saveVar
+  addVariable(id, type, heap, objectType = "") { 
     if (id in this.variables) {
       return null;
     } else {
@@ -42,7 +42,7 @@ class Environment {
     return null;
   }
 
-  getVariable(id) {//getVar
+  getVariable(id) {
     var env = this;
     while (env !== null) {
       if (id in env.variables) {
