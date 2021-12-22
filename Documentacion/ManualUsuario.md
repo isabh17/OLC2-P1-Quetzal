@@ -253,4 +253,4 @@ Es una lista que contiene varios elementos de un mismo tipo de dato.
     Persona persona1 = Persona("Tony", 25, null);
     println(persona1.nombre);
 ### Descripción:
-Es una lista que contiene varios elementos de un mismo tipo de dato.
+Es una estructura que contiene en su interior una lista de variables, mismas que pueden ser cada una de cualquier tipo de dato que contenga Quetzal.
