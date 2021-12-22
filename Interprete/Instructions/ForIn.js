@@ -7,19 +7,24 @@ class ForIn extends Instruction {
     }
 
     execute(tree, table) {
+        var aux = this.expression.execute(tree, table);
+        if (aux instanceof Exception) return aux;
+        if(this.expression.type !== Type.STRING && this.expression.type !== Type.ARRAY){
+            tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
+            ErrorList.addError(new ErrorNode(this.row, this.column, new ErrorType(EnumErrorType.SEMANTIC), "Solo se permite iterar variables string o array en forIn", ENVIRONMENT.FORIN));
+            return new Exception("Semantico", "Solo se permite iterar variables string o array en forIn", this.row, this.column);
+        }
         tree.addEnvironment("FOR-IN");
-        if (this.expression instanceof ListObjects || this.expression instanceof RangeArray) {
-            return this.execForArray(tree, table);
+        if ( (this.expression instanceof ListObjects || this.expression instanceof RangeArray) || (this.expression instanceof Identifier && this.expression.type === Type.ARRAY) ) {
+            return this.execForArray(tree, table, aux);
         } else {
-            return this.normalExec(tree, table);
+            return this.normalExec(tree, table, aux);
         }
     }
 
-    execForArray(tree, table) {
+    execForArray(tree, table, listValues) {
         var newTable = new TableSymbols(table);
-        var listValues = this.expression.execute(tree, table);
-        if (listValues instanceof Exception) return listValues;
-        var symbol = new Symbol(String(this.identifier), this.expression.type, listValues[0], this.row, this.column, null, null);
+        var symbol = new Symbol(String(this.identifier), this.expression.objectType, listValues[0], this.row, this.column, null, null);
         var value = newTable.addSymbol(symbol);
         for (let index of listValues) {
             symbol = new Symbol(symbol.getId(), symbol.getType(), index, symbol.getRow(), symbol.getColumn(), null, null);
@@ -49,15 +54,8 @@ class ForIn extends Instruction {
         return null;
     }
 
-    normalExec(tree, table) {
+    normalExec(tree, table, value) {
         var newTable = new TableSymbols(table);
-        var value = this.expression.execute(tree, table);
-        if (this.expression.type !== Type.STRING) {
-            tree.removeEnvironment();           // Remover ambito cada vez que se termine una ejecucion
-            ErrorList.addError(new ErrorNode(this.row, this.column, new ErrorType(EnumErrorType.SEMANTIC), "Solo se permite iterar variables string en ForIn", ENVIRONMENT.FORIN));
-            return new Exception("Semantico", "Solo se permite iterar variables string en forIn", this.row, this.column);
-        }
-        if (value instanceof Exception) return value;
         let cadena_array = value.split('');
         var symbol = new Symbol(String(this.identifier), this.expression.type, cadena_array[0], this.row, this.column, null, null);
         value = newTable.addSymbol(symbol);

@@ -441,7 +441,6 @@
         function newNode(yy, state, ...nodes) {
             const parent = getNonTerminal(yy, state);
             const children = [];
-            //console.log(children);          
             
             for (let node of nodes) {
                 node.parent = node.parent ? node.parent : parent;

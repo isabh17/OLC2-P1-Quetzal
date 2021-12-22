@@ -27,6 +27,8 @@ class Tree{
   }
   
   updateOut(text){
+    text = String(text);
+    text = text.replace(/\\n/g,"\n");
     this.out += text;
   }
 

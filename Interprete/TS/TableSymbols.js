@@ -36,17 +36,13 @@ class TableSymbols{
     var actualTable = this;
     while(actualTable != null){
       if(symbol.id in actualTable.table){
-        
         if(actualTable.table[symbol.id].getType() === symbol.getType()){
           actualTable.table[symbol.id].setValue(symbol.getValue());
           actualTable.table[symbol.id].setType(symbol.getType());
           return null;
         }else{
-          /*console.log(actualTable.table[symbol.id].getType() === symbol.getType());
-          console.log(actualTable.table[symbol.id].getType());
-          console.log(symbol.getType());*/
           ErrorList.addError(new ErrorNode(symbol.getRow(),symbol.getColumn(),new ErrorType(EnumErrorType.SEMANTIC),`No se puede asignar tipos distintos a las variables.`,ENVIRONMENT.NULL));
-          return new Exception("Semantico", "No se puede asignar tipos distintos a las variables", symbol.getRow(), /*symbol.getEnvironment()*/ null);
+          return new Exception("Semantico", "No se puede asignar tipos distintos a las variables", symbol.getRow(), null);
         }
       }else{
         actualTable = actualTable.previous;

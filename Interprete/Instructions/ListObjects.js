@@ -7,6 +7,9 @@ class ListObjects extends Instruction{
   }
 
   execute(tree, table){
+    if(this.parameters.length === 0){
+      this.type = Type.ARRAY;
+    }
     for(var i = 0; i<this.parameters.length; i++){
       if(this.parameters[i] instanceof ListObjects){
         this.parameters[i].type = this.type;

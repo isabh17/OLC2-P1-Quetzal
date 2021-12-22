@@ -26,14 +26,14 @@ class Assignation extends Instruction{
       symbol = new Symbol(symbol.getId(), Type.STRUCT, value, symbol.getRow(), symbol.getColumn(), null, symbol.objectType);
     }else{
       if(symbol.getType()===2){
-        symbol = new Symbol(symbol.getId(),symbol.getType(), value, symbol.getRow(), symbol.getColumn(), null, null);
+        symbol = new Symbol(symbol.getId(),symbol.getType(), value, symbol.getRow(), symbol.getColumn(), null, symbol.objectType);
         for(var i = 0; i <  TableReport.SymbolList.length; i++){
           if(TableReport.SymbolList[i].name === symbol.getId() && TableReport.SymbolList[i].type === symbol.getType() && TableReport.SymbolList[i].line === symbol.getRow() && TableReport.SymbolList[i].column === symbol.getColumn()  ){
               TableReport.SymbolList[i].value = value;
           }
         }
       }else{
-        symbol = new Symbol(symbol.getId(), this.expression.type, value, symbol.getRow(), symbol.getColumn(), null, null);
+        symbol = new Symbol(symbol.getId(), this.expression.type, value, symbol.getRow(), symbol.getColumn(), null, symbol.objectType);
         for(var i = 0; i <  TableReport.SymbolList.length; i++){
           if(TableReport.SymbolList[i].name === symbol.getId() && TableReport.SymbolList[i].type === this.expression.type && TableReport.SymbolList[i].line === symbol.getRow() && TableReport.SymbolList[i].column === symbol.getColumn()  ){
               TableReport.SymbolList[i].value = value;
