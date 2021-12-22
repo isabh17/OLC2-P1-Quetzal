@@ -70,13 +70,15 @@ El arbol siempre se generara despues de la ejecucion haya salido exitosamente.
 # Descripcion basica del lenguaje Quetzal
 #### Tipos de datos primitivos
 
-| Tipo:                     | token     | Ejemplo |
-| --------------------------- | --------- | ------ |
-| Cadena   | String | "Hola mundo" |
-| Caracter     | Char | 'a' |
-| Entero     | int | 5 |
-| Decimal     | double | 1.5 |
-| Booleano     | boolean | true |
+| Tipo:                     | token     | Ejemplo | Envío por parametro |
+| --------------------------- | --------- | ------ | - |
+| Cadena   | String | "Hola mundo" | Valor |
+| Caracter     | Char | 'a' | Valor |
+| Entero     | int | 5 | Valor |
+| Decimal     | double | 1.5 | Valor |
+| Booleano     | boolean | true | Valor |
+| Arreglo      | [ ]      | [1,2,3] | Referencia |
+| Struct      | struct   | Obj(dato:5) | Referencia |
 
 #### Sintaxis del lenguaje
 
@@ -159,3 +161,96 @@ Bucle que ejecuta las instrucciones si una condición específica se cumple.
     }while (i < 5);
 ### Descripción:
 Bucle que ejecuta las instrucciones, evalua si la condición se cumple, si la condición se cumple repite las instrucciones.
+## 📋 Bucle for
+    for (int i = 0; i < 5; i++) {
+        println(i);
+    }
+    for letra in "Hola Mundo!"{
+            print(letra, "-");
+    }
+    String cadena = "OLC2";
+    for letra in cadena{
+        print(letra, "-");
+    }
+    for animal in ["perro", "gato", "tortuga"]{
+        println("$animal es mi favorito");
+    }
+   
+### Descripción:
+Bucle que ejecuta las instrucciones dependiendo la variable que se le asigne, si posee condición se evalúa y si no se recorre la variable ingresada.
+## 📋 Funciones
+    int sumar(int num1, double num2){
+        return num1 + toInt(num2);
+    }
+    void Agregar(int[] arr, boolean prueba){
+        println("Instrucciones");
+    }
+### Descripción:
+Es una serie de instrucciones que se ejecuta en cuando el programador desee, se le asigna un nombre, un tipo de dato a retornar y una lista de parametros que se le debe enviar.
+## 📋 Funciones nativas
+    println(log10(100));            // Logaritmo de base 10
+    println(sin(134));              // Seno del angulo
+    println(cos(var1));             // Coseno del angulo
+    println(tan(12));               // Tangente del angulo
+    println(sqrt(16));              // Raiz cuadrada
+    println(pow(2,4));              // Potencia
+    println(toInt("15"));           // Casteo a entero
+    println(toDouble("1.5152"));    // Casteo a decimal
+    println(string(1.5));           // Casteo a cadena
+    println(typeof(1.5));           // Saber el tipo de dato del objeto
+### Descripción:
+Son funciones que retornan un tipo de dato, mismo que corresponde a la operación que sea realizar, existen operaciones trigonometricas y matemáticas.
+#### Nota
+Para las funciones trigonométricas, seno, coseno y tangente, el parámetro que se les envía debe estar en grados.
+
+## 📋 Métodos nativos
+    println(int.parse("8200"));             // Parseo a entero
+    println(double.parse("3.13159"));       // Parseo a decimal
+    println(boolean.parse("1"));            // Parseo a booleano
+    println(arreglo.length());              // Tamaño del arreglo o cadena
+    println(animal.toUppercase());          // Mayúsculas a cadena
+    println(animal.toLowercase());          // Minúsculas a cadena
+    println(animal.subString(2,4));         // Substraer una cadena de otra
+    println(animal.caracterOfPosition(2));  // Letra en la posisción enviada
+### Descripción:
+Son métodos propios de algún tipo de objeto, estos permiten obtener cierta información o realizar alguna acción dependiendo lo solicitado.
+
+## 📋 Llamada a funciones
+    ordenamiento(arr1,arr2);
+    imprimirLista(lista);
+    nuevaLinea();
+### Descripción:
+Es una sentencia que invoca a una función previamente guardada para ejecutar las acciones que éste contenga, puede o no contener una lista de parámetros.
+
+## 📋 Arreglos
+    int[] arr = [1,2,3,4,5,6];
+    boolean[] arr2 = [true, false, true, true];
+    String[] arr = ["H","O","L","A"];
+    print(arr[1]);                          // Acceso a la posición 1 del arreglo
+    print(arr[2:4]);                        // Acceso al rango de posiciones 2,4
+    int[] arr2 = #arr;                      // Copia exacta de un arreglo
+### Descripción:
+Es una lista que contiene varios elementos de un mismo tipo de dato.
+
+## 📋 Métodos nativos y operaciones de arreglos
+    int[] arr = [1,2,3,4,5,6];
+    arr.push(7);               // Se agrega el elemento al final del arreglo
+    arr.pop();                 // Se elimina el elemento que se encuentre al final
+    print(arr#*2);             // Se multiplican x2 todos los elementos del arreglo
+### Descripción:
+Es una lista que contiene varios elementos de un mismo tipo de dato.
+
+## 📋 Structs
+    struct Estructura{
+        int x
+    };
+    struct Persona{
+        String nombre,
+        int edad,
+        Persona padre
+    };
+    Estructura strct = Estructura(0);
+    Persona persona1 = Persona("Tony", 25, null);
+    println(persona1.nombre);
+### Descripción:
+Es una lista que contiene varios elementos de un mismo tipo de dato.
