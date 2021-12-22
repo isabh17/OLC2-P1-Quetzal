@@ -14,7 +14,7 @@ void apilar(int num) {
 
 void desapilar(){
     if(stack.length() == MINZIE){
-        println("Pila llena");
+        println("Pila vacia");
         return;
     }
     else{
