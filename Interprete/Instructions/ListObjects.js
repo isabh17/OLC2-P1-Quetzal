@@ -28,6 +28,8 @@ class ListObjects extends Instruction{
       }
       this.parameters[i] = auxiliar;
     }
+    this.objectType = this.type;
+    this.type = Type.ARRAY;
     return this.parameters;
   }
 
