@@ -15,7 +15,6 @@ _Quetzal es un lenguaje de programación inspirado en C, su característica prin
 
 _Adicional Quetzal tendrá 2 flujos, se podrá interpretar el código fuente ingresado y efectuar todas sus instrucciones, o bien se puede traducir este lenguaje a un lenguaje intermedio basado en un lenguaje de 3 direcciones, este se podrá ejectuar posteriormente en cualquier compilador de C, tomando en cuenta las reglas especificas de un lenguaje de 3 direcciones._
 
-![This is a alt text.](Documentacion/img/flujo_quetzal.png "This is a sample image.")
 <ul>
   <li>Documentacion:
     <ul>
